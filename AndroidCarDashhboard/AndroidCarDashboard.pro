@@ -5,7 +5,8 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     uiracedataset.cpp \
-    projectedprogressupdater.cpp
+    projectedprogressupdater.cpp \
+    usb_interface.cpp
 
 RESOURCES += qml.qrc
 
@@ -19,4 +20,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     uiracedataset.h \
-    projectedprogressupdater.h
+    projectedprogressupdater.h \
+    usb_interface.h
