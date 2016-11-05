@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\libs\QtAndroid-bundled.jar"
+        jumboMode="false"
+        revision="24.0.2"
+        sha1="bc7ab6cc93c34e2a39f3baaeca25d2a5250a6154">
+        <dex dex="D:\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\build\intermediates\pre-dexed\debug\QtAndroid-bundled-b0fb4ea7e08715491ef428001ea3f9967f9d6bd3.jar" />
+    </item>
+    <item
+        jar="D:\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\libs\QtAndroidBearer-bundled.jar"
+        jumboMode="false"
+        revision="24.0.2"
+        sha1="46f2a40b7a3b91abf8449a31ad13f719bda8b072">
+        <dex dex="D:\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\build\intermediates\pre-dexed\debug\QtAndroidBearer-bundled-f59bc43d1e0af4aa1085956b7aaa22c3f4d95974.jar" />
+    </item>
+    <item
+        jar="D:\Documents\Supermileage\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\libs\QtAndroidBearer-bundled.jar"
+        jumboMode="false"
+        revision="24.0.2"
+        sha1="46f2a40b7a3b91abf8449a31ad13f719bda8b072">
+        <dex dex="D:\Documents\Supermileage\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\build\intermediates\pre-dexed\debug\QtAndroidBearer-bundled-99797ac1c6af50d2552082e166eb8e925169f05f.jar" />
+    </item>
+    <item
+        jar="D:\Documents\Supermileage\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\libs\QtAndroid-bundled.jar"
+        jumboMode="false"
+        revision="24.0.2"
+        sha1="bc7ab6cc93c34e2a39f3baaeca25d2a5250a6154">
+        <dex dex="D:\Documents\Supermileage\QT-Android-App\build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_7_0-Debug\android-build\build\intermediates\pre-dexed\debug\QtAndroid-bundled-2a4a3071d24d66bcc54bd4e2c05b50e73623d4b6.jar" />
+    </item>
+
+</items>
