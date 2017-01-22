@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick serialport
+QT += qml quick serialport serialbus widgets core androidextras
 CONFIG += c++11
 
 SOURCES += main.cpp \

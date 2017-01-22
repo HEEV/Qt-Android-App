@@ -1,59 +1,131 @@
 #include "usb_interface.h"
 
 // Creates a new USB_Interface class and attempts to open the CANtact port.
-usb_interface::usb_interface(QObject *parent) : QObject(parent)
+usb_interface::usb_interface(QObject *parent, UIRaceDataSet* dataSet) : QObject(parent)
 {
-    openCAN();
+    dataStore = dataSet;
+    slcandActive = false;
+
+    //Set up CAN settings.
+    currentSettings.backendName = "socketcan";
+    currentSettings.deviceInterfaceName = "can0";
+    currentSettings.useConfigurationEnabled = false;
 }
 
 usb_interface::~usb_interface()
 {
-    closeCAN();
 }
 
-// Looks for a CANtact port and attempts to open it if found.
-// Returns true if successfuly, false otherwise.
-bool usb_interface::openCAN()
+
+void usb_interface::connectCANDevice()
 {
-    // Loop through all available serial ports
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
+    //First set up the slcand system so that QT can connect to it.
+    if(!slcandActive)
     {
-        // If this one is the CANtact, try to open it.
-        if(info.description() == "CANtact dev")
-        {
-            port.setPort(info);
+        //Try to allow CAN bus to talk on the bus by first activating slcand and disabling the SELinux port restrictions
+        QProcess slcand;
+        slcand.start("su", QStringList() << "");
+        slcand.waitForStarted();
 
-            bool openedSuccessfully = port.open(QIODevice::ReadWrite);
-            if(openedSuccessfully)
-            {
-                connect(&port, &QSerialPort::readyRead, this, &usb_interface::handleReadyRead);
-                QByteArray open = QString("O\r").toUtf8();
-                port.write(open);
+        slcand.write("slcand -s 6 -S 3000000 -o -c /dev/ttyACM0 can0");
+        slcand.closeWriteChannel();
 
-                return true;
-            } else {
-                return false;
-            }
-        }
+        slcand.waitForFinished();
+
+        QProcess ifconfig;
+        ifconfig.start("su", QStringList() << "-c" << "ifconfig" << "can0" << "up");
+        ifconfig.waitForStarted();
+        ifconfig.waitForFinished();
+
+        QProcess selinux;
+        selinux.start("su", QStringList() << "-c" << "setenforce 0");
+        selinux.waitForStarted();
+        selinux.waitForFinished();
+
+        slcandActive = true;
     }
 
-    // If we didn't find a CANtact, return false
-    return false;
-}
+    //Now set up QT's CAN service.
+    QString errorString;
+    canDevice = QCanBus::instance()->createDevice(currentSettings.backendName, currentSettings.deviceInterfaceName, &errorString);
 
-// Attempts to close the CANtact port if it is open.
-void usb_interface::closeCAN()
-{
-    if (port.isOpen())
+    if(!canDevice)
     {
-        QByteArray close = QString("C\r").toUtf8();
-        port.write(close);
-        port.close();
+        qDebug() << "Error creating a CAN device \n";
+    }
+
+    //Connect the callbacks for the CAN bus
+    connect(m_canDevice, &QCanBusDevice::errorOccurred,
+            this, &usb_interface::receiveError);
+    connect(m_canDevice, &QCanBusDevice::framesReceived,
+            this, &usb_interface::checkMessages);
+    connect(m_canDevice, &QCanBusDevice::framesWritten,
+            this, &usb_interface::framesWritten);
+
+    if (!m_canDevice->connectDevice()) {
+        qDebug() << "Error" << QString(canDevice->errorString());
+
+        delete canDevice;
+        canDevice = nullptr;
     }
 }
 
-// Print a message when something arrives on the CANtact port
-void usb_interface::handleReadyRead()
+void usb_interface::disconnectCANDevice()
 {
-    qDebug() << "We got one! " << QString(port.readAll()) << endl;
+    //Disconnect the can variable first.
+    if (!canDevice)
+        return;
+
+    canDevice->disconnectDevice();
+    delete canDevice;
+    canDevice = nullptr;
+
+    //Now shut down slcand
+    if(slcandActive)
+    {
+        QProcess pkill;
+        pkill.start("pkill", QStringList() << "slcand");
+    }
+}
+
+
+void usb_interface::receiveError(QCanBusDevice::CanBusError error) const
+{
+    switch (error) {
+    case QCanBusDevice::ReadError:
+    case QCanBusDevice::WriteError:
+    case QCanBusDevice::ConnectionError:
+    case QCanBusDevice::ConfigurationError:
+    case QCanBusDevice::UnknownError:
+        qWarning() << m_canDevice->errorString();
+    default:
+        break;
+    }
+}
+
+void usb_interface::checkMessages()
+{
+    if (!m_canDevice)
+        return;
+
+    while (m_canDevice->framesAvailable()) {
+        const QCanBusFrame frame = m_canDevice->readFrame();
+
+        QString view;
+        if (frame.frameType() == QCanBusFrame::ErrorFrame)
+            qDebug() << "Error: " << QString(canDevice->interpretErrorFrame(frame));
+        else
+            view = frame.toString();
+
+    }
+}
+
+void usb_interface::framesWritten(qint64 count)
+{
+   qDebug() << "Frames written: " << count;
+}
+
+void usb_interface::dealWithMessage(QCanBusFrame frame)
+{
+
 }
