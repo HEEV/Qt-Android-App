@@ -19,12 +19,12 @@ void UIRaceDataSet::setProjectedProgress(double projectedProgress)
     this->projectedProgress = projectedProgress;
 }
 
-void UIRaceDataSet::setGroundSpeed(int speed)
+void UIRaceDataSet::setGroundSpeed(qreal speed)
 {
     groundSpeed = speed;
 }
 
-int UIRaceDataSet::getGroundSpeed()
+qreal UIRaceDataSet::getGroundSpeed()
 {
     return groundSpeed;
 }
@@ -37,4 +37,14 @@ void UIRaceDataSet::setSpeedSensorStatus(bool status)
 bool UIRaceDataSet::getSpeedSensorStatus()
 {
     return speedSensorStatus;
+}
+
+void UIRaceDataSet::setCanStatus(bool status)
+{
+    canStatus = status;
+}
+
+bool UIRaceDataSet::getCanStatus()
+{
+    return canStatus;
 }

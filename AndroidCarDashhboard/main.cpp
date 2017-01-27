@@ -3,7 +3,7 @@
 #include <QQmlContext>
 #include <QQmlComponent>
 #include <uiracedataset.h>
-#include <usb_interface.h>
+//#include <usb_interface.h>
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     // Placeholder temporary remove this later this is terrible blah blah blah
     raceDataSet.setProjectedProgress(0.95);
 
-    usb_interface usb;
+    //usb_interface usb;
 
     engine.rootContext()->setContextProperty("UIRaceDataSet", &raceDataSet);
 
