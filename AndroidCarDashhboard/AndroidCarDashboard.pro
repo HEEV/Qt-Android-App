@@ -4,9 +4,7 @@ QT += qml quick serialport serialbus widgets core androidextras
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    uiracedataset.cpp \
-    projectedprogressupdater.cpp \
-    usb_interface.cpp
+    uiracedataset.cpp
 
 RESOURCES += qml.qrc
 
@@ -19,6 +17,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    uiracedataset.h \
-    projectedprogressupdater.h \
-    usb_interface.h
+    uiracedataset.h
