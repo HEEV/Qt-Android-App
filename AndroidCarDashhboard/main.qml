@@ -43,7 +43,7 @@ Window {
                 tickmarksVisible: true
                 maximumValue: 50
                 minimumValue: 0
-                value: UIRaceDataSet.groundSpeed
+                value: UIRaceDataset.groundSpeed
                 style: CircularGaugeStyle {
                     tickmarkStepSize: 5
                 }
@@ -126,7 +126,7 @@ Window {
 
                 ProgressBar {
                     id: projectedProgressBar
-                    value: UIRaceDataSet.projectedProgress
+                    value: UIRaceDataset.projectedProgress
                     width: parent.width
                     height: 15
                     style: ProgressBarStyle {
@@ -276,7 +276,7 @@ Window {
                                 color: "#50f200"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                 Layout.fillWidth: false
-                                active: UIRaceDataSet.canStatus
+                                active: UIRaceDataset.canStatus
                             }
 
                         }
@@ -389,7 +389,7 @@ Window {
                             StatusIndicator {
                                 id: statusIndicator1
                                 color: "#50f200"
-                                active: UIRaceDataSet.speedSensorStatus
+                                active: UIRaceDataset.speedSensorStatus
                             }
                         }
 

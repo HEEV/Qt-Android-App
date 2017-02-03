@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/jonathan/supermileage/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/libs/QtAndroid-bundled.jar"
+        jumboMode="false"
+        revision="25.0.2"
+        sha1="a97fbf62b0e944e8c152d24075be47accdb38522">
+        <dex dex="/home/jonathan/supermileage/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/build/intermediates/pre-dexed/debug/QtAndroid-bundled-4dc60b334ffe877d606e1f22e14ac42db317a42b.jar" />
+    </item>
+    <item
+        jar="/home/jonathan/supermileage/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/libs/QtAndroidBearer-bundled.jar"
+        jumboMode="false"
+        revision="25.0.2"
+        sha1="1ee99f4a2c6dc0069a2ab8b6d869f8ed772884cd">
+        <dex dex="/home/jonathan/supermileage/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/build/intermediates/pre-dexed/debug/QtAndroidBearer-bundled-f7ea8f70e129e72dec2c8936130d7917b19e8b12.jar" />
+    </item>
+    <item
+        jar="/home/jonathan/supermileage/tabletRepo/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/libs/QtAndroid-bundled.jar"
+        jumboMode="false"
+        revision="25.0.2"
+        sha1="a97fbf62b0e944e8c152d24075be47accdb38522">
+        <dex dex="/home/jonathan/supermileage/tabletRepo/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/build/intermediates/pre-dexed/debug/QtAndroid-bundled-3a784040b0916186baf724e063db3a611221bbe2.jar" />
+    </item>
+    <item
+        jar="/home/jonathan/supermileage/tabletRepo/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/libs/QtAndroidBearer-bundled.jar"
+        jumboMode="false"
+        revision="25.0.2"
+        sha1="1ee99f4a2c6dc0069a2ab8b6d869f8ed772884cd">
+        <dex dex="/home/jonathan/supermileage/tabletRepo/QT-Android-App/build-AndroidCarDashboard-Android_for_armeabi_v7a_GCC_4_9_Qt_5_8_1-Debug/android-build/build/intermediates/pre-dexed/debug/QtAndroidBearer-bundled-324941b106a67cd3aa478d4ac8b80caf72cdb7c2.jar" />
+    </item>
+
+</items>
