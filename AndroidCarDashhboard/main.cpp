@@ -3,7 +3,8 @@
 #include <QQmlContext>
 #include <QQmlComponent>
 #include <UIRaceDataset.h>
-//#include <usb_interface.h>
+#include <CANInterface.h>
+#include <DataProcessor.h>
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +14,11 @@ int main(int argc, char *argv[])
     // Placeholder temporary remove this later this is terrible blah blah blah
     raceDataset.setProjectedProgress(0.95);
 
-    //usb_interface usb;
+    //Make a instance of CANInterface.
+    CANInterface interface = new CANInterface();
+
+    //Make a DataProcessor.
+    DataProcessor dataProcessor = new DataProcessor();
 
     engine.rootContext()->setContextProperty("UIRaceDataset", &raceDataset);
 
