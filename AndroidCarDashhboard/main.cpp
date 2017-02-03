@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
 
 
     //Make a DataProcessor.
-    DataProcessor dataProcessor = new DataProcessor(*raceDataset);
+    DataProcessor *dataProcessor = new DataProcessor();
 
     //Make a instance of CANInterface.
-    CANInterface interface = new CANInterface(&dataProcessor);
+    CANInterface *interface = new CANInterface(dataProcessor);
 
 
 

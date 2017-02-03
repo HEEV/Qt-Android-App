@@ -9,16 +9,16 @@ bool CANInterface::startListening()
 {
     bool success = false;
     //Start by making sure that we can use the slcan plugin that is provided by the QT library.
-    if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")))
+    /*if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")))
     {
         device = QCanBus::instance()->createDevice(
                     QStringLiteral("socketcan"), QStringLiteral("can0"));
 
-        connect(device, &QCanBusDevice::framesReceived, this, &CANInterface::readFrame); //Connect the framesReceived signal interrupt to the readFrame method to deal with.
+        //connect(device, &QCanBusDevice::framesReceived, this, &CANInterface::readFrame); //Connect the framesReceived signal interrupt to the readFrame method to deal with.
 
         success = device->connectDevice();
 
-    }
+    }*/
     return success;
 }
 

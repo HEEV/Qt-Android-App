@@ -22,12 +22,12 @@ public:
 
 private:
     // CAN frame ids. These numbers have not been finalized or verified.
-    int const TACHOMETER_ID = 1584; // Used for ground speed
-    int const PITOT_ID = 1648; // Used for air speed
-    int const EFI_PRESSURE_ID = 0; // Used for fuel injection info
-    int const MEGASQUIRT_ID = 0; // Used for engine temperature and other info
-    int const CURRENT_ID = 0;
-    int const VOLTAGE_ID = 0;
+    static const int TACHOMETER_ID; // Used for ground speed
+    static const int PITOT_ID; // Used for air speed
+    static const int EFI_PRESSURE_ID; // Used for fuel injection info
+    static const int MEGASQUIRT_ID; // Used for engine temperature and other info
+    static const int CURRENT_ID;
+    static const int VOLTAGE_ID;
 };
 
 #endif // DATAPROCESSOR_H

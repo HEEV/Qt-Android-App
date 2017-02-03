@@ -1,11 +1,18 @@
 #include "DataProcessor.h"
 
+const int DataProcessor::TACHOMETER_ID = 1584;
+const int DataProcessor::PITOT_ID = 1648;
+const int DataProcessor::EFI_PRESSURE_ID = 1;
+const int DataProcessor::MEGASQUIRT_ID = 2;
+const int DataProcessor::CURRENT_ID = 3;
+const int DataProcessor::VOLTAGE_ID = 4;
+
 DataProcessor::DataProcessor()
 {
 
 }
 
-DataProcessor::routeCANFrame(QCanBusFrame frame)
+void DataProcessor::routeCANFrame(QCanBusFrame frame)
 {
     int id = frame.frameId();
     QByteArray data = frame.payload();
@@ -14,60 +21,60 @@ DataProcessor::routeCANFrame(QCanBusFrame frame)
     // frequent ids at the top.
     switch(id)
     {
-    case TACHOMETER_ID:
+    case DataProcessor::TACHOMETER_ID:
         updateGroundSpeed(data);
         break;
-    case PITOT_ID:
+    case DataProcessor::PITOT_ID:
         updateAirSpeed(data);
         break;
-    case EFI_PRESSURE_ID:
+    case DataProcessor::EFI_PRESSURE_ID:
         updateEFIPressure(data);
         break;
-    case MEGASQUIRT_ID:
+    case DataProcessor::MEGASQUIRT_ID:
         updateMegasquirt(data);
         break;
-    case CURRENT_ID:
+    case DataProcessor::CURRENT_ID:
         updateCurrent(data);
         break;
-    case VOLTAGE_ID:
+    case DataProcessor::VOLTAGE_ID:
         updateVoltage(data);
         break;
     default:
-        // Do nothing if the CAN frame does not have an ID that we care about
+        break;// Do nothing if the CAN frame does not have an ID that we care about
     }
 }
 
-DataProcessor::updateGroundSpeed(QByteArray data)
+void DataProcessor::updateGroundSpeed(QByteArray data)
 {
 
 }
 
-DataProcessor::updateAirSpeed(QByteArray data)
+void DataProcessor::updateAirSpeed(QByteArray data)
 {
 
 }
 
-DataProcessor::updateEFIPressure(QByteArray data)
+void DataProcessor::updateEFIPressure(QByteArray data)
 {
 
 }
 
-DataProcessor::updateMegasquirt(QByteArray data)
+void DataProcessor::updateMegasquirt(QByteArray data)
 {
 
 }
 
-DataProcessor::updateCurrent(QByteArray data)
+void DataProcessor::updateCurrent(QByteArray data)
 {
 
 }
 
-DataProcessor::updateVoltage(QByteArray data)
+void DataProcessor::updateVoltage(QByteArray data)
 {
 
 }
 
-DataProcessor::updateInterfaceIndicators(QByteArray data)
+/*void DataProcessor::updateInterfaceIndicators(QByteArray data)
 {
 
-}
+}*/
