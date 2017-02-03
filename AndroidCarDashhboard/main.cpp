@@ -14,11 +14,14 @@ int main(int argc, char *argv[])
     // Placeholder temporary remove this later this is terrible blah blah blah
     raceDataset.setProjectedProgress(0.95);
 
-    //Make a instance of CANInterface.
-    CANInterface interface = new CANInterface();
 
     //Make a DataProcessor.
-    DataProcessor dataProcessor = new DataProcessor();
+    DataProcessor dataProcessor = new DataProcessor(*raceDataset);
+
+    //Make a instance of CANInterface.
+    CANInterface interface = new CANInterface(&dataProcessor);
+
+
 
     engine.rootContext()->setContextProperty("UIRaceDataset", &raceDataset);
 
