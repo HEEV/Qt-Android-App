@@ -4,7 +4,9 @@ QT += qml quick serialport serialbus widgets core #androidextras
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    UIRaceDataset.cpp
+    UIRaceDataset.cpp \
+    CANInterface.cpp \
+    DataProcessor.cpp
 
 RESOURCES += qml.qrc
 
@@ -17,4 +19,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    UIRaceDataset.h
+    UIRaceDataset.h \
+    CANInterface.h \
+    DataProcessor.h
