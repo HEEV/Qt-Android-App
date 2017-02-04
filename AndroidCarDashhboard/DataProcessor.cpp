@@ -1,5 +1,8 @@
 #include "DataProcessor.h"
 
+//1154 for time between pulses.
+//1150 for pulses per second.
+
 const int DataProcessor::TACHOMETER_ID = 1584;
 const int DataProcessor::PITOT_ID = 1648;
 const int DataProcessor::EFI_PRESSURE_ID = 1;
