@@ -16,6 +16,7 @@ class CANInterface : public QObject
     Q_OBJECT
 public:
     explicit CANInterface(DataProcessor *dataProcessor);
+    ~CANInterface();
     bool startListening();
     void stopListening();
     bool writeCANFrame(int ID, QByteArray payload);
