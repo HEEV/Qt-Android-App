@@ -71,6 +71,10 @@ void CANInterface::readFrame()
 
 bool CANInterface::activateSlcand()
 {
+    QProcess pkill;
+    pkill.start("pkill", QStringList() << "slcand");
+    pkill.waitForFinished();
+    slcandActive = false;
     if(!slcandActive)
     {
         //Try to allow CAN bus to talk on the bus by first activating slcand and disabling the SELinux port restrictions
@@ -105,6 +109,7 @@ bool CANInterface::disableSlcand()
     {
         QProcess pkill;
         pkill.start("pkill", QStringList() << "slcand");
+        pkill.waitForFinished();
         slcandActive = false;
         success = true;
     }
