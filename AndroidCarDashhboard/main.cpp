@@ -10,20 +10,21 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlEngine engine;
-    UIRaceDataset raceDataset;
+    UIRaceDataset *raceDataset = new UIRaceDataset();
     // Placeholder temporary remove this later this is terrible blah blah blah
-    raceDataset.setProjectedProgress(0.95);
+    raceDataset->setProjectedProgress(0.95);
+    raceDataset->setGroundSpeed(38.0);
 
 
     //Make a DataProcessor.
-    DataProcessor *dataProcessor = new DataProcessor();
+    DataProcessor *dataProcessor = new DataProcessor(raceDataset);
 
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
 
 
 
-    engine.rootContext()->setContextProperty("UIRaceDataset", &raceDataset);
+    engine.rootContext()->setContextProperty("UIRaceDataset", raceDataset);
 
     QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
     component.create();

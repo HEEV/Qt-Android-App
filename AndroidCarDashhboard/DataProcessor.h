@@ -2,13 +2,14 @@
 #define DATAPROCESSOR_H
 
 #include <QCanBusFrame>
-
+#include <UIRaceDataset.h>
+#include <QDebug>
 
 
 class DataProcessor
 {
 public:
-    DataProcessor();
+    DataProcessor(UIRaceDataset *uiRaceDataSet);
 
     void routeCANFrame(QCanBusFrame frame);
 
@@ -28,6 +29,8 @@ private:
     static const int MEGASQUIRT_ID; // Used for engine temperature and other info
     static const int CURRENT_ID;
     static const int VOLTAGE_ID;
+
+    UIRaceDataset *raceDataset;
 };
 
 #endif // DATAPROCESSOR_H
