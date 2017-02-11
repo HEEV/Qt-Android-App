@@ -47,6 +47,17 @@ Window {
                 style: CircularGaugeStyle {
                     tickmarkStepSize: 5
                 }
+                //Every time the number changes this is the animation to play in response.
+                Behavior on value
+                {
+                    NumberAnimation
+                    {
+                        //How long the animation should take
+                        duration: 300
+                        //The style of animation to be played.
+                        easing.type: Easing.InOutSine
+                    }
+                }
             }
 
             ColumnLayout {
