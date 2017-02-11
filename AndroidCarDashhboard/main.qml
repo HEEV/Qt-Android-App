@@ -44,9 +44,7 @@ Window {
                 maximumValue: 50
                 minimumValue: 0
                 value: UIRaceDataset.groundSpeed
-                style: CircularGaugeStyle {
-                    tickmarkStepSize: 5
-                }
+                style: DashboardGaugeStyle {}
                 //Every time the number changes this is the animation to play in response.
                 Behavior on value
                 {
