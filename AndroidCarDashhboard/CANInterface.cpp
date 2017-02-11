@@ -71,8 +71,13 @@ void CANInterface::readFrame()
 
 bool CANInterface::activateSlcand()
 {
+    QProcess ifconfigStop;
+    ifconfigStop.start("su", QStringList() << "-c" << "ifconfig" << "can0" << "down");
+    ifconfigStop.waitForStarted();
+    ifconfigStop.waitForFinished();
+
     QProcess pkill;
-    pkill.start("pkill", QStringList() << "slcand");
+    pkill.start("su", QStringList() << "-c" << "pkill" << "slcand");
     pkill.waitForFinished();
     slcandActive = false;
     if(!slcandActive)
@@ -82,7 +87,7 @@ bool CANInterface::activateSlcand()
         slcand.start("su", QStringList() << "");
         slcand.waitForStarted();
 
-        slcand.write("slcand -s 6 -S 3000000 -o -c /dev/ttyACM0 can0");
+        slcand.write("slcand -s 6 -S 3000000 -o -c /dev/ttyACM* can0");
         slcand.closeWriteChannel();
 
         slcand.waitForFinished();
@@ -108,7 +113,7 @@ bool CANInterface::disableSlcand()
     if(slcandActive)
     {
         QProcess pkill;
-        pkill.start("pkill", QStringList() << "slcand");
+        pkill.start("su", QStringList() << "-c" << "pkill" << "slcand");
         pkill.waitForFinished();
         slcandActive = false;
         success = true;
