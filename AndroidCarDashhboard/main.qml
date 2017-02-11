@@ -10,7 +10,7 @@ Window {
     visible: true
     width: 960
     height: 600
-    title: qsTr("GUI Practice")
+    title: qsTr("AndroidCANDashboard")
 
     Flickable {
         id: flickable

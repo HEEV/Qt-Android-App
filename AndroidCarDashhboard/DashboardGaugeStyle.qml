@@ -54,7 +54,7 @@ import QtQuick.Controls.Styles 1.4
 CircularGaugeStyle {
     tickmarkInset: toPixels(0.04)
     minorTickmarkInset: tickmarkInset
-    labelStepSize: 20
+    labelStepSize: 5
     labelInset: toPixels(0.23)
 
     property real xCenter: outerRadius
