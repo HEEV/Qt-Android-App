@@ -32,6 +32,8 @@ public:
     static int getData(const QByteArray msg,  int32_t& data);
     /// \brief Get an unsigned 32-bit integer from a CanMessage.
     static int getData(const QByteArray msg, uint32_t& data);
+    /// \brief Wrapper for the uint32_t getData function and put it in an int
+    static int getData(const QByteArray msg, int& data);
 
 private:
    enum CanNodeDataType{
