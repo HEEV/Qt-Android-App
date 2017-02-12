@@ -32,7 +32,14 @@ public:
     static int getData(const QByteArray msg,  int32_t& data);
     /// \brief Get an unsigned 32-bit integer from a CanMessage.
     static int getData(const QByteArray msg, uint32_t& data);
-    /// \brief Wrapper for the uint32_t getData function and put it in an int
+    /**
+     * \brief Stuffs any data type into an int.
+     * This is a hacky convinence function that ignores typchecking. Most of the
+     * time it aught to work, but if the message is actualy a signed message
+     * under 32 bits long (int8_t, int16_t) you are bound to get strange errors.
+     * Also since it limits the size of positive numbers to INT_MAX, uint32_t's
+     * may go crazy as well. Use with caution.
+     */
     static int getData(const QByteArray msg, int& data);
 
 private:
