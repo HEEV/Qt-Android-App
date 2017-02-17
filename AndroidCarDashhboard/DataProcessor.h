@@ -9,7 +9,7 @@
 class DataProcessor
 {
 public:
-    DataProcessor(UIRaceDataset *uiRaceDataSet);
+    DataProcessor(UIRaceDataset *uiRaceDataSet, double inchesPerWheelRevolution);
 
     void routeCANFrame(QCanBusFrame frame);
 
@@ -23,12 +23,17 @@ public:
 
 private:
     // CAN frame ids. These numbers have not been finalized or verified.
-    static const int TACHOMETER_ID; // Used for ground speed
+    static const int TACHOMETER_PULSES_ID;
+    static const int TACHOMETER_TIME_LAST_PULSE_ID; // Used for ground speed
     static const int PITOT_ID; // Used for air speed
     static const int EFI_PRESSURE_ID; // Used for fuel injection info
     static const int MEGASQUIRT_ID; // Used for engine temperature and other info
     static const int CURRENT_ID;
     static const int VOLTAGE_ID;
+
+    // Multiplier to get velocity from revolutions per second
+    static const double VELOCITY_MULTIPLIER_BASE;
+    double velocityMultiplier;
 
     UIRaceDataset *raceDataset;
 };
