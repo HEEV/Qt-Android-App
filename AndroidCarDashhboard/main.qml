@@ -253,7 +253,7 @@ Window {
                     id: rectangle
                     width: 200
                     height: 200
-                    color: "#1b1b1b"
+                    color: "#222222"
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
 
@@ -273,7 +273,7 @@ Window {
 
                             Button {
                                 id: button
-                                text: qsTr("Activate CAN")
+                                text: qsTr("Start Race")
                                 Layout.fillWidth: false
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                 Layout.fillHeight: false
@@ -288,6 +288,31 @@ Window {
                                 active: UIRaceDataset.canStatus
                             }
 
+                            Rectangle {
+                                id: rectangle2
+                                width: 200
+                                height: 200
+                                color: "#222222"
+                            }
+
+
+                            Button {
+                                id: button1
+                                text: qsTr("Stop Race")
+                                Layout.fillWidth: false
+                                checkable: false
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                Layout.fillHeight: false
+                            }
+
+
+                            StatusIndicator {
+                                id: statusIndicator5
+                                color: "#50f200"
+                                Layout.fillWidth: false
+                                active: UIRaceDataset.canStatus
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            }
                         }
                     }
 
