@@ -35,6 +35,16 @@ private:
     static const double VELOCITY_MULTIPLIER_BASE;
     double velocityMultiplier;
 
+    // Holds the time of the last tachometer message that
+    // included a *new* wheel time interval (i.e. a message
+    // whose value was NOT INT_MAX
+    time_t timeOfLastWheelPulseMessage;
+    // Time in seconds that it took for the wheel to go around
+    // for the most recent full revolution
+    uint32_t intervalOfLastKnownRevolution;
+
+    qreal calculateMPH(uint32_t revolutionInterval);
+
     UIRaceDataset *raceDataset;
 };
 

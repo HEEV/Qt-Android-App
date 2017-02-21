@@ -1,4 +1,5 @@
 #include "DataProcessor.h"
+#include <climits>
 
 //1154 for time between pulses.
 //1150 for pulses per second.
@@ -59,15 +60,46 @@ void DataProcessor::routeCANFrame(QCanBusFrame frame)
 
 void DataProcessor::updateGroundSpeed(QByteArray data)
 {
-    // Grab the time interval from data byte 1.
+    time_t currentTime = time(nullptr);
+
+    qreal milesPerHour = 0;
+
+     // Grab the time interval from data byte 1.
     uint32_t intervalOfLastRevolution =
             data[1]
             | (data[2] << 8)
             | (data[3] << 16)
             | (data[4] << 24);
 
-    // Declare a wheel circumference and use to compute a proof-of-concept ground speed:
-    qreal milesPerHour = (qreal)((1.0 / (double)intervalOfLastRevolution) * velocityMultiplier);
+    // If we got a max_int (meaning CAN board did not receive a pulse since last message
+    if (intervalOfLastRevolution == INT_MAX)
+    {
+        // the time that has elapsed since we last processed a new revolution interval
+        uint32_t timeSinceLastUpdate = (uint32_t)(difftime(currentTime, timeOfLastWheelPulseMessage) * 1000.0);
+        // if time since last updateGroundSpeed is greater than last known wheel rotation interval
+        if (timeSinceLastUpdate > intervalOfLastKnownRevolution)
+        {
+            // Calculate the velocity based on an estimated interval
+            milesPerHour = calculateMPH(timeSinceLastUpdate);
+        }
+        else
+        {
+            // Stop now and don't update the speed
+            // since it has not been long enough to
+            // assume deceleration has occurred.
+            return;
+        }
+    }
+    else
+    {
+        // Save the current time
+        timeOfLastWheelPulseMessage = currentTime;
+        intervalOfLastKnownRevolution = intervalOfLastRevolution;
+
+        // Calculate the velocity
+        milesPerHour = calculateMPH(intervalOfLastRevolution);
+    }
+
 
     raceDataset->setGroundSpeed(milesPerHour);
     raceDataset->groundSpeedNotify();
@@ -78,6 +110,11 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 //    raceDataset->speedSensorStatusNotify();
 
     //qDebug() << "Wheel frequency: " << wheelRotationFrequency << "\n";
+}
+
+qreal DataProcessor::calculateMPH(uint32_t revolutionInterval)
+{
+    return (qreal)((1.0 / (double)revolutionInterval) * velocityMultiplier);
 }
 
 void DataProcessor::updateAirSpeed(QByteArray data)
