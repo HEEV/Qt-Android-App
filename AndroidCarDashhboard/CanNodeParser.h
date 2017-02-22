@@ -8,8 +8,6 @@
 #define CAN_NODE_PARSER_H_
 
 #include <QCanBusFrame>
-#include <UIRaceDataset.h>
-#include <QDebug>
 #include <stdint.h>
 
 class CanNodeParser
@@ -40,7 +38,7 @@ public:
      * Also since it limits the size of positive numbers to INT_MAX, uint32_t's
      * may go crazy as well. Use with caution.
      */
-    static int getData(const QByteArray msg, int& data);
+    //static int getData(const QByteArray msg, int& data);
 
 private:
    enum CanNodeDataType{

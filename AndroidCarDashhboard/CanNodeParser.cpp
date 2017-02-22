@@ -97,11 +97,12 @@ int CanNodeParser::getData(const QByteArray msg, uint32_t& data)
     return DATA_OK;
 }
 
-int CanNodeParser::getData(const QByteArray msg, int& data)
+/*int CanNodeParser::getData(const QByteArray msg, int& data)
 {
     data  = (int) msg[1];
     data |= (int) (msg[2]<<8);
     data |= (int) (msg[3]<<16);
     data |= (int) (msg[4]<<24);
     return DATA_OK;
-}
+}*/
+
