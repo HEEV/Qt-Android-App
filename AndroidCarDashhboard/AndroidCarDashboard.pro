@@ -6,7 +6,8 @@ CONFIG += c++11
 SOURCES += main.cpp \
     UIRaceDataset.cpp \
     CANInterface.cpp \
-    DataProcessor.cpp
+    DataProcessor.cpp \
+    CanNodeParser.cpp
 
 RESOURCES += qml.qrc
 
@@ -21,4 +22,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     UIRaceDataset.h \
     CANInterface.h \
-    DataProcessor.h
+    DataProcessor.h \
+    CanNodeParser.h

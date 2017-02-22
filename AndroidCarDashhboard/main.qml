@@ -119,6 +119,8 @@ Window {
                     value: 0.5
                     width: parent.width
                     height: 15
+                    indeterminate: false
+                    maximumValue: 1
                     style: ProgressBarStyle {
                         background: Rectangle {
                             radius: 2
@@ -257,64 +259,50 @@ Window {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
 
-                    ColumnLayout {
-                        id: columnLayout2
+                    RowLayout {
+                        id: activateRow
                         anchors.fill: parent
+                        spacing: 5
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                        RowLayout {
-                            id: activateRow
-                            width: 100
-                            height: 100
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: 5
-                            Layout.fillWidth: true
+                        Button {
+                            id: button
+                            text: qsTr("Start Race")
+                            Layout.fillWidth: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillHeight: false
+                            checkable: false
+                        }
 
-                            Button {
-                                id: button
-                                text: qsTr("Start Race")
-                                Layout.fillWidth: false
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                Layout.fillHeight: false
-                                checkable: false
-                            }
-
-                            StatusIndicator {
-                                id: statusIndicator
-                                color: "#50f200"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                Layout.fillWidth: false
-                                active: UIRaceDataset.canStatus
-                            }
-
-                            Rectangle {
-                                id: rectangle2
-                                width: 200
-                                height: 200
-                                color: "#222222"
-                            }
+                        StatusIndicator {
+                            id: statusIndicator
+                            color: "#50f200"
+                            active: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                        }
 
 
-                            Button {
-                                id: button1
-                                text: qsTr("Stop Race")
-                                Layout.fillWidth: false
-                                checkable: false
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                Layout.fillHeight: false
-                            }
+                        Button {
+                            id: button1
+                            text: qsTr("Stop Race")
+                            Layout.fillWidth: false
+                            checkable: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillHeight: false
+                        }
 
 
-                            StatusIndicator {
-                                id: statusIndicator5
-                                color: "#50f200"
-                                Layout.fillWidth: false
-                                active: UIRaceDataset.canStatus
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            }
+                        StatusIndicator {
+                            id: statusIndicator5
+                            color: "#50f200"
+                            Layout.fillWidth: false
+                            active: UIRaceDataset.canStatus
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         }
                     }
+
 
                 }
 
@@ -327,109 +315,27 @@ Window {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                    ColumnLayout {
-                        id: columnLayout1
-                        anchors.topMargin: 30
+/*
+                    ScrollView
+                    {
                         anchors.fill: parent
+                        verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
+                        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+                        Flickable {
+                            id: loggerFlickable
+                            anchors.fill: parent
 
-                        RowLayout {
-                            id: rowLayout3
-                            width: 100
-                            height: 100
-                            anchors.top: parent.top
-                            anchors.topMargin: 0
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-
-                            Text {
-                                id: text4
-                                color: "#ffffff"
-                                text: qsTr("Pressure Sensors")
-                                font.pixelSize: 46
-                                horizontalAlignment: Text.AlignLeft
-                            }
-
-                            StatusIndicator {
-                                id: statusIndicator4
-                                color: "#50f200"
-                                active: false
+                            TextArea.loggerFlickable: TextArea {
+                                id: textArea
+                                //text: UIRaceDataset.
+                                font.capitalization: Font.capitalization
+                                textColor: "#000000"
+                                anchors.fill: parent
                             }
                         }
-
-                        RowLayout {
-                            id: rowLayout2
-                            width: 100
-                            height: 100
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-
-                            Text {
-                                id: text3
-                                color: "#ffffff"
-                                text: qsTr("MegaSquirt")
-                                font.pixelSize: 46
-                                horizontalAlignment: Text.AlignLeft
-                            }
-
-                            StatusIndicator {
-                                id: statusIndicator3
-                                color: "#50f200"
-                                active: false
-                            }
-                        }
-
-                        RowLayout {
-                            id: rowLayout1
-                            width: 100
-                            height: 100
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-
-                            Text {
-                                id: text2
-                                color: "#ffffff"
-                                text: qsTr("Pitot Tube")
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                font.pixelSize: 46
-                                horizontalAlignment: Text.AlignLeft
-                            }
-
-                            StatusIndicator {
-                                id: statusIndicator2
-                                color: "#50f200"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                active: false
-                            }
-                        }
-
-                        RowLayout {
-                            id: rowLayout
-                            width: 100
-                            height: 100
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-
-                            Text {
-                                id: text1
-                                color: "#ffffff"
-                                text: qsTr("Speed Sensor")
-                                renderType: Text.NativeRendering
-                                horizontalAlignment: Text.AlignLeft
-                                font.pixelSize: 46
-                            }
-
-                            StatusIndicator {
-                                id: statusIndicator1
-                                color: "#50f200"
-                                active: UIRaceDataset.speedSensorStatus
-                            }
-                        }
-
-
-
                     }
+
+*/
 
 
 
