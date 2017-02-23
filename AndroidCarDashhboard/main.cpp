@@ -5,6 +5,7 @@
 #include <UIRaceDataset.h>
 #include <CANInterface.h>
 #include <DataProcessor.h>
+#include <Logger.h>
 
 int main(int argc, char *argv[])
 {
@@ -22,9 +23,13 @@ int main(int argc, char *argv[])
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
 
-
+    // Make a logging object
+    Logger *logger = new Logger("./logFile.txt");
+    logger->println("Hello World");
+    logger->println("This is a test");
 
     engine.rootContext()->setContextProperty("UIRaceDataset", raceDataset);
+    engine.rootContext()->setContextProperty("Logger", logger);
 
     QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
     component.create();

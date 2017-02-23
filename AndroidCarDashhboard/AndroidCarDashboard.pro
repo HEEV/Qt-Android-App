@@ -7,7 +7,8 @@ SOURCES += main.cpp \
     UIRaceDataset.cpp \
     CANInterface.cpp \
     DataProcessor.cpp \
-    CanNodeParser.cpp
+    CanNodeParser.cpp \
+    Logger.cpp
 
 RESOURCES += qml.qrc
 
@@ -23,4 +24,5 @@ HEADERS += \
     UIRaceDataset.h \
     CANInterface.h \
     DataProcessor.h \
-    CanNodeParser.h
+    CanNodeParser.h \
+    Logger.h

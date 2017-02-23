@@ -308,13 +308,26 @@ Window {
 
 
                 Rectangle {
-                    id: rectangle1
+                    id: logPane
                     width: 200
                     height: 200
                     color: "#303030"
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    TextArea {
+                        anchors.fill: parent
+                        flickableItem.flickableDirection: Flickable.VerticalFlick
+                        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+                        verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
+                        text: Logger.log;
+                        font.capitalization: Font.MixedCase
+                        font.family: "Times New Roman"
+                        wrapMode: TextEdit.WrapAnywhere
+                        readOnly: true
+                    }
+
 /*
                     ScrollView
                     {
