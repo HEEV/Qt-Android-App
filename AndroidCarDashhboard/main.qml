@@ -326,6 +326,7 @@ Window {
                         font.family: "Times New Roman"
                         wrapMode: TextEdit.WrapAnywhere
                         readOnly: true
+
                     }
 
 /*

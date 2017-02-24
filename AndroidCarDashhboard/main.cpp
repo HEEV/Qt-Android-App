@@ -24,9 +24,10 @@ int main(int argc, char *argv[])
     CANInterface *interface = new CANInterface(dataProcessor);
 
     // Make a logging object
-    Logger *logger = new Logger("./logFile.txt");
-    logger->println("Hello World");
-    logger->println("This is a test");
+    Logger *logger = new Logger("logFile.txt");
+    logger->println("Begin logging test.");
+    logger->println("This is a line of text");
+    logger->println("This is another line of text");
 
     engine.rootContext()->setContextProperty("UIRaceDataset", raceDataset);
     engine.rootContext()->setContextProperty("Logger", logger);

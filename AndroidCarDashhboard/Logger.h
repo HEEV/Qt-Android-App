@@ -14,11 +14,15 @@ class Logger : public QObject
     Q_PROPERTY(QString log READ getLog NOTIFY logNotify)
 public:
     explicit Logger(string logFileName, QObject *parent = 0);
-    QString getLog();
+    ~Logger();
+
+     QString getLog();
     void println(string message);
+
+    bool openLogFile();
+    void closeLogFile();
 private:
     QString log;
-    QString fileName;
     QTextStream *logStream;
 signals:
     void logNotify();
