@@ -5,7 +5,12 @@
 #include <UIRaceDataset.h>
 #include <CANInterface.h>
 #include <DataProcessor.h>
+#include <QStandardPaths>
+#include <QDateTime>
 #include <Logger.h>
+
+static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
+static const QString LOG_FILE_EXTENSION = QString(".txt");
 
 int main(int argc, char *argv[])
 {
@@ -16,18 +21,20 @@ int main(int argc, char *argv[])
     raceDataset->setProjectedProgress(0.95);
     raceDataset->setGroundSpeed(38.0);
 
+    // Set up logging
+    QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+            + "/" + LOG_FILE_BASE_NAME + "_" + (QDateTime::currentDateTime().toString(Qt::TextDate))
+            + LOG_FILE_EXTENSION;
+    Logger *logger = new Logger(logFilePath);
+    logger->println("Begin logging test.");
+    logger->println("This is a line of text");
+    logger->println("This is another line of text");
 
     //Make a DataProcessor.
     DataProcessor *dataProcessor = new DataProcessor(raceDataset, 69.115 /*this number is just a guess*/);
 
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
-
-    // Make a logging object
-    Logger *logger = new Logger("logFile.txt");
-    logger->println("Begin logging test.");
-    logger->println("This is a line of text");
-    logger->println("This is another line of text");
 
     engine.rootContext()->setContextProperty("UIRaceDataset", raceDataset);
     engine.rootContext()->setContextProperty("Logger", logger);

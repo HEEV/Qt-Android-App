@@ -1,23 +1,37 @@
 #include "Logger.h"
+#include <QDir>
+#include <QFileInfo>
 #include <assert.h>
 
-Logger::Logger(string logFileName, QObject *parent) : QObject(parent)
+
+Logger::Logger(QString logFileName, QObject *parent)
 {
-    logStream = new QTextStream(new QFile(QString::fromStdString(logFileName)));
+    logFile = new QFile(logFileName);
+    logStream = new QTextStream(new QFile(logFileName));
+
     bool logFileOpened = openLogFile();
     // Using an assertion here until we decide on a way to handle exceptions
     assert(logFileOpened);
+}
+
+Logger::Logger(string logFileName, QObject *parent) : QObject(parent)
+{
+    Logger(QString::fromStdString(logFileName), parent);
 }
 
 Logger::~Logger()
 {
     logStream->flush();
     logStream->device()->close();
+    delete logFile;
 }
 
 bool Logger::openLogFile()
 {
-   return logStream->device()->open(QIODevice::WriteOnly);
+    QFileInfo logFileInfo(*logFile);
+    QDir logFileDir = logFileInfo.dir();
+    logFileDir.mkpath(logFileDir.path());
+    return logStream->device()->open(QIODevice::WriteOnly);
 }
 
 void Logger::closeLogFile()

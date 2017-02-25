@@ -13,6 +13,7 @@ class Logger : public QObject
     Q_OBJECT
     Q_PROPERTY(QString log READ getLog NOTIFY logNotify)
 public:
+    explicit Logger(QString logFileName, QObject *parent = 0);
     explicit Logger(string logFileName, QObject *parent = 0);
     ~Logger();
 
@@ -23,6 +24,7 @@ public:
     void closeLogFile();
 private:
     QString log;
+    QFile *logFile;
     QTextStream *logStream;
 signals:
     void logNotify();
