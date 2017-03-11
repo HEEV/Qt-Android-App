@@ -4,7 +4,8 @@
 #include <QCanBusFrame>
 #include <UIRaceDataset.h>
 #include <QDebug>
-
+#include "CanNodeParser.h"
+#include "Logger.h"
 
 class DataProcessor
 {
@@ -46,6 +47,7 @@ private:
     qreal calculateMPH(uint32_t revolutionInterval);
 
     UIRaceDataset *raceDataset;
+    Logger *logger;
 };
 
 #endif // DATAPROCESSOR_H

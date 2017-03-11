@@ -1,8 +1,6 @@
 #include "DataProcessor.h"
 #include <climits>
 
-//1154 for time between pulses.
-//1150 for pulses per second.
 
 // This signal gives the number of wheel rotations since
 //   the last message (resets to 0 every second)
@@ -20,7 +18,7 @@ const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
 DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, double inchesPerWheelRevolution)
 {
     this->raceDataset = uiRaceDataset;
-
+    logger = new Logger();
     // Calculate the velocity multiplier for ground speed
     velocityMultiplier = VELOCITY_MULTIPLIER_BASE * inchesPerWheelRevolution;
 }
@@ -119,7 +117,25 @@ qreal DataProcessor::calculateMPH(uint32_t revolutionInterval)
 
 void DataProcessor::updateAirSpeed(QByteArray data)
 {
+    //voltage -> pressure;
+    uint16_t voltage;
+    CanNodeParser::getData(data, voltge);
+    double pressure;
+    float vcc = 3.6; // Presure sensor supply voltage.
+    float scalingFactor1 = 0.81081;
+    float voltageMath = voltage;
+    voltageMath /= 1000.0f;
+    voltageMath *= scalingFactor1;
+    pressure = (((voltage * 10.0f)/vcc) - 4.0f) * 100.0f;
 
+    float rho = 1.225; //A good value for rho.
+    float scalingFactor2 = 1.41430;
+    float offset1 = -0.26;
+    double windSpeed;
+    windSpeed = sqrt((2 * pressure)/ rho); // In m/s
+    windSpeed *= 2.2369;
+    windSpeed *= scalingFactor2;
+    windSpeed += offset1;
 }
 
 void DataProcessor::updateEFIPressure(QByteArray data)
