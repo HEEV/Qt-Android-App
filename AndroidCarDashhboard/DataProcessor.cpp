@@ -18,7 +18,7 @@ const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
 DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, double inchesPerWheelRevolution)
 {
     this->raceDataset = uiRaceDataset;
-    logger = new Logger();
+    logger = new Logger((QString)"test.txt");
     // Calculate the velocity multiplier for ground speed
     velocityMultiplier = VELOCITY_MULTIPLIER_BASE * inchesPerWheelRevolution;
 }
@@ -119,7 +119,7 @@ void DataProcessor::updateAirSpeed(QByteArray data)
 {
     //voltage -> pressure;
     uint16_t voltage;
-    CanNodeParser::getData(data, voltge);
+    CanNodeParser::getData(data, voltage);
     double pressure;
     float vcc = 3.6; // Presure sensor supply voltage.
     float scalingFactor1 = 0.81081;
