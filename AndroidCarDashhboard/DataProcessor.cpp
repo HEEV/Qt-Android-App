@@ -15,10 +15,10 @@ const int DataProcessor::VOLTAGE_ID = 4;
 
 const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
 
-DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, double inchesPerWheelRevolution)
+DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, double inchesPerWheelRevolution, Logger *log)
 {
     this->raceDataset = uiRaceDataset;
-    logger = new Logger((QString)"test.txt");
+    logger = log;
     // Calculate the velocity multiplier for ground speed
     velocityMultiplier = VELOCITY_MULTIPLIER_BASE * inchesPerWheelRevolution;
 }
@@ -59,7 +59,6 @@ void DataProcessor::routeCANFrame(QCanBusFrame frame)
 void DataProcessor::updateGroundSpeed(QByteArray data)
 {
     time_t currentTime = time(nullptr);
-
     qreal milesPerHour = 0;
 
      // Grab the time interval from data byte 1.

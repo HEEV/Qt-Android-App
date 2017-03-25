@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     logger->println("This is another line of text");
 
     //Make a DataProcessor.
-    DataProcessor *dataProcessor = new DataProcessor(raceDataset, 69.115 /*this number is just a guess*/);
+    DataProcessor *dataProcessor = new DataProcessor(raceDataset, 69.115 /*this number is just a guess*/, logger);
 
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);

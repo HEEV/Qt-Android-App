@@ -10,7 +10,7 @@
 class DataProcessor
 {
 public:
-    DataProcessor(UIRaceDataset *uiRaceDataSet, double inchesPerWheelRevolution);
+    DataProcessor(UIRaceDataset *uiRaceDataSet, double inchesPerWheelRevolution, Logger *log);
 
     void routeCANFrame(QCanBusFrame frame);
 
