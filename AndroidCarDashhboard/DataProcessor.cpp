@@ -58,18 +58,17 @@ void DataProcessor::routeCANFrame(QCanBusFrame frame)
 
 void DataProcessor::updateGroundSpeed(QByteArray data)
 {
+    const uint32_t WHEEL_STOPPED = 0xFFFFFFFF;
     time_t currentTime = time(nullptr);
     qreal milesPerHour = 0;
 
      // Grab the time interval from data byte 1.
-    uint32_t intervalOfLastRevolution =
-            data[1]
-            | (data[2] << 8)
-            | (data[3] << 16)
-            | (data[4] << 24);
+    uint32_t intervalOfLastRevolution = WHEEL_STOPPED;
+    //get the data
+    CanNodeParser::getData(data, intervalOfLastRevolution);
 
     // If we got a max_int (meaning CAN board did not receive a pulse since last message
-    if (intervalOfLastRevolution == INT_MAX)
+    if (intervalOfLastRevolution == WHEEL_STOPPED)
     {
         // the time that has elapsed since we last processed a new revolution interval
         uint32_t timeSinceLastUpdate = (uint32_t)(difftime(currentTime, timeOfLastWheelPulseMessage) * 1000.0);
@@ -86,6 +85,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
             // assume deceleration has occurred.
             return;
         }
+        qDebug << "Time since last update: " << timeSinceLastUpdate << "\n";
     }
     else
     {
@@ -95,6 +95,8 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 
         // Calculate the velocity
         milesPerHour = calculateMPH(intervalOfLastRevolution);
+
+        qDebug << "Wheel revolution time: " << intervalOfLastRevolution << "\n";
     }
 
 
