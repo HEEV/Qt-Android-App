@@ -85,7 +85,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
             // assume deceleration has occurred.
             return;
         }
-        qDebug << "Time since last update: " << timeSinceLastUpdate << "\n";
+        qDebug() << "Time since last update: " << timeSinceLastUpdate << "\n";
     }
     else
     {
@@ -96,7 +96,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
         // Calculate the velocity
         milesPerHour = calculateMPH(intervalOfLastRevolution);
 
-        qDebug << "Wheel revolution time: " << intervalOfLastRevolution << "\n";
+        qDebug() << "Wheel revolution time: " << intervalOfLastRevolution << "\n";
     }
 
 
