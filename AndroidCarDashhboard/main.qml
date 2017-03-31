@@ -179,7 +179,7 @@ Window {
                 Text {
                     id: currentTime
                     color: "#ffffff"
-                    text: qsTr("Current Lap Time: 2:21:332")
+                    text: qsTr("Current Lap Time: " + UIRaceDataset.currentLapTime)
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
                     font.pointSize: 32
@@ -202,7 +202,7 @@ Window {
                 Text {
                     id: totalElapsedTime
                     color: "#ffffff"
-                    text: qsTr("Total Time Elapsed: 5:23:577")
+                    text: qsTr("Total Time Elapsed: " + UIRaceDataset.totalTime)
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
                     font.pointSize: 32
@@ -273,12 +273,16 @@ Window {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillHeight: false
                             checkable: false
+                            onClicked:
+                            {
+                                RaceActionManager.startRace();
+                            }
                         }
 
                         StatusIndicator {
                             id: statusIndicator
                             color: "#50f200"
-                            active: false
+                            active: UIRaceDataset.raceStatus
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
                         }
@@ -291,6 +295,10 @@ Window {
                             checkable: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillHeight: false
+                            onClicked:
+                            {
+                                RaceActionManager.stopRace();
+                            }
                         }
 
 

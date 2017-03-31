@@ -8,7 +8,8 @@ SOURCES += main.cpp \
     CANInterface.cpp \
     DataProcessor.cpp \
     CanNodeParser.cpp \
-    Logger.cpp
+    Logger.cpp \
+    RaceActionManager.cpp
 
 RESOURCES += qml.qrc
 
@@ -25,4 +26,5 @@ HEADERS += \
     CANInterface.h \
     DataProcessor.h \
     CanNodeParser.h \
-    Logger.h
+    Logger.h \
+    RaceActionManager.h

@@ -1,14 +1,18 @@
+//QT includes.
 #include <QGuiApplication>
 #include <QtAndroidExtras/QtAndroidExtras>
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
+#include <QStandardPaths>
+#include <QDateTime>
+
+//Local Includes
 #include <UIRaceDataset.h>
 #include <CANInterface.h>
 #include <DataProcessor.h>
-#include <QStandardPaths>
-#include <QDateTime>
 #include <Logger.h>
+#include <RaceActionManager.h>
 
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
@@ -19,13 +23,14 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlEngine engine;
+
+    //Get the screen to stay on hopefuly
+    performJNIOperations();
+
     UIRaceDataset *raceDataset = new UIRaceDataset();
     // Placeholder temporary remove this later this is terrible blah blah blah
     raceDataset->setProjectedProgress(0.95);
     raceDataset->setGroundSpeed(38.0);
-
-    //Get the screen to stay on hopefuly
-    performJNIOperations();
 
     // Set up logging
     QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
@@ -42,8 +47,15 @@ int main(int argc, char *argv[])
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
 
+    //Set up the RaceActionManager to take care of the race progress
+    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset);
+
+
+
+    //Make the UIRaceDataset, Logger and RaceActionManager accessable to the QML segment of the code.
     engine.rootContext()->setContextProperty("UIRaceDataset", raceDataset);
     engine.rootContext()->setContextProperty("Logger", logger);
+    engine.rootContext()->setContextProperty("RaceActionManager", manager);
 
     QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
     component.create();
@@ -52,6 +64,10 @@ int main(int argc, char *argv[])
 
     return returnval;
 }
+
+
+
+
 
 void performJNIOperations()
 {
