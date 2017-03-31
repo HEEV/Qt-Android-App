@@ -7,6 +7,8 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     groundSpeed = 0;
     speedSensorStatus = false;
     canStatus = false;
+    totalTime = "00:00:00";
+    currentLapTime = "00:00:00";
 }
 
 qreal UIRaceDataset::getProjectedProgress()
@@ -47,4 +49,24 @@ void UIRaceDataset::setCanStatus(bool status)
 bool UIRaceDataset::getCanStatus()
 {
     return canStatus;
+}
+
+void UIRaceDataset::setTotalTime(QString time)
+{
+    totalTime = time;
+}
+
+QString UIRaceDataset::getTotalTime()
+{
+    return totalTime;
+}
+
+void UIRaceDataset::setCurrentLapTime(QString time)
+{
+    currentLapTime = time;
+}
+
+QString UIRaceDataset::getCurrentLapTime()
+{
+    return currentLapTime;
 }
