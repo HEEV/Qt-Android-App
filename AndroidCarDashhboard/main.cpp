@@ -53,6 +53,10 @@ int main(int argc, char *argv[])
     return returnval;
 }
 
+
+
+
+
 void performJNIOperations()
 {
     QAndroidJniObject activity = QtAndroid::androidActivity();
