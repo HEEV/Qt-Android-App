@@ -70,3 +70,13 @@ QString UIRaceDataset::getCurrentLapTime()
 {
     return currentLapTime;
 }
+
+void UIRaceDataset::setRaceStatus(bool status)
+{
+    raceStatus = status;
+}
+
+bool UIRaceDataset::getRaceStatus()
+{
+    return raceStatus;
+}

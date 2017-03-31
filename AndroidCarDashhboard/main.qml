@@ -179,7 +179,7 @@ Window {
                 Text {
                     id: currentTime
                     color: "#ffffff"
-                    text: qsTr("Current Lap Time: 2:21:332")
+                    text: qsTr("Current Lap Time: " + UIRaceDataset.currentLapTime)
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
                     font.pointSize: 32
@@ -282,7 +282,7 @@ Window {
                         StatusIndicator {
                             id: statusIndicator
                             color: "#50f200"
-                            active: false
+                            active: UIRaceDataset.raceStatus
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
                         }

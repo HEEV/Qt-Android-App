@@ -18,7 +18,8 @@ class RaceActionManager: public QObject
 
 public:
     //We require pretty much all of the other classes in order to make this class work correctly.
-    RaceActionManager(CANInterface &can, DataProcessor &data, Logger &log, UIRaceDataset &ui);
+    RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui);
+    ~RaceActionManager();
 
     bool initConnections();
     Q_INVOKABLE bool startRace();
@@ -31,9 +32,9 @@ private slots:
 private:
     const QString logPrefix = "RACE_MANAGER: ";
 
-    unsigned long totalTimeMili = 0;
-    unsigned int lapTimeMili = 0;
-    const int timerPeriod = 10; //In miliseconds.
+    static const int timerPeriod = 10; //In miliseconds.
+
+    bool raceStarted;
 
     CANInterface *canInterface;
     DataProcessor *dataProcessor;
@@ -41,6 +42,8 @@ private:
     UIRaceDataset *uiInterface;
 
     QTimer *raceTimer;
+    QTime totalRaceTime;
+    QTime currentLapTime;
 
 };
 
