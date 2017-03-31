@@ -1,4 +1,5 @@
 #include <QGuiApplication>
+#include <QtAndroidExtras/QtAndroidExtras>
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -12,6 +13,8 @@
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
+void performJNIOperations();
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -20,6 +23,9 @@ int main(int argc, char *argv[])
     // Placeholder temporary remove this later this is terrible blah blah blah
     raceDataset->setProjectedProgress(0.95);
     raceDataset->setGroundSpeed(38.0);
+
+    //Get the screen to stay on hopefuly
+    performJNIOperations();
 
     // Set up logging
     QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
@@ -46,3 +52,20 @@ int main(int argc, char *argv[])
 
     return returnval;
 }
+
+void performJNIOperations()
+{
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    if (activity.isValid())
+    {
+        QAndroidJniObject window = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
+
+        if (window.isValid())
+        {
+            const int FLAG_KEEP_SCREEN_ON = 128;
+            window.callMethod<void>("addFlags", "(I)V", FLAG_KEEP_SCREEN_ON);
+        }
+        QAndroidJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
+    }
+}
+
