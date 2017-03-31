@@ -12,6 +12,8 @@ const int DataProcessor::EFI_PRESSURE_ID = 1;
 const int DataProcessor::MEGASQUIRT_ID = 2;
 const int DataProcessor::CURRENT_ID = 3;
 const int DataProcessor::VOLTAGE_ID = 4;
+const uint32_t DataProcessor::NO_NEW_DATA = 0xFFFFFFFF;
+const int DataProcessor::WHEEL_TIMEOUT_LENGTH = 6000;
 
 const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
 
@@ -56,36 +58,38 @@ void DataProcessor::routeCANFrame(QCanBusFrame frame)
     }
 }
 
+/*!
+ * \brief DataProcessor::updateGroundSpeed calculates and sets the
+ * ground speed based on how long it took the wheel to revolve
+ * \param data the message data from the CANInterface
+ */
 void DataProcessor::updateGroundSpeed(QByteArray data)
 {
-    const uint32_t WHEEL_STOPPED = 0xFFFFFFFF;
-    time_t currentTime = time(nullptr);
+    static time_t currentTime = 0;
+    currentTime = time(nullptr);
     qreal milesPerHour = 0;
 
      // Grab the time interval from data byte 1.
-    uint32_t intervalOfLastRevolution = WHEEL_STOPPED;
-    //get the data
+    uint32_t intervalOfLastRevolution = NO_NEW_DATA;
     CanNodeParser::getData(data, intervalOfLastRevolution);
 
-    // If we got a max_int (meaning CAN board did not receive a pulse since last message
-    if (intervalOfLastRevolution == WHEEL_STOPPED)
+    // If we got a max_int (meaning CAN board did not receive a pulse since last message)
+    if (intervalOfLastRevolution == NO_NEW_DATA)
     {
         // the time that has elapsed since we last processed a new revolution interval
-        uint32_t timeSinceLastUpdate = (uint32_t)(difftime(currentTime, timeOfLastWheelPulseMessage) * 1000.0);
-        // if time since last updateGroundSpeed is greater than last known wheel rotation interval
-        if (timeSinceLastUpdate > intervalOfLastKnownRevolution)
+        int timeSinceLastUpdate = timeDifferenceInMilliseconds(currentTime, timeOfLastWheelPulseMessage);
+
+        if (timeSinceLastUpdate > WHEEL_TIMEOUT_LENGTH)
         {
-            // Calculate the velocity based on an estimated interval
-            milesPerHour = calculateMPH(timeSinceLastUpdate);
+            // Set the ground speed as if it the car has stopped.
+            milesPerHour = 0.0;
         }
         else
         {
-            // Stop now and don't update the speed
-            // since it has not been long enough to
-            // assume deceleration has occurred.
+            // Stop now and don't update the speed  since it has not been
+            // long enough to assume that the has stopped
             return;
         }
-        qDebug << "Time since last update: " << timeSinceLastUpdate << "\n";
     }
     else
     {
@@ -95,25 +99,20 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 
         // Calculate the velocity
         milesPerHour = calculateMPH(intervalOfLastRevolution);
-
-        qDebug << "Wheel revolution time: " << intervalOfLastRevolution << "\n";
     }
-
 
     raceDataset->setGroundSpeed(milesPerHour);
     raceDataset->groundSpeedNotify();
-
-    // These two lines don't really belong here, they are just to demonstrate
-    // that the updateGroundSpeed function is running.
-//    raceDataset->setSpeedSensorStatus(true);
-//    raceDataset->speedSensorStatusNotify();
-
-    //qDebug() << "Wheel frequency: " << wheelRotationFrequency << "\n";
 }
 
 qreal DataProcessor::calculateMPH(uint32_t revolutionInterval)
 {
     return (qreal)((1.0 / (double)revolutionInterval) * velocityMultiplier);
+}
+
+int DataProcessor::timeDifferenceInMilliseconds(time_t endTime, time_t startTime)
+{
+    return (int)(difftime(endTime, startTime) * 1000.0);
 }
 
 void DataProcessor::updateAirSpeed(QByteArray data)

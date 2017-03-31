@@ -32,6 +32,15 @@ private:
     static const int CURRENT_ID;
     static const int VOLTAGE_ID;
 
+    // the value received when a sensor sends a message that
+    // does not contain new information
+    static const uint32_t NO_NEW_DATA;
+
+    // the amount of time (in milliseconds) to wait for new
+    // data from the wheel tachometer before assuming the car
+    // has (basically) stopped.
+    static const int WHEEL_TIMEOUT_LENGTH;
+
     // Multiplier to get velocity from revolutions per second
     static const double VELOCITY_MULTIPLIER_BASE;
     double velocityMultiplier;
@@ -44,7 +53,9 @@ private:
     // for the most recent full revolution
     uint32_t intervalOfLastKnownRevolution;
 
+    // Helper methods for updateGroundSpeed()
     qreal calculateMPH(uint32_t revolutionInterval);
+    int timeDifferenceInMilliseconds(time_t startTime, time_t endTime);
 
     UIRaceDataset *raceDataset;
     Logger *logger;
