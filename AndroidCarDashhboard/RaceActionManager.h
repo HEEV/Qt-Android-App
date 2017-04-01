@@ -42,6 +42,7 @@ private:
     UIRaceDataset *uiInterface;
 
     QTimer *raceTimer;
+    QTimer *updateGPS;
     QTime totalRaceTime;
     QTime currentLapTime;
 

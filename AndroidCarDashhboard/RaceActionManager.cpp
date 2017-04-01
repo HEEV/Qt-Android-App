@@ -6,7 +6,7 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     dataProcessor = data;
     logger = log;
     uiInterface = ui;
-    currentLapTime = QTime(0,0,0,0);
+    currentLapTime = QTime();
     totalRaceTime = QTime();
 }
 
@@ -21,7 +21,9 @@ bool RaceActionManager::startRace()
     raceTimer = new QTimer();
     connect(raceTimer, SIGNAL(timeout()), this, SLOT(updateCurrentTime()));
     raceTimer->start(100);
+    totalRaceTime.restart();
     totalRaceTime.start();
+    currentLapTime.restart();
     currentLapTime.start();
     uiInterface->setRaceStatus(true);
     uiInterface->raceStatusNotify();
@@ -32,13 +34,19 @@ bool RaceActionManager::startRace()
 
 void RaceActionManager::updateCurrentTime()
 {
-    QString totalText = totalRaceTime.toString("mm:ss:zz");
-    QString currentLapText = currentLapTime.toString("mm:ss:zz");
+    int totalTimeMS = totalRaceTime.elapsed();
+    int currentLapTimeMS = currentLapTime.elapsed();
+    QString totalText = QString("%1:%2:%3").arg( totalTimeMS / 60000        , 2, 10, QChar('0'))
+                                           .arg((totalTimeMS % 60000) / 1000, 2, 10, QChar('0'))
+                                           .arg((totalTimeMS % 1000)        , 3, 10, QChar('0'));
+    QString currentLapText = QString("%1:%2:%3").arg( currentLapTimeMS / 60000        , 2, 10, QChar('0'))
+                                                .arg((currentLapTimeMS % 60000) / 1000, 2, 10, QChar('0'))
+                                                .arg((currentLapTimeMS % 1000)        , 3, 10, QChar('0'));
     uiInterface->setCurrentLapTime(totalText);
     uiInterface->currentLapTimeNotify();
     uiInterface->setTotalTime(currentLapText);
     uiInterface->totalTimeNotify();
-    logger->println(QString("Passing: " + totalText).toStdString());
+    //logger->println(QString("Passing: " + QString::number(totalTimeMS)).toStdString());
 }
 
 
