@@ -13,6 +13,7 @@
 #include <DataProcessor.h>
 #include <Logger.h>
 #include <RaceActionManager.h>
+#include <GPSPositioningService.h>
 
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
@@ -47,8 +48,11 @@ int main(int argc, char *argv[])
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
 
+    //Make a GPS Service
+    GPSPositioningService *gps = new GPSPositioningService(logger);
+
     //Set up the RaceActionManager to take care of the race progress
-    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset);
+    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset, gps);
 
 
 

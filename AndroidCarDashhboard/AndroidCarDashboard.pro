@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     CanNodeParser.cpp \
     Logger.cpp \
     RaceActionManager.cpp \
-    GPSPositioningService.cpp
+    GPSPositioningService.cpp \
+    NetworkInterface.cpp
 
 RESOURCES += qml.qrc
 
@@ -29,4 +30,5 @@ HEADERS += \
     CanNodeParser.h \
     Logger.h \
     RaceActionManager.h \
-    GPSPositioningService.h
+    GPSPositioningService.h \
+    NetworkInterface.h
