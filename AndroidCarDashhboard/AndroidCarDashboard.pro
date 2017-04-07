@@ -1,6 +1,11 @@
 TEMPLATE = app
 
-QT += qml quick serialport serialbus widgets core androidextras
+QT += qml quick serialport serialbus widgets core positioning network
+
+Q_OS_ANDROID{
+QT += androidextras
+}
+
 CONFIG += c++11
 
 SOURCES += main.cpp \
@@ -9,7 +14,9 @@ SOURCES += main.cpp \
     DataProcessor.cpp \
     CanNodeParser.cpp \
     Logger.cpp \
-    RaceActionManager.cpp
+    RaceActionManager.cpp \
+    GPSPositioningService.cpp \
+    NetworkInterface.cpp
 
 RESOURCES += qml.qrc
 
@@ -27,4 +34,6 @@ HEADERS += \
     DataProcessor.h \
     CanNodeParser.h \
     Logger.h \
-    RaceActionManager.h
+    RaceActionManager.h \
+    GPSPositioningService.h \
+    NetworkInterface.h
