@@ -33,5 +33,5 @@ void GPSPositioningService::stopTracking()
 
 void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
 {
-    logger->println((logTag + info).toStdString());
+    //logger->println((logTag + info).toStdString());
 }

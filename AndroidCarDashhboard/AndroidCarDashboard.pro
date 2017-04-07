@@ -1,6 +1,11 @@
 TEMPLATE = app
 
-QT += qml quick serialport serialbus widgets core positioning androidextras
+QT += qml quick serialport serialbus widgets core positioning network
+
+Q_OS_ANDROID{
+QT += androidextras
+}
+
 CONFIG += c++11
 
 SOURCES += main.cpp \

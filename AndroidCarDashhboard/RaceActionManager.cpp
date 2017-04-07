@@ -1,11 +1,12 @@
 #include "RaceActionManager.h"
 
-RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui)
+RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net)
 {
     canInterface = can;
     dataProcessor = data;
     logger = log;
     uiInterface = ui;
+    network = net;
     currentLapTime = QTime();
     totalRaceTime = QTime();
 }
@@ -18,9 +19,26 @@ bool RaceActionManager::initConnections()
 
 bool RaceActionManager::startRace()
 {
+    logger->println("Connecting to server.");
+    bool connected = network->connectToServer(this);
+
+    QJsonObject startUp;
+    startUp.insert("SharedKey", "k5t452dewa432");
+    startUp.insert("CarType", "Sting");
+    startUp.insert("LapNum", "1");
+    network->sendJASON(startUp);
+    if(connected)
+    {
+        logger->println("Connected.");
+
+    }
+    else
+    {
+        logger->println("Unable to connect.");
+    }
     raceTimer = new QTimer();
     connect(raceTimer, SIGNAL(timeout()), this, SLOT(updateCurrentTime()));
-    raceTimer->start(100);
+    raceTimer->start(timerPeriod);
     totalRaceTime.restart();
     totalRaceTime.start();
     currentLapTime.restart();
@@ -46,6 +64,12 @@ void RaceActionManager::updateCurrentTime()
     uiInterface->currentLapTimeNotify();
     uiInterface->setTotalTime(currentLapText);
     uiInterface->totalTimeNotify();
+
+
+    //Simple network send.
+    QJsonObject test;
+    test.insert("Time", totalText);
+    bool sent = network->sendJASON(test);
     //logger->println(QString("Passing: " + QString::number(totalTimeMS)).toStdString());
 }
 
@@ -54,6 +78,8 @@ bool RaceActionManager::stopRace()
 {
     if(raceStarted)
     {
+        network->disconnect();
+
         raceTimer->stop();
         //Disconnects everything that is associated with the timer
         disconnect(raceTimer, 0, 0,0);
@@ -66,6 +92,13 @@ bool RaceActionManager::stopRace()
     }
     logger->println((logPrefix + "Race stopped.").toStdString());
     return true;
+}
+
+
+void RaceActionManager::updateNetwork(QJsonObject json)
+{
+    QString response = json["response"].toString();
+    logger->println(response.toStdString());
 }
 
 RaceActionManager::~RaceActionManager()
