@@ -1,6 +1,12 @@
 //QT includes.
 #include <QGuiApplication>
+<<<<<<< HEAD
 //#include <QtAndroidExtras/QtAndroidExtras>
+=======
+#ifdef Q_OS_ANDROID
+#include <QtAndroidExtras/QtAndroidExtras>
+#endif
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -13,19 +19,29 @@
 #include <DataProcessor.h>
 #include <Logger.h>
 #include <RaceActionManager.h>
+#include <GPSPositioningService.h>
+#include <NetworkInterface.h>
 
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
+#ifdef Q_OS_ANDROID
 void performJNIOperations();
+#endif
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlEngine engine;
 
+#ifdef Q_OS_ANDROID
     //Get the screen to stay on hopefuly
+<<<<<<< HEAD
     //performJNIOperations();
+=======
+    performJNIOperations();
+#endif
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 
     UIRaceDataset *raceDataset = new UIRaceDataset();
     // Placeholder temporary remove this later this is terrible blah blah blah
@@ -47,9 +63,15 @@ int main(int argc, char *argv[])
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
 
-    //Set up the RaceActionManager to take care of the race progress
-    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset);
+    //Make a GPS Service
+    GPSPositioningService *gps = new GPSPositioningService(logger);
 
+    //Make network interface.
+    NetworkInterface *net = new NetworkInterface();
+
+
+    //Set up the RaceActionManager to take care of the race progress
+    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset, gps, net);
 
 
     //Make the UIRaceDataset, Logger and RaceActionManager accessable to the QML segment of the code.
@@ -68,7 +90,11 @@ int main(int argc, char *argv[])
 
 
 
+<<<<<<< HEAD
 /*
+=======
+#ifdef Q_OS_ANDROID
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 void performJNIOperations()
 {
     QAndroidJniObject activity = QtAndroid::androidActivity();
@@ -84,4 +110,8 @@ void performJNIOperations()
         QAndroidJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
     }
 }
+<<<<<<< HEAD
 */
+=======
+#endif
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
