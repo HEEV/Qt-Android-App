@@ -20,6 +20,9 @@ Window {
         flickableDirection: Flickable.HorizontalFlick
         anchors.fill: parent
 
+        //        RowLayout {
+        //            id: layout1
+        //            anchors.left: parent.left
 
         Rectangle {
             id: uiPane
@@ -41,7 +44,7 @@ Window {
                 anchors.leftMargin: 240
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.topMargin: 202
+                anchors.topMargin: 210
 
                 tickmarksVisible: true
                 maximumValue: 50
@@ -73,9 +76,8 @@ Window {
                 anchors.top: parent.top
                 maximumValue: 50
                 value: UIRaceDataset.windSpeed
-                anchors.topMargin: 8
-                style: DashboardGaugeStyle {
-                }
+                anchors.topMargin: 0
+                style: DashboardGaugeStyle {}
                 minimumValue: 0
                 anchors.leftMargin: 0
                 //Every time the number changes this is the animation to play in response.
@@ -96,7 +98,7 @@ Window {
                 height: 104
                 anchors.leftMargin: 5
                 anchors.topMargin: -104
-                anchors.rightMargin: 389
+                anchors.rightMargin: 435
                 anchors.left: parent.left
                 anchors.right: speedometer.right
                 anchors.top: speedometer.bottom
@@ -152,17 +154,6 @@ Window {
                 }
 
                 Text {
-                    id: lastLapTime
-                    color: "#ffffff"
-                    text: qsTr("Last Lap Time: 3:02:245")
-                    fontSizeMode: Text.Fit
-                    horizontalAlignment: Text.AlignRight
-                    font.pointSize: 32
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                Text {
                     id: totalElapsedTime
                     color: "#ffffff"
                     text: qsTr("Total Time Elapsed: " + UIRaceDataset.totalTime)
@@ -185,6 +176,33 @@ Window {
                 }
 
                 Text {
+                    id: lastLapTime
+                    color: "#ffffff"
+                    text: qsTr("Last Lap Time: 3:02:245")
+                    fontSizeMode: Text.Fit
+                    horizontalAlignment: Text.AlignRight
+                    font.pointSize: 32
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+            }
+
+            ColumnLayout {
+                id: lapStats
+                x: 0
+                y: 7
+                anchors.right: parent.right
+                anchors.topMargin: 0
+                anchors.leftMargin: 0
+                spacing: 0
+                anchors.top: parent.top
+                anchors.left: speedometer.right
+                anchors.bottomMargin: 0
+                anchors.rightMargin: 0
+                anchors.bottom: progressBarCluster.top
+
+
+                Text {
                     id: currentLap
                     color: "#ffffff"
                     text: qsTr("Lap 2")
@@ -195,8 +213,11 @@ Window {
                     Layout.fillHeight: true
                 }
             }
-
         }
+        //        }
+        //        RowLayout {
+        //            id: layout2
+        //            anchors.right: parent.right
 
         Rectangle {
             id: switchPane
@@ -300,38 +321,9 @@ Window {
                         readOnly: true
 
                     }
-
-/*
-                    ScrollView
-                    {
-                        anchors.fill: parent
-                        verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
-                        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-                        Flickable {
-                            id: loggerFlickable
-                            anchors.fill: parent
-
-                            TextArea.loggerFlickable: TextArea {
-                                id: textArea
-                                //text: UIRaceDataset.
-                                font.capitalization: Font.capitalization
-                                textColor: "#000000"
-                                anchors.fill: parent
-                            }
-                        }
-                    }
-
-*/
-
-
-
                 }
-
-
-
-
             }
         }
+        //        }
     }
-
 }

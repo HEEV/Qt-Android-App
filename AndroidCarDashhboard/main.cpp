@@ -1,6 +1,6 @@
 //QT includes.
 #include <QGuiApplication>
-#include <QtAndroidExtras/QtAndroidExtras>
+//#include <QtAndroidExtras/QtAndroidExtras>
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QQmlEngine engine;
 
     //Get the screen to stay on hopefuly
-    performJNIOperations();
+    //performJNIOperations();
 
     UIRaceDataset *raceDataset = new UIRaceDataset();
     // Placeholder temporary remove this later this is terrible blah blah blah
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
 
 
-
+/*
 void performJNIOperations()
 {
     QAndroidJniObject activity = QtAndroid::androidActivity();
@@ -84,4 +84,4 @@ void performJNIOperations()
         QAndroidJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
     }
 }
-
+*/
