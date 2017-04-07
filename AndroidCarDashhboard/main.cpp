@@ -1,8 +1,12 @@
 //QT includes.
 #include <QGuiApplication>
+<<<<<<< HEAD
+//#include <QtAndroidExtras/QtAndroidExtras>
+=======
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras/QtAndroidExtras>
 #endif
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -32,8 +36,12 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
     //Get the screen to stay on hopefuly
+<<<<<<< HEAD
+    //performJNIOperations();
+=======
     performJNIOperations();
 #endif
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 
     UIRaceDataset *raceDataset = new UIRaceDataset();
     // Placeholder temporary remove this later this is terrible blah blah blah
@@ -82,7 +90,11 @@ int main(int argc, char *argv[])
 
 
 
+<<<<<<< HEAD
+/*
+=======
 #ifdef Q_OS_ANDROID
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 void performJNIOperations()
 {
     QAndroidJniObject activity = QtAndroid::androidActivity();
@@ -98,4 +110,8 @@ void performJNIOperations()
         QAndroidJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
     }
 }
+<<<<<<< HEAD
+*/
+=======
 #endif
+>>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
