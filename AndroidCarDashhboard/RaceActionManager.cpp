@@ -7,6 +7,7 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     logger = log;
     uiInterface = ui;
     network = net;
+    gpsService = gps;
     currentLapTime = QTime();
     totalRaceTime = QTime();
 }
@@ -20,33 +21,45 @@ bool RaceActionManager::initConnections()
 bool RaceActionManager::startRace()
 {
     logger->println("Connecting to server.");
-    bool connected = network->connectToServer(this);
+/*
+    //Network setup.
+    networkConnected = network->connectToServer(this);
 
     QJsonObject startUp;
     startUp.insert("SharedKey", "k5t452dewa432");
     startUp.insert("CarType", "Sting");
     startUp.insert("LapNum", "1");
-    network->sendJASON(startUp);
-    if(connected)
+
+    if(networkConnected)
     {
         logger->println("Connected.");
-
+        network->sendJASON(startUp);
     }
     else
     {
         logger->println("Unable to connect.");
     }
+*/
+    //Start the GPS service.
+    gpsStarted = gpsService->startTracking();
+
+    //Set up pulse to check on things.
     raceTimer = new QTimer();
     connect(raceTimer, SIGNAL(timeout()), this, SLOT(updateCurrentTime()));
     raceTimer->start(timerPeriod);
+
+    //Start keeping track of time.
     totalRaceTime.restart();
     totalRaceTime.start();
     currentLapTime.restart();
     currentLapTime.start();
+
+    //Show on the UI that the race has started.
     uiInterface->setRaceStatus(true);
     uiInterface->raceStatusNotify();
     logger->println((logPrefix + "Race started.").toStdString());
     raceStarted = true;
+
     return true;
 }
 
@@ -67,9 +80,9 @@ void RaceActionManager::updateCurrentTime()
 
 
     //Simple network send.
-    QJsonObject test;
-    test.insert("Time", totalText);
-    bool sent = network->sendJASON(test);
+    //QJsonObject test;
+    //test.insert("Time", totalText);
+    //bool sent = network->sendJASON(test);
     //logger->println(QString("Passing: " + QString::number(totalTimeMS)).toStdString());
 }
 
@@ -78,8 +91,13 @@ bool RaceActionManager::stopRace()
 {
     if(raceStarted)
     {
-        network->disconnect();
-
+        /*
+        if(networkConnected)
+        {
+            network->disconnect();
+            delete network;
+        }
+*/
         raceTimer->stop();
         //Disconnects everything that is associated with the timer
         disconnect(raceTimer, 0, 0,0);

@@ -43,12 +43,15 @@ private:
     static const int timerPeriod = 500; //In miliseconds.
 
     bool raceStarted;
+    bool networkConnected;
+    bool gpsStarted;
 
     CANInterface *canInterface;
     DataProcessor *dataProcessor;
     Logger *logger;
     UIRaceDataset *uiInterface;
     NetworkInterface *network;
+    GPSPositioningService *gpsService;
 
     QTimer *raceTimer;
     QTimer *updateGPS;
