@@ -20,6 +20,7 @@ Window {
         flickableDirection: Flickable.HorizontalFlick
         anchors.fill: parent
 
+
         Rectangle {
             id: uiPane
             width: parent.width/2
@@ -32,13 +33,15 @@ Window {
             anchors.left: parent.left
             anchors.leftMargin: 0
 
+
             CircularGauge {
                 id: speedometer
                 width: parent.width * 0.5
                 height: parent.height * 0.65
+                anchors.leftMargin: 240
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.topMargin: 5
+                anchors.topMargin: 202
 
                 tickmarksVisible: true
                 maximumValue: 50
@@ -58,8 +61,42 @@ Window {
                 }
             }
 
+
+            CircularGauge {
+                id: windometer
+                x: 0
+                y: 0
+                width: parent.width * 0.35
+                height: parent.height * 0.45
+                anchors.left: parent.left
+                tickmarksVisible: true
+                anchors.top: parent.top
+                maximumValue: 50
+                value: UIRaceDataset.windSpeed
+                anchors.topMargin: 8
+                style: DashboardGaugeStyle {
+                }
+                minimumValue: 0
+                anchors.leftMargin: 0
+                //Every time the number changes this is the animation to play in response.
+                Behavior on value
+                {
+                    NumberAnimation
+                    {
+                        //How long the animation should take
+                        duration: 300
+                        //The style of animation to be played.
+                        easing.type: Easing.InOutSine
+                    }
+                }
+            }
+
             ColumnLayout {
-                id: windRpmCluster
+                id: velocityCluster
+                height: 104
+                anchors.leftMargin: 5
+                anchors.topMargin: -104
+                anchors.rightMargin: 389
                 anchors.left: parent.left
                 anchors.right: speedometer.right
                 anchors.top: speedometer.bottom
@@ -68,7 +105,7 @@ Window {
                 Text {
                     id: relativeSpeed
                     color: "#ffffff"
-                    text: qsTr("Relative Speed: 14.2 mph")
+                    text: qsTr("Ṽgw: 14.2 mph")
                     font.pointSize: 32
                     fontSizeMode: Text.Fit
                     Layout.fillWidth: true
@@ -78,17 +115,7 @@ Window {
                 Text {
                     id: averageSpeed
                     color: "#ffffff"
-                    text: qsTr("Average Speed: 18.2 mph")
-                    font.pointSize: 32
-                    fontSizeMode: Text.Fit
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                Text {
-                    id: rpm
-                    color: "#ffffff"
-                    text: qsTr("RPM: 1200")
+                    text: qsTr("Avg. V: 18.2 mph")
                     font.pointSize: 32
                     fontSizeMode: Text.Fit
                     Layout.fillWidth: true
@@ -98,71 +125,7 @@ Window {
 
             }
 
-            Column {
-                id: progressBarCluster
-                width: parent.width
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
 
-                Text {
-                    id: actualProgressTitle
-                    color: "#ffffff"
-                    text: qsTr("Actual Progress")
-                    font.pointSize: 20
-                    fontSizeMode: Text.Fit
-                    anchors.left: parent.left
-                }
-
-                ProgressBar {
-                    id: actualProgressBar
-                    value: 0.5
-                    width: parent.width
-                    height: 15
-                    indeterminate: false
-                    maximumValue: 1
-                    style: ProgressBarStyle {
-                        background: Rectangle {
-                            radius: 2
-                            color: "darkGray"
-                            border.color: "gray"
-                            border.width: 1
-                        }
-                        progress: Rectangle {
-                            color: "blue"
-                            border.color: "Blue"
-                        }
-                    }
-                }
-
-                ProgressBar {
-                    id: projectedProgressBar
-                    value: UIRaceDataset.projectedProgress
-                    width: parent.width
-                    height: 15
-                    style: ProgressBarStyle {
-                        background: Rectangle {
-                            radius: 2
-                            color: "darkGray"
-                            border.color: "gray"
-                            border.width: 1
-                        }
-                        progress: Rectangle {
-                            color: "red"
-                            border.color: "red"
-                        }
-                    }
-                }
-
-                Text {
-                    id: desiredProgressTitle
-                    color: "#ffffff"
-                    text: qsTr("Desired Progress")
-                    font.pointSize: 20
-                    fontSizeMode: Text.Fit
-                    anchors.left: parent.left
-                }
-            }
 
             ColumnLayout {
                 id: timeStats
@@ -232,6 +195,7 @@ Window {
                     Layout.fillHeight: true
                 }
             }
+
         }
 
         Rectangle {
