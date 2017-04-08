@@ -15,6 +15,7 @@ class RaceActionManager;
 #include "UIRaceDataset.h"
 #include "GPSPositioningService.h"
 #include "NetworkInterface.h"
+#include "AVMedia.h"
 
 
 class RaceActionManager: public QObject
@@ -24,7 +25,7 @@ class RaceActionManager: public QObject
 
 public:
     //We require pretty much all of the other classes in order to make this class work correctly.
-    RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net);
+    RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net, AVMedia *media);
     ~RaceActionManager();
 
     bool initConnections();
@@ -52,6 +53,7 @@ private:
     UIRaceDataset *uiInterface;
     NetworkInterface *network;
     GPSPositioningService *gpsService;
+    AVMedia *mediaPlayer;
 
     QTimer *raceTimer;
     QTimer *updateGPS;

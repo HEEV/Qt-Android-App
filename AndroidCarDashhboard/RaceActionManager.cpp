@@ -1,6 +1,6 @@
 #include "RaceActionManager.h"
 
-RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net)
+RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net, AVMedia *media)
 {
     canInterface = can;
     dataProcessor = data;
@@ -8,8 +8,11 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     uiInterface = ui;
     network = net;
     gpsService = gps;
+    mediaPlayer = media;
     currentLapTime = QTime();
     totalRaceTime = QTime();
+
+    mediaPlayer->load("Rick");
 }
 
 bool RaceActionManager::initConnections()
@@ -53,6 +56,10 @@ bool RaceActionManager::startRace()
     totalRaceTime.start();
     currentLapTime.restart();
     currentLapTime.start();
+
+    //Start the media player.
+    mediaPlayer->play();
+
 
     //Show on the UI that the race has started.
     uiInterface->setRaceStatus(true);
@@ -98,6 +105,8 @@ bool RaceActionManager::stopRace()
         totalRaceTime.restart();
         currentLapTime.restart();
 
+        //Stop media
+        mediaPlayer->stop();
 
         //Deal with network
         if(networkConnected)
