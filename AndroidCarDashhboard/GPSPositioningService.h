@@ -6,12 +6,13 @@
 #include <QGeoPositionInfoSource>
 
 #include "Logger.h"
+#include "UIRaceDataset.h"
 
 class GPSPositioningService: public QObject
 {
     Q_OBJECT
 public:
-    GPSPositioningService(Logger *log);
+    GPSPositioningService(Logger *log, UIRaceDataset *data);
 
     bool startTracking();
     void stopTracking();
@@ -22,8 +23,9 @@ private slots:
 private:
     QGeoPositionInfoSource *source;
     Logger *logger;
+    UIRaceDataset *dataStore;
     const QString logTag = "GPS_SERVICE: ";
-    const int gpsUpdateInterval = 500;
+    static const int gpsUpdateInterval;
     bool tracking;
 };
 

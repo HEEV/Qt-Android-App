@@ -2,8 +2,9 @@ TEMPLATE = app
 
 QT += qml quick serialport serialbus widgets core positioning network
 
-Q_OS_ANDROID{
-QT += androidextras
+android {
+    QT += androidextras
+} else {
 }
 
 CONFIG += c++11

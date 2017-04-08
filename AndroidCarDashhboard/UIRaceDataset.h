@@ -2,6 +2,7 @@
 #define UIRACEDATASET_H
 
 #include <QObject>
+#include <QGeoPositionInfo>
 
 class UIRaceDataset : public QObject
 {
@@ -13,6 +14,7 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(QString totalTime READ getTotalTime WRITE setTotalTime NOTIFY totalTimeNotify)
     Q_PROPERTY(QString currentLapTime READ getCurrentLapTime WRITE setCurrentLapTime NOTIFY currentLapTimeNotify)
     Q_PROPERTY(bool raceStatus READ getRaceStatus WRITE setRaceStatus NOTIFY raceStatusNotify)
+
 public:
     explicit UIRaceDataset(QObject *parent = 0);
 
@@ -37,6 +39,9 @@ public:
     void setRaceStatus(bool status);
     bool getRaceStatus();
 
+    void setGPSInfo(QGeoPositionInfo info);
+    QGeoPositionInfo getGPSInfo();
+
 private:
     qreal projectedProgress;
     qreal groundSpeed;
@@ -45,6 +50,7 @@ private:
     bool raceStatus;
     QString totalTime;
     QString currentLapTime;
+    QGeoPositionInfo gpsInfo;
 
 signals:
     void projectedProgressNotify();

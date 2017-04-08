@@ -80,3 +80,13 @@ bool UIRaceDataset::getRaceStatus()
 {
     return raceStatus;
 }
+
+void UIRaceDataset::setGPSInfo(QGeoPositionInfo info)
+{
+    gpsInfo = info;
+}
+
+QGeoPositionInfo UIRaceDataset::getGPSInfo()
+{
+    return gpsInfo;
+}

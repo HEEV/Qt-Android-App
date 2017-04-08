@@ -7,7 +7,7 @@
 const int DataProcessor::TACHOMETER_PULSES_ID = 1150;
 // This signal gives the time interval of the most recent wheel rotation
 const int DataProcessor::TACHOMETER_TIME_LAST_PULSE_ID = 1154;
-const int DataProcessor::PITOT_ID = 1648;
+const int DataProcessor::PITOT_ID = 950;
 const int DataProcessor::EFI_PRESSURE_ID = 1;
 const int DataProcessor::MEGASQUIRT_ID = 2;
 const int DataProcessor::CURRENT_ID = 3;
@@ -136,6 +136,8 @@ void DataProcessor::updateAirSpeed(QByteArray data)
     windSpeed *= 2.2369;
     windSpeed *= scalingFactor2;
     windSpeed += offset1;
+
+    logger->println("Wind value: " + QString::number(windSpeed).toStdString());
 }
 
 void DataProcessor::updateEFIPressure(QByteArray data)

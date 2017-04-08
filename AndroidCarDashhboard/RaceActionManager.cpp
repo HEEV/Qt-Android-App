@@ -21,7 +21,7 @@ bool RaceActionManager::initConnections()
 bool RaceActionManager::startRace()
 {
     logger->println("Connecting to server.");
-/*
+
     //Network setup.
     networkConnected = network->connectToServer(this);
 
@@ -39,7 +39,7 @@ bool RaceActionManager::startRace()
     {
         logger->println("Unable to connect.");
     }
-*/
+
     //Start the GPS service.
     gpsStarted = gpsService->startTracking();
 
@@ -80,9 +80,9 @@ void RaceActionManager::updateCurrentTime()
 
 
     //Simple network send.
-    //QJsonObject test;
-    //test.insert("Time", totalText);
-    //bool sent = network->sendJASON(test);
+    QJsonObject test;
+    test.insert("Time", totalText);
+    bool sent = network->sendJASON(test);
     //logger->println(QString("Passing: " + QString::number(totalTimeMS)).toStdString());
 }
 
@@ -91,18 +91,22 @@ bool RaceActionManager::stopRace()
 {
     if(raceStarted)
     {
-        /*
-        if(networkConnected)
-        {
-            network->disconnect();
-            delete network;
-        }
-*/
+        //Stop the update timer.
         raceTimer->stop();
         //Disconnects everything that is associated with the timer
         disconnect(raceTimer, 0, 0,0);
         totalRaceTime.restart();
         currentLapTime.restart();
+
+
+        //Deal with network
+        if(networkConnected)
+        {
+            network->disconnect();
+            delete network;
+        }
+
+        //Notify the UI that the race has ended.
         uiInterface->setRaceStatus(false);
         uiInterface->raceStatusNotify();
         raceStarted = false;
