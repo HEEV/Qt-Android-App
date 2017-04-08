@@ -14,11 +14,80 @@ Window {
 
     Flickable {
         id: flickable
-        boundsBehavior: Flickable.StopAtBounds
+        anchors.fill: parent
         contentWidth: window1.width*2
         contentHeight: window1.height
+        boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.HorizontalFlick
-        anchors.fill: parent
+
+        /*
+          flickSlowThreshold: The slowest flick speed to tolerate before snapping
+          to either the dashboard or the logging screen.
+
+          Note: Multiplying flickDeceleration by a number between 0 and 1
+          allows us to choose a cutoff based on how long it would have taken the
+          flick to finish on its own. (e.g. flickDeceleration * 0.5 means snap when the
+          flick has 1/2 second of movement left.)
+        */
+        property int flickSlowThreshold: flickDeceleration * 0.4
+        property bool aboutToStop: Math.abs(horizontalVelocity) < flickSlowThreshold
+
+        /*
+          flickFastThreshold: The fastest flick speed tolerate before snapping
+          to either the dashboard or the logging screen.
+        */
+        property int flickFastThreshold: flickDeceleration * 2
+        property bool fastEnoughToAutoSnap: Math.abs(horizontalVelocity) > flickFastThreshold
+
+        // The number of milliseconds a snap animation should take
+        property int snapDuration: 200
+
+        /*
+          Decides whether or not to snap based on how fast the flickable pane is moving
+        */
+        onHorizontalVelocityChanged: {
+            // Only consider snapping if the user is not currently dragging the screen
+            if (!draggingHorizontally) {
+                if (aboutToStop) {
+                    if (flickable.contentX < flickable.contentWidth / 4) {
+                        // Snap to dashboard
+                        snapToDashboard();
+                    } else {
+                        // Snap to logging screen
+                        snapToLogScreen();
+                    }
+                } else if (fastEnoughToAutoSnap) {
+                    // If moving to the right
+                    if (horizontalVelocity < 0) {
+                        // Snap to dashboard
+                        snapToDashboard();
+                    // if moving to the left
+                    } else {
+                        // Snap to logging screen
+                        snapToLogScreen();
+                    }
+                }
+            }
+        }
+
+        function snapToDashboard() {
+            snapAnimation.to = 0;
+            snapAnimation.start();
+        }
+
+        function snapToLogScreen() {
+            snapAnimation.to = flickable.contentWidth / 2;
+            snapAnimation.start();
+        }
+
+        NumberAnimation on contentX {
+            id: snapAnimation
+            duration: snapDuration
+        }
+
+        //        RowLayout {
+        //            id: layout1
+        //            anchors.left: parent.left
 
         Rectangle {
             id: uiPane
@@ -32,13 +101,15 @@ Window {
             anchors.left: parent.left
             anchors.leftMargin: 0
 
+
             CircularGauge {
                 id: speedometer
                 width: parent.width * 0.5
                 height: parent.height * 0.65
+                anchors.leftMargin: 240
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.topMargin: 5
+                anchors.topMargin: 210
 
                 tickmarksVisible: true
                 maximumValue: 50
@@ -58,8 +129,41 @@ Window {
                 }
             }
 
+
+            CircularGauge {
+                id: windometer
+                x: 0
+                y: 0
+                width: parent.width * 0.35
+                height: parent.height * 0.45
+                anchors.left: parent.left
+                tickmarksVisible: true
+                anchors.top: parent.top
+                maximumValue: 50
+                value: UIRaceDataset.windSpeed
+                anchors.topMargin: 0
+                style: DashboardGaugeStyle {}
+                minimumValue: 0
+                anchors.leftMargin: 0
+                //Every time the number changes this is the animation to play in response.
+                Behavior on value
+                {
+                    NumberAnimation
+                    {
+                        //How long the animation should take
+                        duration: 300
+                        //The style of animation to be played.
+                        easing.type: Easing.InOutSine
+                    }
+                }
+            }
+
             ColumnLayout {
-                id: windRpmCluster
+                id: velocityCluster
+                height: 104
+                anchors.leftMargin: 5
+                anchors.topMargin: -104
+                anchors.rightMargin: 435
                 anchors.left: parent.left
                 anchors.right: speedometer.right
                 anchors.top: speedometer.bottom
@@ -68,7 +172,7 @@ Window {
                 Text {
                     id: relativeSpeed
                     color: "#ffffff"
-                    text: qsTr("Relative Speed: 14.2 mph")
+                    text: qsTr("Ṽgw: 14.2 mph")
                     font.pointSize: 32
                     fontSizeMode: Text.Fit
                     Layout.fillWidth: true
@@ -78,17 +182,7 @@ Window {
                 Text {
                     id: averageSpeed
                     color: "#ffffff"
-                    text: qsTr("Average Speed: 18.2 mph")
-                    font.pointSize: 32
-                    fontSizeMode: Text.Fit
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                Text {
-                    id: rpm
-                    color: "#ffffff"
-                    text: qsTr("RPM: 1200")
+                    text: qsTr("Avg. V: 18.2 mph")
                     font.pointSize: 32
                     fontSizeMode: Text.Fit
                     Layout.fillWidth: true
@@ -98,71 +192,7 @@ Window {
 
             }
 
-            Column {
-                id: progressBarCluster
-                width: parent.width
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
 
-                Text {
-                    id: actualProgressTitle
-                    color: "#ffffff"
-                    text: qsTr("Actual Progress")
-                    font.pointSize: 20
-                    fontSizeMode: Text.Fit
-                    anchors.left: parent.left
-                }
-
-                ProgressBar {
-                    id: actualProgressBar
-                    value: 0.5
-                    width: parent.width
-                    height: 15
-                    indeterminate: false
-                    maximumValue: 1
-                    style: ProgressBarStyle {
-                        background: Rectangle {
-                            radius: 2
-                            color: "darkGray"
-                            border.color: "gray"
-                            border.width: 1
-                        }
-                        progress: Rectangle {
-                            color: "blue"
-                            border.color: "Blue"
-                        }
-                    }
-                }
-
-                ProgressBar {
-                    id: projectedProgressBar
-                    value: UIRaceDataset.projectedProgress
-                    width: parent.width
-                    height: 15
-                    style: ProgressBarStyle {
-                        background: Rectangle {
-                            radius: 2
-                            color: "darkGray"
-                            border.color: "gray"
-                            border.width: 1
-                        }
-                        progress: Rectangle {
-                            color: "red"
-                            border.color: "red"
-                        }
-                    }
-                }
-
-                Text {
-                    id: desiredProgressTitle
-                    color: "#ffffff"
-                    text: qsTr("Desired Progress")
-                    font.pointSize: 20
-                    fontSizeMode: Text.Fit
-                    anchors.left: parent.left
-                }
-            }
 
             ColumnLayout {
                 id: timeStats
@@ -189,17 +219,6 @@ Window {
                 }
 
                 Text {
-                    id: lastLapTime
-                    color: "#ffffff"
-                    text: qsTr("Last Lap Time: 3:02:245")
-                    fontSizeMode: Text.Fit
-                    horizontalAlignment: Text.AlignRight
-                    font.pointSize: 32
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                Text {
                     id: totalElapsedTime
                     color: "#ffffff"
                     text: qsTr("Total Time Elapsed: " + UIRaceDataset.totalTime)
@@ -222,6 +241,33 @@ Window {
                 }
 
                 Text {
+                    id: lastLapTime
+                    color: "#ffffff"
+                    text: qsTr("Last Lap Time: 3:02:245")
+                    fontSizeMode: Text.Fit
+                    horizontalAlignment: Text.AlignRight
+                    font.pointSize: 32
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+            }
+
+            ColumnLayout {
+                id: lapStats
+                x: 0
+                y: 7
+                anchors.right: parent.right
+                anchors.topMargin: 0
+                anchors.leftMargin: 0
+                spacing: 0
+                anchors.top: parent.top
+                anchors.left: speedometer.right
+                anchors.bottomMargin: 0
+                anchors.rightMargin: 0
+                anchors.bottom: progressBarCluster.top
+
+
+                Text {
                     id: currentLap
                     color: "#ffffff"
                     text: qsTr("Lap 2")
@@ -233,6 +279,10 @@ Window {
                 }
             }
         }
+        //        }
+        //        RowLayout {
+        //            id: layout2
+        //            anchors.right: parent.right
 
         Rectangle {
             id: switchPane
@@ -336,38 +386,9 @@ Window {
                         readOnly: true
 
                     }
-
-/*
-                    ScrollView
-                    {
-                        anchors.fill: parent
-                        verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
-                        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-                        Flickable {
-                            id: loggerFlickable
-                            anchors.fill: parent
-
-                            TextArea.loggerFlickable: TextArea {
-                                id: textArea
-                                //text: UIRaceDataset.
-                                font.capitalization: Font.capitalization
-                                textColor: "#000000"
-                                anchors.fill: parent
-                            }
-                        }
-                    }
-
-*/
-
-
-
                 }
-
-
-
-
             }
         }
+        //        }
     }
-
 }
