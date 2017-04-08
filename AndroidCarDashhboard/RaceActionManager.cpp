@@ -1,5 +1,19 @@
 #include "RaceActionManager.h"
 
+/*!
+ * \class RaceActionManager
+ * \brief The RaceActionManager controls the execution of the app after the initial setup is done.
+ * \since 1.0
+ *
+ * This is a very important class.
+ */
+
+
+/*!
+ * \fn RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net, AVMedia *media)
+ *
+ * Constructs a RaceActionManager with access to all of the modules it needs to do its job.
+ */
 RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net, AVMedia *media)
 {
     canInterface = can;
@@ -70,6 +84,9 @@ bool RaceActionManager::startRace()
     return true;
 }
 
+/*!
+ * \brief This function will be called every time interval and is used for sending things to the Network and handling events.
+ */
 void RaceActionManager::updateCurrentTime()
 {
     int totalTimeMS = totalRaceTime.elapsed();
@@ -92,7 +109,6 @@ void RaceActionManager::updateCurrentTime()
     bool sent = network->sendJASON(test);
     //logger->println(QString("Passing: " + QString::number(totalTimeMS)).toStdString());
 }
-
 
 bool RaceActionManager::stopRace()
 {
@@ -124,7 +140,6 @@ bool RaceActionManager::stopRace()
     logger->println((logPrefix + "Race stopped.").toStdString());
     return true;
 }
-
 
 void RaceActionManager::updateNetwork(QJsonObject json)
 {

@@ -61,7 +61,6 @@ void DataProcessor::routeCANFrame(QCanBusFrame frame)
 /*!
  * \brief DataProcessor::updateGroundSpeed calculates and sets the
  * ground speed based on how long it took the wheel to revolve
- * \param data the message data from the CANInterface
  */
 void DataProcessor::updateGroundSpeed(QByteArray data)
 {

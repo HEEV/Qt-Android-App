@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>DashboardGaugeStyle.qml</file>
         <file>mainVance.qml</file>
+        <file alias="rick_roll.mp3">Rick_Roll.mp3</file>
     </qresource>
 </RCC>

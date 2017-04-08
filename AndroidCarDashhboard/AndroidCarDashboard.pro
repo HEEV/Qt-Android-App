@@ -1,6 +1,7 @@
 TEMPLATE = app
 
-QT += qml quick serialport serialbus widgets core positioning network
+QT += qml quick serialport serialbus widgets core positioning network multimedia
+
 
 android {
     QT += androidextras
@@ -17,7 +18,9 @@ SOURCES += main.cpp \
     Logger.cpp \
     RaceActionManager.cpp \
     GPSPositioningService.cpp \
-    NetworkInterface.cpp
+    NetworkInterface.cpp \
+    AVMedia.cpp \
+    androidCarDashFAQ.mm
 
 RESOURCES += qml.qrc
 
@@ -37,4 +40,5 @@ HEADERS += \
     Logger.h \
     RaceActionManager.h \
     GPSPositioningService.h \
-    NetworkInterface.h
+    NetworkInterface.h \
+    AVMedia.h

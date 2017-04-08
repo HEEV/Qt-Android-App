@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     //Make network interface.
     NetworkInterface *net = new NetworkInterface();
 
-
     //Make a media interface.
     AVMedia *media = new AVMedia();
 
