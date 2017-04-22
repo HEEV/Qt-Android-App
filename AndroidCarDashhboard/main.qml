@@ -6,45 +6,182 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 
 Window {
-    id: window1
+    id: applicationWindow
     visible: true
-    width: 960
-    height: 600
+    width: Screen.width
+    height: Screen.height
     title: qsTr("AndroidCANDashboard")
 
     Flickable {
         id: flickable
         boundsBehavior: Flickable.StopAtBounds
-        contentWidth: window1.width*2
-        contentHeight: window1.height
         flickableDirection: Flickable.HorizontalFlick
+        contentWidth: applicationWindow.width*2
+        contentHeight: applicationWindow.height
+
         anchors.fill: parent
 
-        //        RowLayout {
-        //            id: layout1
-        //            anchors.left: parent.left
+        Rectangle {
+            id: leftPane1
+            color: "#000000"
+            width: parent.width*3/20
+            height: parent.height
+
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+
+            CircularGauge {
+                id: windometer
+                width: parent.width - 5
+                height: parent.width
+
+                anchors.top: parent.top
+                anchors.left: parent.left
+
+                anchors.topMargin: 5
+                anchors.leftMargin: 5
+                anchors.rightMargin: 0
+
+                tickmarksVisible: true
+                maximumValue: 25
+                minimumValue: -25
+                value: UIRaceDataset.windSpeed
+                style: DashboardGaugeStyle {}
+
+                //Every time the number changes this is the animation to play in response.
+                Behavior on value
+                {
+                    NumberAnimation
+                    {
+                        //How long the animation should take in milliseconds
+                        duration: 300
+                        //The style of animation to be played.
+                        easing.type: Easing.InOutSine
+                    }
+                }
+            }
+
+            Rectangle {
+                id: windLabel
+                color: "#000000"
+                width: parent.width
+                height: parent.height*1/14
+
+                anchors.top: windometer.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Text {
+                    id: windSpeedLabel
+                    color: "#ffffff"
+                    text: qsTr("Ṽw")
+                    fontSizeMode: Text.Fit
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 32
+
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+
+            ColumnLayout {
+                id: velocityCluster
+                width: parent.width
+                height: parent.height * .15
+
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+
+                anchors.leftMargin: 2
+                anchors.bottomMargin: 2
+
+                Text {
+                    id: relativeSpeed
+                    color: "#ffffff"
+                    text: qsTr("Ṽgw: 25.0 mph")
+                    font.pointSize: 24
+                    fontSizeMode: Text.Fit
+
+                    anchors.bottom: averageSpeed.top
+                }
+
+                Text {
+                    id: averageSpeed
+                    color: "#ffffff"
+                    text: qsTr("Avg. V: 25.0 mph")
+                    font.pointSize: 24
+                    fontSizeMode: Text.Fit
+
+                    anchors.bottom: parent.bottom
+                }
+
+
+            }
+
+        }
 
         Rectangle {
-            id: uiPane
-            width: parent.width/2
+            id: middlePane1
+            color: "#000000"
+            width: parent.width*4/20
             height: parent.height
-            color: "black"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
 
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: leftPane1.right
+
+            Rectangle {
+                id: lapCount
+                color: "#000000"
+                width: parent.width
+
+                anchors.top: parent.top
+                anchors.bottom: speedometer.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                anchors.topMargin: 2
+                anchors.bottomMargin: 2
+                anchors.leftMargin: 2
+                anchors.rightMargin: 2
+
+                Text {
+                    id: lap
+                    color: "#ffffff"
+                    text: qsTr("Lap")
+                    fontSizeMode: Text.Fit
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 32
+
+                    anchors.bottom: lapNumber.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                Text {
+                    id: lapNumber
+                    color: "#ffffff"
+                    text: qsTr("2")
+                    fontSizeMode: Text.Fit
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 32
+
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
 
             CircularGauge {
                 id: speedometer
-                width: parent.width * 0.5
-                height: parent.height * 0.65
-                anchors.leftMargin: 240
-                anchors.top: parent.top
+                width: parent.width
+                height: parent.width
+
+                anchors.bottom: groundLabel.top
                 anchors.left: parent.left
-                anchors.topMargin: 210
+
+                anchors.bottomMargin: 5
+                anchors.leftMargin: 1
+                anchors.rightMargin: 1
+
 
                 tickmarksVisible: true
                 maximumValue: 50
@@ -64,266 +201,220 @@ Window {
                 }
             }
 
+            Rectangle {
+                id: groundLabel
+                color: "#000000"
+                width: parent.width
+                height: parent.height*1/14
 
-            CircularGauge {
-                id: windometer
-                x: 0
-                y: 0
-                width: parent.width * 0.35
-                height: parent.height * 0.45
+                anchors.bottom: parent.bottom
                 anchors.left: parent.left
-                tickmarksVisible: true
-                anchors.top: parent.top
-                maximumValue: 50
-                value: UIRaceDataset.windSpeed
-                anchors.topMargin: 0
-                style: DashboardGaugeStyle {}
-                minimumValue: 0
-                anchors.leftMargin: 0
-                //Every time the number changes this is the animation to play in response.
-                Behavior on value
-                {
-                    NumberAnimation
-                    {
-                        //How long the animation should take
-                        duration: 300
-                        //The style of animation to be played.
-                        easing.type: Easing.InOutSine
-                    }
-                }
-            }
-
-            ColumnLayout {
-                id: velocityCluster
-                height: 104
-                anchors.leftMargin: 5
-                anchors.topMargin: -104
-                anchors.rightMargin: 435
-                anchors.left: parent.left
-                anchors.right: speedometer.right
-                anchors.top: speedometer.bottom
-                anchors.bottom: progressBarCluster.top
+                anchors.right: parent.right
 
                 Text {
-                    id: relativeSpeed
+                    id: grooundSpeedLabel
                     color: "#ffffff"
-                    text: qsTr("Ṽgw: 14.2 mph")
-                    font.pointSize: 32
+                    text: qsTr("Vg")
                     fontSizeMode: Text.Fit
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                Text {
-                    id: averageSpeed
-                    color: "#ffffff"
-                    text: qsTr("Avg. V: 18.2 mph")
+                    horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 32
-                    fontSizeMode: Text.Fit
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
-
-
             }
+        }
 
+        Rectangle {
+            id: rightPane1
+            color: "#000000"
+            width: parent.width*3/20
+            height: parent.height
 
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: middlePane1.right
 
-            ColumnLayout {
+            Column {
                 id: timeStats
-                anchors.topMargin: 0
-                anchors.leftMargin: 0
-                anchors.bottomMargin: 0
-                anchors.rightMargin: 0
-                anchors.left: speedometer.right
+                width: parent.width
+
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.bottom: progressBarCluster.top
-                spacing: 0
 
                 Text {
                     id: currentTime
                     color: "#ffffff"
+                    Layout.fillWidth: true
+                    font.pointSize: 24
+                    horizontalAlignment: Text.AlignRight
                     text: qsTr("Current Lap Time: " + UIRaceDataset.currentLapTime)
-                    fontSizeMode: Text.Fit
-                    horizontalAlignment: Text.AlignRight
-                    font.pointSize: 32
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
 
-                }
-
-                Text {
-                    id: totalElapsedTime
-                    color: "#ffffff"
-                    text: qsTr("Total Time Elapsed: " + UIRaceDataset.totalTime)
-                    fontSizeMode: Text.Fit
-                    horizontalAlignment: Text.AlignRight
-                    font.pointSize: 32
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                Text {
-                    id: batteryLevel
-                    color: "#ffffff"
-                    text: qsTr("Battery 73%")
-                    fontSizeMode: Text.Fit
-                    horizontalAlignment: Text.AlignRight
-                    font.pointSize: 32
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    anchors.top: parent.top
+                    anchors.right: parent.right
                 }
 
                 Text {
                     id: lastLapTime
                     color: "#ffffff"
-                    text: qsTr("Last Lap Time: 3:02:245")
-                    fontSizeMode: Text.Fit
-                    horizontalAlignment: Text.AlignRight
-                    font.pointSize: 32
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    font.pointSize: 24
+                    horizontalAlignment: Text.AlignRight
+                    text: qsTr("Last Lap Time: 7:77:777")
+
+                    anchors.top: currentTime.bottom
+                    anchors.right: parent.right
                 }
-            }
-
-            ColumnLayout {
-                id: lapStats
-                x: 0
-                y: 7
-                anchors.right: parent.right
-                anchors.topMargin: 0
-                anchors.leftMargin: 0
-                spacing: 0
-                anchors.top: parent.top
-                anchors.left: speedometer.right
-                anchors.bottomMargin: 0
-                anchors.rightMargin: 0
-                anchors.bottom: progressBarCluster.top
-
 
                 Text {
-                    id: currentLap
+                    id: totalElapsedTime
                     color: "#ffffff"
-                    text: qsTr("Lap 2")
-                    fontSizeMode: Text.Fit
-                    horizontalAlignment: Text.AlignRight
-                    font.pointSize: 32
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    font.pointSize: 24
+                    horizontalAlignment: Text.AlignRight
+                    text: qsTr("Total Time Elapsed: " + UIRaceDataset.totalTime)
+
+                    anchors.top: lastLapTime.bottom
+                    anchors.right: parent.right
+                }
+
+                Text {
+                    id: batteryLevel
+                    color: "#ffffff"
+                    Layout.fillWidth: true
+                    font.pointSize: 24
+                    horizontalAlignment: Text.AlignRight
+                    text: qsTr("Battery 73%")
+
+                    anchors.top: totalElapsedTime.bottom
+                    anchors.right: parent.right
                 }
             }
         }
-        //        }
-        //        RowLayout {
-        //            id: layout2
-        //            anchors.right: parent.right
 
         Rectangle {
-            id: switchPane
-            x: 0
+            id: pane2
+            color: "#000000"
             width: parent.width/2
             height: parent.height
-            color: "#000000"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
 
-            ColumnLayout {
-                id: columnLayout
-                anchors.fill: parent
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
 
                 Rectangle {
-                    id: rectangle
-                    width: 200
-                    height: 200
+                    id: raceControlBar
                     color: "#222222"
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                    width: parent.width
+                    height: parent.height/5
 
-                    RowLayout {
-                        id: activateRow
-                        anchors.fill: parent
-                        spacing: 5
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.top: parent.top
+
+                    Rectangle {
+                        id: startStopBar
+                        color: "#222222"
+                        width: parent.width/4
+                        height: parent.height
+
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
 
                         Button {
-                            id: button
+                            id: startRaceButton
                             text: qsTr("Start Race")
-                            Layout.fillWidth: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillHeight: false
                             checkable: false
+
+                            anchors.right: stopRaceButton.left
+
+                            anchors.rightMargin: 5
+
                             onClicked:
                             {
                                 RaceActionManager.startRace();
                             }
                         }
 
-                        StatusIndicator {
-                            id: statusIndicator
-                            color: "#50f200"
-                            active: UIRaceDataset.raceStatus
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                        }
-
-
                         Button {
-                            id: button1
+                            id: stopRaceButton
                             text: qsTr("Stop Race")
-                            Layout.fillWidth: false
                             checkable: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillHeight: false
+
+                            anchors.right: parent.right
+
                             onClicked:
                             {
                                 RaceActionManager.stopRace();
                             }
                         }
 
-
                         StatusIndicator {
-                            id: statusIndicator5
+                            id: raceActiveIndicator
                             color: "#50f200"
-                            Layout.fillWidth: false
-                            active: UIRaceDataset.canStatus
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            active: UIRaceDataset.raceStatus
+
+                            anchors.top: startRaceButton.bottom
+                            anchors.horizontalCenter: startRaceButton.horizontalCenter
                         }
                     }
 
+                    Rectangle {
+                        id: canControlBar
+                        color: "#222222"
+                        width: parent.width/4
+                        height: parent.height
 
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Button {
+                            id: connectCanButton
+                            text: qsTr("Connect Can")
+                            checkable: false
+
+                            anchors.left: parent.left
+
+//                            onClicked:
+//                            {
+//                                RaceActionManager.connectCan();
+//                            }
+                        }
+
+                        StatusIndicator {
+                            id: canStatusIndicator
+                            color: "#50f200"
+                            active: UIRaceDataset.canStatus
+
+                            anchors.top: connectCanButton.bottom
+                            anchors.horizontalCenter: connectCanButton.horizontalCenter
+                        }
+                    }
                 }
 
 
                 Rectangle {
                     id: logPane
-                    width: 200
-                    height: 200
                     color: "#303030"
+                    width: parent.width
                     Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    anchors.top: raceControlBar.bottom
+                    anchors.bottom: parent.bottom
 
                     TextArea {
-                        anchors.fill: parent
                         flickableItem.flickableDirection: Flickable.VerticalFlick
                         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
                         verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
+                        readOnly: true
+
                         text: Logger.log;
                         font.capitalization: Font.MixedCase
                         font.family: "Times New Roman"
                         wrapMode: TextEdit.WrapAnywhere
-                        readOnly: true
 
+                        anchors.fill: parent
                     }
                 }
-            }
+
         }
-        //        }
     }
 }
