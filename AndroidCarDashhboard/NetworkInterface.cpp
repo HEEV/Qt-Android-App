@@ -29,6 +29,7 @@ bool NetworkInterface::connectToServer(RaceActionManager *ram)
         // Hook up event handlers for connection errors and successful connections.
         connect(sock, SIGNAL(connected()), this, SLOT(handleOnConnected()));
         connect(sock, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleConnectionError(QAbstractSocket::SocketError)));
+        connect(sock, SIGNAL(readyRead()), this, SLOT(handleReceiveData()));
 
         if (sock->waitForConnected(initialConnectionAttemptInterval)) {
             return true;
@@ -61,10 +62,24 @@ bool NetworkInterface::sendJASON(QJsonObject json)
 }
 
 /**
+ * @brief Event handler that fires when new data arrives from the server.
+ */
+void NetworkInterface::handleReceiveData()
+{
+    // For now, simply log the incoming data.
+    while (sock->canReadLine())
+    {
+        QString data = inStream->readLine();
+        log->println(logPrefix + data.toStdString());
+    }
+}
+
+/**
  * @brief Prints to the log a message saying that we are connected to the server.
  */
 void NetworkInterface::handleOnConnected()
 {
+    inStream = new QTextStream(sock);
     log->println(logPrefix + "Connected to server.");
 }
 
