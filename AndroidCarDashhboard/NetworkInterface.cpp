@@ -1,6 +1,6 @@
 #include "NetworkInterface.h"
 
-const QString NetworkInterface::host = "163.11.137.228";
+const QString NetworkInterface::host = "jacob.cedarville.edu";
 
 NetworkInterface::NetworkInterface()
 {
@@ -16,7 +16,7 @@ bool NetworkInterface::connectToServer(RaceActionManager *ram)
     {
         raceManager = ram;
         sock = new QTcpSocket();
-        sock->connectToHost(host, 1234);
+        sock->connectToHost(host, 3306);
         if(sock->state() == QTcpSocket::ConnectedState ||
            sock->state() == QTcpSocket::ConnectingState ||
            sock->state() == QTcpSocket::BoundState)

@@ -1,9 +1,12 @@
 #include "GPSPositioningService.h"
 
-GPSPositioningService::GPSPositioningService(Logger *log)
+const int GPSPositioningService::gpsUpdateInterval = 500;
+
+GPSPositioningService::GPSPositioningService(Logger *log, UIRaceDataset *data)
 {
     tracking = false;
     logger = log;
+    dataStore = data;
 }
 
 
@@ -16,7 +19,9 @@ bool GPSPositioningService::startTracking()
         source->setUpdateInterval(gpsUpdateInterval);
         source->startUpdates();
         tracking = true;
+        return true;
     }
+    return false;
 }
 
 void GPSPositioningService::stopTracking()
@@ -32,5 +37,10 @@ void GPSPositioningService::stopTracking()
 
 void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
 {
-    //logger->println((logTag + info).toStdString());
+    //QGeoCoordinate coord = info.coordinate();
+    //QString coords = QString::number(coord.latitude());
+    //coords += " : " + QString::number(coord.longitude());
+    //coords += " : " + QString::number(coord.altitude());
+    //logger->println((logTag + coords).toStdString());
+    dataStore->setGPSInfo(QGeoPositionInfo(info));
 }

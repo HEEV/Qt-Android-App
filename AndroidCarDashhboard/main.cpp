@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     CANInterface *interface = new CANInterface(dataProcessor);
 
     //Make a GPS Service
-    GPSPositioningService *gps = new GPSPositioningService(logger);
+    GPSPositioningService *gps = new GPSPositioningService(logger, raceDataset);
 
     //Make network interface.
     NetworkInterface *net = new NetworkInterface();
@@ -67,6 +67,9 @@ int main(int argc, char *argv[])
     //Set up the RaceActionManager to take care of the race progress
     RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset, gps, net);
 
+
+    //Start aquiring GPS data
+    gps->startTracking();
 
     //Make the UIRaceDataset, Logger and RaceActionManager accessable to the QML segment of the code.
     engine.rootContext()->setContextProperty("UIRaceDataset", raceDataset);
@@ -77,6 +80,11 @@ int main(int argc, char *argv[])
     component.create();
 
     const int returnval = app.exec();
+
+
+
+    //Kill the GPS usage.
+    gps->stopTracking();
 
     return returnval;
 }

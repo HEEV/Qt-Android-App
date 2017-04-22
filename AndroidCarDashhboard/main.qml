@@ -21,6 +21,71 @@ Window {
 
         anchors.fill: parent
 
+        /*
+          flickSlowThreshold: The slowest flick speed to tolerate before snapping
+          to either the dashboard or the logging screen.
+
+          Note: Multiplying flickDeceleration by a number between 0 and 1
+          allows us to choose a cutoff based on how long it would have taken the
+          flick to finish on its own. (e.g. flickDeceleration * 0.5 means snap when the
+          flick has 1/2 second of movement left.)
+        */
+        property int flickSlowThreshold: flickDeceleration * 0.4
+        property bool aboutToStop: Math.abs(horizontalVelocity) < flickSlowThreshold
+
+        /*
+          flickFastThreshold: The fastest flick speed tolerate before snapping
+          to either the dashboard or the logging screen.
+        */
+        property int flickFastThreshold: flickDeceleration * 2
+        property bool fastEnoughToAutoSnap: Math.abs(horizontalVelocity) > flickFastThreshold
+
+        // The number of milliseconds a snap animation should take
+        property int snapDuration: 200
+
+        /*
+          Decides whether or not to snap based on how fast the flickable pane is moving
+        */
+        onHorizontalVelocityChanged: {
+            // Only consider snapping if the user is not currently dragging the screen
+            if (!draggingHorizontally) {
+                if (aboutToStop) {
+                    if (flickable.contentX < flickable.contentWidth / 4) {
+                        // Snap to dashboard
+                        snapToDashboard();
+                    } else {
+                        // Snap to logging screen
+                        snapToLogScreen();
+                    }
+                } else if (fastEnoughToAutoSnap) {
+                    // If moving to the right
+                    if (horizontalVelocity < 0) {
+                        // Snap to dashboard
+                        snapToDashboard();
+                    // if moving to the left
+                    } else {
+                        // Snap to logging screen
+                        snapToLogScreen();
+                    }
+                }
+            }
+        }
+
+        function snapToDashboard() {
+            snapAnimation.to = 0;
+            snapAnimation.start();
+        }
+
+        function snapToLogScreen() {
+            snapAnimation.to = flickable.contentWidth / 2;
+            snapAnimation.start();
+        }
+
+        NumberAnimation on contentX {
+            id: snapAnimation
+            duration: snapDuration
+        }
+
         Rectangle {
             id: leftPane1
             color: "#000000"
