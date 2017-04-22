@@ -43,10 +43,16 @@ Window {
         // The number of milliseconds a snap animation should take
         property int snapDuration: 200
 
+
+        onHorizontalVelocityChanged: decideToSnap()
+        // this is important in case the user keeps his finger on the screen
+        // until the flickable has stopped moving.
+        onDragEnded: decideToSnap()
+
         /*
           Decides whether or not to snap based on how fast the flickable pane is moving
         */
-        onHorizontalVelocityChanged: {
+        function decideToSnap() {
             // Only consider snapping if the user is not currently dragging the screen
             if (!draggingHorizontally) {
                 if (aboutToStop) {

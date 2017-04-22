@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     GPSPositioningService *gps = new GPSPositioningService(logger, raceDataset);
 
     //Make network interface.
-    NetworkInterface *net = new NetworkInterface();
+    NetworkInterface *net = new NetworkInterface(logger);
 
 
     //Set up the RaceActionManager to take care of the race progress

@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include "Logger.h"
 
 //Again circular dependancies.
 class NetworkInterface;
@@ -14,10 +15,12 @@ class NetworkInterface;
 //Local includes
 #include <RaceActionManager.h>
 
-class NetworkInterface
+class NetworkInterface : public QObject
 {
+    Q_OBJECT
+
 public:
-    NetworkInterface();
+    NetworkInterface(Logger *log);
     ~NetworkInterface();
 
     //The RaceActionManager is for the callback that will be used.
@@ -29,9 +32,26 @@ public:
 private:
     QTcpSocket *sock;
     QTextStream *outStream;
+    QTextStream *inStream;
     RaceActionManager *raceManager;
 
     static const QString host;
+    static const int port;
+    void issueReconnectAttempt();
+    // Prevents us from issuing more than one reconnection attempt at a time
+    bool reconnectInProgress;
+    static const int reconnectAttemptInterval;
+    static const int initialConnectionAttemptInterval;
+
+    Logger *log;
+    static const string logPrefix;
+
+private slots:
+    void handleOnConnected();
+    void handleConnectionError(QAbstractSocket::SocketError error);
+    void attemptToReconnect();
+
+    void handleReceiveData();
 
 };
 
