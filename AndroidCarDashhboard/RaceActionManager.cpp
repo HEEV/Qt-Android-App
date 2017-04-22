@@ -32,12 +32,14 @@ bool RaceActionManager::startRace()
 
     if(networkConnected)
     {
-        logger->println("Connected.");
+        // Don't need to log this because NetworkInterface logs its connection activity
+        //logger->println("Connected.");
         network->sendJASON(startUp);
     }
     else
     {
-        logger->println("Unable to connect.");
+        // Don't need to log this because NetworkInterface logs its connection activity
+        //logger->println("Unable to connect.");
     }
 
     //Start the GPS service.
