@@ -96,36 +96,72 @@ Window {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
 
-            CircularGauge {
+            RoundGauge {
                 id: windometer
                 width: parent.width - 5
                 height: parent.width
-
                 anchors.top: parent.top
                 anchors.left: parent.left
 
-                anchors.topMargin: 5
+                anchors.bottomMargin: 5
                 anchors.leftMargin: 5
                 anchors.rightMargin: 0
 
-                tickmarksVisible: true
-                maximumValue: 25
-                minimumValue: -25
-                value: UIRaceDataset.windSpeed
-                style: DashboardGaugeStyle {}
+                outerCirclingColor: "#ff2200"
+                textFont.family : "Helvetica"
+                textFont.bold : true
+                textFont.italic : true
+                digitalFont.family : "Helvetica"
+                digitalFont.bold : true
+                digitalFont.italic : true
 
-                //Every time the number changes this is the animation to play in response.
-                Behavior on value
-                {
-                    NumberAnimation
-                    {
-                        //How long the animation should take in milliseconds
-                        duration: 300
-                        //The style of animation to be played.
-                        easing.type: Easing.InOutSine
-                    }
-                }
+                //            textFont.pointSize : 12
+
+                unit: "mph"
+                unitFont.pointSize: 12
+                unitFont.bold: true
+                unitFont.italic: true
+                unitFont.family: "Helvetica"
+                fullCircle: true
+                subDivs: 35
+                minValue: -35
+                maxValue: 35
+                lowValues: -20
+                highValues: 20
+                currentValue: UIRaceDataset.windSpeed
+                digitalFont.pointSize: 15
             }
+
+//            CircularGauge {
+//                id: windometer
+//                width: parent.width - 5
+//                height: parent.width
+
+//                anchors.top: parent.top
+//                anchors.left: parent.left
+
+//                anchors.topMargin: 5
+//                anchors.leftMargin: 5
+//                anchors.rightMargin: 0
+
+//                tickmarksVisible: true
+//                maximumValue: 25
+//                minimumValue: -25
+//                value: UIRaceDataset.windSpeed
+//                style: DashboardGaugeStyle {}
+
+//                //Every time the number changes this is the animation to play in response.
+//                Behavior on value
+//                {
+//                    NumberAnimation
+//                    {
+//                        //How long the animation should take in milliseconds
+//                        duration: 300
+//                        //The style of animation to be played.
+//                        easing.type: Easing.InOutSine
+//                    }
+//                }
+//            }
 
             Rectangle {
                 id: windLabel
@@ -140,7 +176,7 @@ Window {
                 Text {
                     id: windSpeedLabel
                     color: "#ffffff"
-                    text: qsTr("Ṽw")
+                    text: qsTr("Ṽgw")
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 32
@@ -161,15 +197,15 @@ Window {
                 anchors.leftMargin: 2
                 anchors.bottomMargin: 2
 
-                Text {
-                    id: relativeSpeed
-                    color: "#ffffff"
-                    text: qsTr("Ṽgw: 25.0 mph")
-                    font.pointSize: 24
-                    fontSizeMode: Text.Fit
+//                Text {
+//                    id: relativeSpeed
+//                    color: "#ffffff"
+//                    text: qsTr("Ṽgw: 25.0 mph")
+//                    font.pointSize: 24
+//                    fontSizeMode: Text.Fit
 
-                    anchors.bottom: averageSpeed.top
-                }
+//                    anchors.bottom: averageSpeed.top
+//                }
 
                 Text {
                     id: averageSpeed
@@ -235,11 +271,10 @@ Window {
                 }
             }
 
-            CircularGauge {
+            RoundGauge {
                 id: speedometer
                 width: parent.width
                 height: parent.width
-
                 anchors.bottom: groundLabel.top
                 anchors.left: parent.left
 
@@ -247,24 +282,61 @@ Window {
                 anchors.leftMargin: 1
                 anchors.rightMargin: 1
 
+                outerCirclingColor: "#ff2200"
+                textFont.family : "Helvetica"
+                textFont.bold : true
+                textFont.italic : true
+                digitalFont.family : "Helvetica"
+                digitalFont.bold : true
+                digitalFont.italic : true
 
-                tickmarksVisible: true
-                maximumValue: 50
-                minimumValue: 0
-                value: UIRaceDataset.groundSpeed
-                style: DashboardGaugeStyle {}
-                //Every time the number changes this is the animation to play in response.
-                Behavior on value
-                {
-                    NumberAnimation
-                    {
-                        //How long the animation should take
-                        duration: 300
-                        //The style of animation to be played.
-                        easing.type: Easing.InOutSine
-                    }
-                }
+                //            textFont.pointSize : 12
+
+                unit: "mph"
+                unitFont.pointSize: 12
+                unitFont.bold: true
+                unitFont.italic: true
+                unitFont.family: "Helvetica"
+                fullCircle: true
+                subDivs: 33
+                minValue: 0
+                maxValue: 75
+                lowValues: 10
+                highValues: 50
+                currentValue: UIRaceDataset.groundSpeed
+                digitalFont.pointSize: 15
             }
+
+//            CircularGauge {
+//                id: speedometer
+//                width: parent.width
+//                height: parent.width
+
+//                anchors.bottom: groundLabel.top
+//                anchors.left: parent.left
+
+//                anchors.bottomMargin: 5
+//                anchors.leftMargin: 1
+//                anchors.rightMargin: 1
+
+
+//                tickmarksVisible: true
+//                maximumValue: 50
+//                minimumValue: 0
+//                value: UIRaceDataset.groundSpeed
+//                style: DashboardGaugeStyle {}
+//                //Every time the number changes this is the animation to play in response.
+//                Behavior on value
+//                {
+//                    NumberAnimation
+//                    {
+//                        //How long the animation should take
+//                        duration: 300
+//                        //The style of animation to be played.
+//                        easing.type: Easing.InOutSine
+//                    }
+//                }
+//            }
 
             Rectangle {
                 id: groundLabel
@@ -315,7 +387,7 @@ Window {
                     horizontalAlignment: Text.AlignRight
                     text: qsTr("Current Lap Time: " + UIRaceDataset.currentLapTime)
 
-                    anchors.top: parent.top
+//                    anchors.top: parent.top
                     anchors.right: parent.right
                 }
 
@@ -327,7 +399,7 @@ Window {
                     horizontalAlignment: Text.AlignRight
                     text: qsTr("Last Lap Time: 7:77:777")
 
-                    anchors.top: currentTime.bottom
+//                    anchors.top: currentTime.bottom
                     anchors.right: parent.right
                 }
 
@@ -339,7 +411,7 @@ Window {
                     horizontalAlignment: Text.AlignRight
                     text: qsTr("Total Time Elapsed: " + UIRaceDataset.totalTime)
 
-                    anchors.top: lastLapTime.bottom
+//                    anchors.top: lastLapTime.bottom
                     anchors.right: parent.right
                 }
 
@@ -351,7 +423,7 @@ Window {
                     horizontalAlignment: Text.AlignRight
                     text: qsTr("Battery 73%")
 
-                    anchors.top: totalElapsedTime.bottom
+//                    anchors.top: totalElapsedTime.bottom
                     anchors.right: parent.right
                 }
             }
@@ -378,7 +450,7 @@ Window {
                     Rectangle {
                         id: startStopBar
                         color: "#222222"
-                        width: parent.width/4
+                        width: parent.width/3
                         height: parent.height
 
                         anchors.left: parent.left
@@ -406,10 +478,10 @@ Window {
 
                             anchors.right: parent.right
 
-                            onClicked:
-                            {
-                                RaceActionManager.stopRace();
-                            }
+//                            onClicked:
+//                            {
+//                                RaceActionManager.stopRace();
+//                            }
                         }
 
                         StatusIndicator {
@@ -425,7 +497,7 @@ Window {
                     Rectangle {
                         id: canControlBar
                         color: "#222222"
-                        width: parent.width/4
+                        width: parent.width/3
                         height: parent.height
 
                         anchors.right: parent.right
@@ -438,9 +510,24 @@ Window {
 
                             anchors.left: parent.left
 
+                            anchors.rightMargin: 5
+
 //                            onClicked:
 //                            {
 //                                RaceActionManager.connectCan();
+//                            }
+                        }
+
+                        Button {
+                            id: disconnectCanButton
+                            text: qsTr("Disconnect Can")
+                            checkable: false
+
+                            anchors.left: connectCanButton.right
+
+//                            onClicked:
+//                            {
+//                                RaceActionManager.disconnectCan();
 //                            }
                         }
 

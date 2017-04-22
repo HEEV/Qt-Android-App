@@ -17,9 +17,12 @@ SOURCES += main.cpp \
     Logger.cpp \
     RaceActionManager.cpp \
     GPSPositioningService.cpp \
-    NetworkInterface.cpp
+    NetworkInterface.cpp \
+    #QMLLib/ViewManagement.cpp
 
 RESOURCES += qml.qrc
+
+include(./QMLLib/View.pri)
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -37,4 +40,8 @@ HEADERS += \
     Logger.h \
     RaceActionManager.h \
     GPSPositioningService.h \
-    NetworkInterface.h
+    NetworkInterface.h \
+    #QMLLib/ViewManagement.h
+
+DISTFILES += \
+    QMLLib/View.pri

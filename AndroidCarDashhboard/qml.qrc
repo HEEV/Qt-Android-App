@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>DashboardGaugeStyle.qml</file>
+        <file>GraphGauge.qml</file>
+        <file>needle.png</file>
+        <file>RoundGauge.qml</file>
     </qresource>
 </RCC>
