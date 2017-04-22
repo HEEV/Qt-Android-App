@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     UIRaceDataset *raceDataset = new UIRaceDataset();
     // Placeholder temporary remove this later this is terrible blah blah blah
     raceDataset->setProjectedProgress(0.95);
-    raceDataset->setGroundSpeed(38.0);
+    raceDataset->setGroundSpeed(0.0);
 
     // Set up logging
     QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
