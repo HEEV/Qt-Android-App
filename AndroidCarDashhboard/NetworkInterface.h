@@ -32,6 +32,7 @@ public:
 private:
     QTcpSocket *sock;
     QTextStream *outStream;
+    QTextStream *inStream;
     RaceActionManager *raceManager;
 
     static const QString host;
@@ -49,6 +50,8 @@ private slots:
     void handleOnConnected();
     void handleConnectionError(QAbstractSocket::SocketError error);
     void attemptToReconnect();
+
+    void handleReceiveData();
 
 };
 
