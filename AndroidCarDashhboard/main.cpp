@@ -1,12 +1,8 @@
 //QT includes.
 #include <QGuiApplication>
-<<<<<<< HEAD
-//#include <QtAndroidExtras/QtAndroidExtras>
-=======
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras/QtAndroidExtras>
 #endif
->>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -25,9 +21,11 @@
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
+/*
 #ifdef Q_OS_ANDROID
 void performJNIOperations();
 #endif
+*/
 
 int main(int argc, char *argv[])
 {
@@ -36,17 +34,13 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
     //Get the screen to stay on hopefuly
-<<<<<<< HEAD
     //performJNIOperations();
-=======
-    performJNIOperations();
 #endif
->>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 
     UIRaceDataset *raceDataset = new UIRaceDataset();
     // Placeholder temporary remove this later this is terrible blah blah blah
     raceDataset->setProjectedProgress(0.95);
-    raceDataset->setGroundSpeed(38.0);
+    raceDataset->setGroundSpeed(25.0);
 
     // Set up logging
     QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
@@ -87,14 +81,8 @@ int main(int argc, char *argv[])
     return returnval;
 }
 
-
-
-
-<<<<<<< HEAD
 /*
-=======
 #ifdef Q_OS_ANDROID
->>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
 void performJNIOperations()
 {
     QAndroidJniObject activity = QtAndroid::androidActivity();
@@ -110,8 +98,6 @@ void performJNIOperations()
         QAndroidJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
     }
 }
-<<<<<<< HEAD
-*/
-=======
+
 #endif
->>>>>>> 6cba42d539043d57e4ff9f2e6341d259813633d5
+*/
