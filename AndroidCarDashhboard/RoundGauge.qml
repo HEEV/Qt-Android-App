@@ -16,11 +16,11 @@ Canvas
 
     property color lowValuesColor : "#0066FF";
     property color highValuesColor : "#cc0000";
-    property color innerCirclingColor : "white";
+    property color innerCirclingColor : "#FFFFFF";
     property color outerCirclingColor : "#0099FF";
-    property color textColor : "white";
-    property color graduationColor : "white";
-    property color backgroundColor : "black";
+    property color textColor : "#FFFFFF";
+    property color graduationColor : "#FFFFFF";
+    property color backgroundColor : "#000000";
     property bool  digitalEnable : true
     property alias digitalFont : digital_readout.font
     property alias unit : measure_unit.text
@@ -81,7 +81,7 @@ Canvas
         context.arc(d.center.x, d.center.y, d.radius - 2, d.startAngle, d.endAngle);
         context.stroke();
 
-        // DRAW WHITE ARC CERCLING
+        // DRAW WHITE ARC CIRCLING
         context.beginPath();
         context.lineWidth = 2;
         context.strokeStyle = innerCirclingColor;
@@ -116,7 +116,7 @@ Canvas
         context.lineWidth = 10
         text_model.clear();
         var angleStep = (d.wholeAngle) / (subDivs + 1);
-        for (var i = 0; i <= subDivs + 1; i=i+2.25)
+        for (var i = 0; i <= subDivs + 1; i++)
         {
             context.beginPath();
             var rotAngle  = (d.startAngle) + i * (angleStep);
@@ -228,10 +228,10 @@ Canvas
         border
         {
             width : 1
-            color : "white"
+            color : "#FFFFFF"
         }
 
-        color : "black"
+        color : "#000000"
     }
 
     // NEEDLE

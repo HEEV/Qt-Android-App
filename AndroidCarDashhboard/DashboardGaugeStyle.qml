@@ -51,6 +51,38 @@
 import QtQuick 2.2
 import QtQuick.Controls.Styles 1.4
 
+//Sample Gauge
+//            CircularGauge {
+//                id: windometer
+//                width: parent.width - 5
+//                height: parent.width
+
+//                anchors.top: parent.top
+//                anchors.left: parent.left
+
+//                anchors.topMargin: 5
+//                anchors.leftMargin: 5
+//                anchors.rightMargin: 0
+
+//                tickmarksVisible: true
+//                maximumValue: 25
+//                minimumValue: -25
+//                value: UIRaceDataset.windSpeed
+//                style: DashboardGaugeStyle {}
+
+//                //Every time the number changes this is the animation to play in response.
+//                Behavior on value
+//                {
+//                    NumberAnimation
+//                    {
+//                        //How long the animation should take in milliseconds
+//                        duration: 300
+//                        //The style of animation to be played.
+//                        easing.type: Easing.InOutSine
+//                    }
+//                }
+//            }
+
 CircularGaugeStyle {
     tickmarkInset: toPixels(0.04)
     minorTickmarkInset: tickmarkInset
