@@ -566,7 +566,7 @@ Window {
                 {
                     id: networkStatusIndicator
                     color: "#50f200"
-                    active: UIRaceDataSet.networkStatus
+                    active: UIRaceDataset.networkStatus
 
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: networkStatusLabel.horizontalCenter
