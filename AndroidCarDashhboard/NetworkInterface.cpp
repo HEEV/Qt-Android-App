@@ -2,51 +2,54 @@
 
 const QString NetworkInterface::host = "jacob.cedarville.edu";
 const int NetworkInterface::port = 3306;
-const int NetworkInterface::initialConnectionAttemptInterval = 2000;
 const int NetworkInterface::reconnectAttemptInterval = 2000;
 
 const string NetworkInterface::logPrefix = "NETWORK_INTERFACE: ";
 
 NetworkInterface::NetworkInterface(Logger *log)
 {
-    //Default the socket to a null value.
-    sock = nullptr;
     reconnectInProgress = false;
     raceManager = nullptr;
     this->log = log;
 
-
+    sock = new QTcpSocket();
+    // Hook up event handlers for connection errors and successful connections.
+    connect(sock, SIGNAL(connected()), this, SLOT(handleOnConnected()));
+    connect(sock, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleConnectionError(QAbstractSocket::SocketError)));
+    connect(sock, SIGNAL(readyRead()), this, SLOT(handleReceiveData()));
 }
 
 bool NetworkInterface::connectToServer(RaceActionManager *ram)
 {
-    if(sock == nullptr)
+    shouldTryToReconnect = true;
+    if(!isConnected())
     {
         raceManager = ram;
-        sock = new QTcpSocket();
+
         sock->connectToHost(host, port);
 
-        // Hook up event handlers for connection errors and successful connections.
-        connect(sock, SIGNAL(connected()), this, SLOT(handleOnConnected()));
-        connect(sock, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleConnectionError(QAbstractSocket::SocketError)));
-        connect(sock, SIGNAL(readyRead()), this, SLOT(handleReceiveData()));
-
-        if (sock->waitForConnected(initialConnectionAttemptInterval)) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
     return false;
 }
 
+bool NetworkInterface::isConnected()
+{
+    if (sock == nullptr)
+    {
+        return false;
+    } else
+    {
+        return (sock->state() == QAbstractSocket::ConnectedState);
+    }
+}
 
 void NetworkInterface::disconnect()
 {
-    if(sock != nullptr)
+    shouldTryToReconnect = false;
+    if(isConnected())
     {
         sock->disconnectFromHost();
-        delete sock;
     }
 }
 
@@ -89,15 +92,9 @@ void NetworkInterface::handleOnConnected()
  */
 void NetworkInterface::handleConnectionError(QAbstractSocket::SocketError error)
 {
-    if (error == QAbstractSocket::RemoteHostClosedError || error == QAbstractSocket::ConnectionRefusedError)
+    if (shouldTryToReconnect && !reconnectInProgress)
     {
-        if (!reconnectInProgress)
-        {
-            issueReconnectAttempt();
-        }
-    } else
-    {
-        log->println(logPrefix + "Unhandled error type.");
+        issueReconnectAttempt();
     }
 }
 
@@ -108,6 +105,7 @@ void NetworkInterface::handleConnectionError(QAbstractSocket::SocketError error)
 void NetworkInterface::issueReconnectAttempt()
 {
     static string timeout = QString::number(reconnectAttemptInterval / 1000).toStdString();
+
     log->println(logPrefix + "Waiting " + timeout + "s to reconnect...");
 
     // This variable prevents us from issuing multiple reconnection attempts at once.
@@ -120,13 +118,16 @@ void NetworkInterface::issueReconnectAttempt()
  */
 void NetworkInterface::attemptToReconnect()
 {
-    log->println(logPrefix + "Attempting to reconnect to server.");
+    if (shouldTryToReconnect) // This value should be false if the race has stopped
+    {
+        log->println(logPrefix + "Attempting to reconnect to server.");
 
-    // QTcpSocket's connectToHost() rather than our own connectToServer() so
-    // that we don't have to destroy and re-allocate sock
-    sock->connectToHost(host, port);
-    // This variable prevents us from issuing multiple reconnection attempts at once.
-    reconnectInProgress = false;
+        // QTcpSocket's connectToHost() rather than our own connectToServer() so
+        // that we don't have to destroy and re-allocate sock
+        sock->connectToHost(host, port);
+        // This variable prevents us from issuing multiple reconnection attempts at once.
+        reconnectInProgress = false;
+    }
 }
 
 NetworkInterface::~NetworkInterface()

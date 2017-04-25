@@ -51,6 +51,16 @@ bool UIRaceDataset::getCanStatus()
     return canStatus;
 }
 
+void UIRaceDataset::setNetworkStatus(bool status)
+{
+    networkStatus = status;
+}
+
+bool UIRaceDataset::getNetworkStatus()
+{
+    return networkStatus;
+}
+
 void UIRaceDataset::setTotalTime(QString time)
 {
     totalTime = time;
