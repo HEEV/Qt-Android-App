@@ -115,23 +115,27 @@ CircularGaugeStyle {
             ctx.clip();
         }
 
+        // BLACK BACKGROUND
         ctx.beginPath();
         ctx.fillStyle = "black";
         ctx.ellipse(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.fill();
 
+        // BORDER PT 1
         ctx.beginPath();
         ctx.lineWidth = tickmarkInset;
         ctx.strokeStyle = "black";
         ctx.arc(xCenter, yCenter, outerRadius - ctx.lineWidth / 2, outerRadius - ctx.lineWidth / 2, 0, Math.PI * 2);
         ctx.stroke();
 
+        // BORDER PT 2
         ctx.beginPath();
         ctx.lineWidth = tickmarkInset / 2;
         ctx.strokeStyle = "#222";
         ctx.arc(xCenter, yCenter, outerRadius - ctx.lineWidth / 2, outerRadius - ctx.lineWidth / 2, 0, Math.PI * 2);
         ctx.stroke();
 
+        // GRADIENT CIRCLE
         ctx.beginPath();
         var gradient = ctx.createRadialGradient(xCenter, yCenter, outerRadius * 0.8, xCenter, yCenter, outerRadius);
         gradient.addColorStop(0, Qt.rgba(1, 1, 1, 0));
@@ -181,6 +185,7 @@ CircularGaugeStyle {
             var ctx = getContext("2d");
             ctx.reset();
 
+            // LEFT NEEDLE
             ctx.beginPath();
             ctx.moveTo(xCenter, height);
             ctx.lineTo(xCenter - needleBaseWidth / 2, height - needleBaseWidth / 2);
@@ -191,6 +196,7 @@ CircularGaugeStyle {
             ctx.fillStyle = Qt.rgba(0.66, 0, 0, 0.66);
             ctx.fill();
 
+            // RIGHT NEEDLE
             ctx.beginPath();
             ctx.moveTo(xCenter, height)
             ctx.lineTo(width, height - needleBaseWidth / 2);

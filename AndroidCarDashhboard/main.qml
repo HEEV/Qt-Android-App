@@ -11,6 +11,7 @@ import QtQuick.Controls.Styles 1.4
 Window {
     id: applicationWindow
     visible: true
+    visibility: "FullScreen"
     width: Screen.width
     height: Screen.height
     title: qsTr("AndroidCANDashboard")
@@ -135,42 +136,107 @@ Window {
                 randVal = 0;
             }
 
+            Keys.onVolumeUpPressed:
+            {
+                randVal = 1;
+            }
+
+            Keys.onVolumeDownPressed:
+            {
+                randVal = 0;
+            }
+
             /*
               The a gauge for the relative velocity of the wind to the car.
             */
-            RoundGauge
-            {
+            CircularGauge {
                 id: windometer
-                width: parent.width*3/10 - 5
+                width: parent.width*3/10
                 height: parent.width*3/10
+
                 anchors.top: parent.top
                 anchors.left: parent.left
 
-                anchors.bottomMargin: 5
+                anchors.topMargin: 5
                 anchors.leftMargin: 5
                 anchors.rightMargin: 0
 
-                outerCirclingColor: "#ff2200"
-                textFont.family : "Consolas"
-                textFont.bold : true
-                textFont.italic : true
-                digitalFont.family : "Consolas"
-                digitalFont.bold : true
-                digitalFont.italic : true
+                tickmarksVisible: true
+                maximumValue: 35
+                minimumValue: -35
+                value: UIRaceDataset.windSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
-                unit: "Ṽgw: mph"
-                unitFont.pointSize: 12
-                unitFont.bold: true
-                unitFont.italic: true
-                unitFont.family: "Consolas"
-                fullCircle: true
-                subDivs: 13
-                minValue: -35
-                maxValue: 35
-                lowValues: -20
-                highValues: 20
-                currentValue: (parent.randVal *  (maxValue - minValue) + minValue) | UIRaceDataset.windSpeed;
-                digitalFont.pointSize: 15
+                property real values: UIRaceDataset.windSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+                property real lowValues: -20
+                property real highValues: 20
+                property real range : maximumValue - minimumValue
+                property real valuesRatio : (values - minimumValue) / range
+                property real startAngle : Math.PI * 0.691
+                property real endAngle : Math.PI * 2.310
+                property real wholeAngle : endAngle - startAngle
+                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
+                property real needleAngle : needleAngleRad  * 180 / Math.PI
+
+                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+                onNeedleAngleRadChanged: windometerValueGradient.requestPaint();
+
+                style: NewDashboardGaugeStyle
+                {
+                    minValue: parent.minimumValue
+                    maxValue: parent.maximumValue
+                    lowValues: parent.lowValues
+                    highValues: parent.highValues
+                    label: "Ṽgw: mph"
+                    values: UIRaceDataset.windSpeed | (parent.randVal * (maxValue - minValue) + minValue)
+                }
+
+                Canvas
+                {
+                    id: windometerValueGradient
+                    anchors.fill: parent
+                    antialiasing: true
+
+                    property real startAngle : Math.PI * 0.691
+                    property real endAngle : Math.PI * 2.310
+                    property color lowValuesColor: "#0066FF"
+                    property color highValuesColor: "#cc0000"
+                    property real values: parent.values
+
+                    function getArcGradientColor()
+                    {
+                        if (values <= parent.lowValues)
+                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
+                        else if (values >= parent.highValues)
+                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
+                        else
+                        {
+                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
+                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
+                        }
+                    }
+
+                    property color targetColor : getArcGradientColor();
+                    Behavior on targetColor {ColorAnimation {duration: 750}}
+
+                    onPaint:
+                    {
+                        var ctx = getContext("2d");
+                        targetColor = getArcGradientColor();
+                        ctx.reset();
+                        ctx.beginPath();
+                        ctx.lineWidth = 12;
+                        ctx.strokeStyle = targetColor;
+                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 18, parent.startAngle, parent.needleAngleRad);
+                        ctx.stroke();
+                    }
+                }
+
+
+                //Every time the number changes this is the animation to play in response.
+                Behavior on value
+                {
+                    SpringAnimation {spring: 1.2; damping: 0.3;}
+                }
             }
 
             /*
@@ -305,11 +371,11 @@ Window {
             /*
               The gauge for the velocity of the car.
             */
-            RoundGauge
-            {
+            CircularGauge {
                 id: speedometer
                 width: parent.width*4/10
                 height: parent.width*4/10
+
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -317,37 +383,91 @@ Window {
                 anchors.leftMargin: 1
                 anchors.rightMargin: 1
 
-                outerCirclingColor: "#ff2200"
-                textFont.family : "Consolas"
-                textFont.bold : true
-                textFont.italic : true
-                digitalFont.family : "Consolas"
-                digitalFont.bold : true
-                digitalFont.italic : true
+                tickmarksVisible: true
+                maximumValue: 80
+                minimumValue: 0
+                value: UIRaceDataset.groundSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
-                unit: "Vg: mph"
-                unitFont.pointSize: 12
-                unitFont.bold: true
-                unitFont.italic: true
-                unitFont.family: "Consolas"
-                fullCircle: true
-                subDivs: 14
-                minValue: 0
-                maxValue: 75
-                lowValues: 10
-                highValues: 50
-                currentValue: (parent.randVal *  (maxValue - minValue) + minValue) | UIRaceDataset.groundSpeed;
-                digitalFont.pointSize: 15
+                property real values: UIRaceDataset.groundSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+                property real lowValues: 10
+                property real highValues: 50
+                property real range : maximumValue - minimumValue
+                property real valuesRatio : (values - minimumValue) / range
+                property real startAngle : Math.PI * 0.691
+                property real endAngle : Math.PI * 2.310
+                property real wholeAngle : endAngle - startAngle
+                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
+                property real needleAngle : needleAngleRad  * 180 / Math.PI
+
+                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
+
+                style: NewDashboardGaugeStyle
+                {
+                    minValue: parent.minimumValue
+                    maxValue: parent.maximumValue
+                    lowValues: parent.lowValues
+                    highValues: parent.highValues
+                    label: "Vg: mph"
+                    values: UIRaceDataset.groundSpeed | (parent.randVal * (maxValue - minValue) + minValue)
+                }
+
+                Canvas
+                {
+                    id: speedometerValueGradient
+                    anchors.fill: parent
+                    antialiasing: true
+
+                    property real startAngle : Math.PI * 0.691
+                    property real endAngle : Math.PI * 2.310
+                    property color lowValuesColor: "#0066FF"
+                    property color highValuesColor: "#cc0000"
+                    property real values: parent.values
+
+                    function getArcGradientColor()
+                    {
+                        if (values <= parent.lowValues)
+                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
+                        else if (values >= parent.highValues)
+                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
+                        else
+                        {
+                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
+                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
+                        }
+                    }
+
+                    property color targetColor : getArcGradientColor();
+                    Behavior on targetColor {ColorAnimation {duration: 750}}
+
+                    onPaint:
+                    {
+                        var ctx = getContext("2d");
+                        targetColor = getArcGradientColor();
+                        ctx.reset();
+                        ctx.beginPath();
+                        ctx.lineWidth = 12;
+                        ctx.strokeStyle = targetColor;
+                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 18, parent.startAngle, parent.needleAngleRad);
+                        ctx.stroke();
+                    }
+                }
+
+                //Every time the number changes this is the animation to play in response.
+                Behavior on value
+                {
+                    SpringAnimation {spring: 1.2; damping: 0.3;}
+                }
             }
 
             /*
               The guage for the temperature of the engine.
             */
-            RoundGauge
-            {
+            CircularGauge {
                 id: thermometer
                 width: windometer.width
                 height: windometer.height
+
                 anchors.top: parent.top
                 anchors.right: parent.right
 
@@ -355,27 +475,83 @@ Window {
                 anchors.leftMargin: 0
                 anchors.rightMargin: 5
 
-                outerCirclingColor: "#ff2200"
-                textFont.family : "Consolas"
-                textFont.bold : true
-                textFont.italic : true
-                digitalFont.family : "Consolas"
-                digitalFont.bold : true
-                digitalFont.italic : true
+                tickmarksVisible: true
+                maximumValue: 180
+                minimumValue: 0
+                value: UIRaceDataset.thermometer | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
-                unit: "T: °F"
-                unitFont.pointSize: 12
-                unitFont.bold: true
-                unitFont.italic: true
-                unitFont.family: "Consolas"
-                fullCircle: true
-                subDivs: 17
-                minValue: 0
-                maxValue: 180
-                lowValues: 30
-                highValues: 150
-                currentValue: (parent.randVal *  (maxValue - minValue) + minValue) | UIRaceDataset.thermometer;
-                digitalFont.pointSize: 15
+                property real values: UIRaceDataset.thermometer | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+                property real lowValues: 30
+                property real highValues: 150
+                property real range : maximumValue - minimumValue
+                property real valuesRatio : (values - minimumValue) / range
+                property real startAngle : Math.PI * 0.691
+                property real endAngle : Math.PI * 2.310
+                property real wholeAngle : endAngle - startAngle
+                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
+                property real needleAngle : needleAngleRad  * 180 / Math.PI
+
+                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+                onNeedleAngleRadChanged: thermometerValueGradient.requestPaint();
+
+                style: NewDashboardGaugeStyle
+                {
+                    minValue: parent.minimumValue
+                    maxValue: parent.maximumValue
+                    lowValues: parent.lowValues
+                    highValues: parent.highValues
+                    label: "T: °F"
+                    tickmarkLabelVisible: false
+                    values: UIRaceDataset.thermometer | (parent.randVal * (maxValue - minValue) + minValue)
+
+                }
+
+                Canvas
+                {
+                    id: thermometerValueGradient
+                    anchors.fill: parent
+                    antialiasing: true
+
+                    property real startAngle : Math.PI * 0.691
+                    property real endAngle : Math.PI * 2.310
+                    property color lowValuesColor: "#0066FF"
+                    property color highValuesColor: "#cc0000"
+                    property real values: parent.values
+
+                    function getArcGradientColor()
+                    {
+                        if (values <= parent.lowValues)
+                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
+                        else if (values >= parent.highValues)
+                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
+                        else
+                        {
+                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
+                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
+                        }
+                    }
+
+                    property color targetColor : getArcGradientColor();
+                    Behavior on targetColor {ColorAnimation {duration: 750}}
+
+                    onPaint:
+                    {
+                        var ctx = getContext("2d");
+                        targetColor = getArcGradientColor();
+                        ctx.reset();
+                        ctx.beginPath();
+                        ctx.lineWidth = 12;
+                        ctx.strokeStyle = targetColor;
+                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 18, parent.startAngle, parent.needleAngleRad);
+                        ctx.stroke();
+                    }
+                }
+
+                //Every time the number changes this is the animation to play in response.
+                Behavior on value
+                {
+                    SpringAnimation {spring: 1.2; damping: 0.3;}
+                }
             }
 
             /*

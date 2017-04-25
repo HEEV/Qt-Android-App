@@ -1,5 +1,42 @@
 import QtQuick 2.2
 
+// Sample RoundGauge
+//            RoundGauge
+//            {
+//                id: windometer
+//                width: parent.width*3/10 - 5
+//                height: parent.width*3/10
+//                anchors.top: parent.top
+//                anchors.left: parent.left
+
+//                anchors.bottomMargin: 5
+//                anchors.leftMargin: 5
+//                anchors.rightMargin: 0
+
+//                outerCirclingColor: "#ff2200"
+//                textFont.family : "Consolas"
+//                textFont.bold : true
+//                textFont.italic : true
+//                digitalFont.family : "Consolas"
+//                digitalFont.bold : true
+//                digitalFont.italic : true
+
+//                unit: "Ṽgw: mph"
+//                unitFont.pointSize: 12
+//                unitFont.bold: true
+//                unitFont.italic: true
+//                unitFont.family: "Consolas"
+//                fullCircle: true
+//                subDivs: 13
+//                minValue: -35
+//                maxValue: 35
+//                lowValues: -20
+//                highValues: 20
+//                currentValue: (parent.randVal *  (maxValue - minValue) + minValue) | UIRaceDataset.windSpeed;
+//                digitalFont.pointSize: 15
+//            }
+
+
 Canvas
 {
     id : gauge_canvas
@@ -48,6 +85,7 @@ Canvas
     // DRAWN ONCE
     onPaint:
     {
+        // BORDER
         context.beginPath();
 
         // BLUE ARC
@@ -65,6 +103,7 @@ Canvas
         fillGradiant.addColorStop(0, outerCirclingColor);
         fillGradiant.addColorStop(1, backgroundColor);
 
+        // GRADIENT CIRCLE
         context.beginPath();
         if (fullCircle)
             context.arc(d.center.x, d.center.y, d.radius - 0.001, 0 , 2 * Math.PI);
@@ -75,13 +114,14 @@ Canvas
         context.shadowColor = outerCirclingColor;
         context.fill();
 
+        // OUTSIDE WHITE CIRCLE
         context.beginPath();
         context.lineWidth = 2;
         context.strokeStyle = innerCirclingColor;
         context.arc(d.center.x, d.center.y, d.radius - 2, d.startAngle, d.endAngle);
         context.stroke();
 
-        // DRAW WHITE ARC CIRCLING
+        // WHITE ARC FOR VALUES PT 1
         context.beginPath();
         context.lineWidth = 2;
         context.strokeStyle = innerCirclingColor;
@@ -91,33 +131,34 @@ Canvas
         context.shadowBlur = 0;
         context.shadowColor = "transparent";
 
+        // WHITE ARC FOR VALUE PT 2
         context.beginPath();
         //        context.lineWidth = 2;
         //        context.strokeStyle = innerCirclingColor;
         context.arc(d.center.x, d.center.y, d.radius - (15 + indicatorWidth), d.startAngle, d.endAngle);
         context.stroke();
 
-        // DRAW LOW VALUE ARC
+        // LOW VALUE ARC
         context.beginPath();
         context.lineWidth = 8;
         context.strokeStyle = lowValuesColor;
         context.arc(d.center.x, d.center.y, d.radius - (10 + indicatorWidth), d.startAngle, d.startAngle + ((lowValues - minValue) / d.range) * (d.wholeAngle));
         context.stroke();
 
-        // DRAW HIGH VALUE ARC
+        // HIGH VALUE ARC
         context.beginPath();
         context.lineWidth = 8;
         context.strokeStyle = highValuesColor;
         context.arc(d.center.x, d.center.y, d.radius - (10 + indicatorWidth), d.endAngle - (((d.range  - (highValues - minValue)) / d.range) * (d.wholeAngle)), d.endAngle);
         context.stroke();
 
-        // GRADUATIONS
         context.strokeStyle = graduationColor;
         context.lineWidth = 10
         text_model.clear();
         var angleStep = (d.wholeAngle) / (subDivs + 1);
         for (var i = 0; i <= subDivs + 1; i++)
         {
+            // TICK MARKS
             context.beginPath();
             var rotAngle  = (d.startAngle) + i * (angleStep);
             var offset = (subDivs % 2 !== 0) ? (i % 2 !== 0) ? 0.015 : 0.005 : 0.005
@@ -176,6 +217,7 @@ Canvas
 
         onPaint:
         {
+            // VALUE GRADIENT ANIMATION
             context.reset();
             context.beginPath();
             context.lineWidth = indicatorWidth;
