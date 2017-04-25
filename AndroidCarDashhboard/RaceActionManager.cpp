@@ -10,6 +10,10 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     currentLapTime = QTime();
     totalRaceTime = QTime();
 
+    raceStarted = false;
+    uiInterface->setRaceStatus(raceStarted);
+    uiInterface->raceStatusNotify();
+
     raceTimer = new QTimer();
     connect(raceTimer, SIGNAL(timeout()), this, SLOT(updateCurrentTime()));
     sendToServerTimer = new QTimer();
@@ -29,10 +33,10 @@ bool RaceActionManager::initConnections()
     uiInterface->canStatusNotify();
 
     //Network setup.
-    if (!network->isConnected()) // replace this condition with a call to some networkinterface method that gets state
-    {
-        network->connectToServer(this);
-    }
+    // connecToServer() does no harm if called when network is already connected
+    // in fact, this call is necessary because it tells the network interface
+    // that it should attempt to reconnect if it loses its connection.
+    network->connectToServer(this);
     uiInterface->setNetworkStatus(network->isConnected());
     uiInterface->networkStatusNotify();
 
@@ -123,10 +127,11 @@ bool RaceActionManager::stopRace()
         }
 
         //Deal with network
-        if(network->isConnected())
-        {
-            network->disconnect();
-        }
+        // disconnect() does no harm if called when the network interface is
+        // already disconnected. In fact, this call is necessary because it
+        // tells the network interface to not attempt to reconnect should it
+        // encounter a connection error.
+        network->disconnect();
 
         //Notify the UI that the race has ended.
         updateIndicatorLights();

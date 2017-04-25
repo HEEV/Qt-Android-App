@@ -2,7 +2,6 @@
 
 const QString NetworkInterface::host = "jacob.cedarville.edu";
 const int NetworkInterface::port = 3306;
-const int NetworkInterface::initialConnectionAttemptInterval = 2000;
 const int NetworkInterface::reconnectAttemptInterval = 2000;
 
 const string NetworkInterface::logPrefix = "NETWORK_INTERFACE: ";
@@ -22,6 +21,7 @@ NetworkInterface::NetworkInterface(Logger *log)
 
 bool NetworkInterface::connectToServer(RaceActionManager *ram)
 {
+    shouldTryToReconnect = true;
     if(!isConnected())
     {
         raceManager = ram;
@@ -46,6 +46,7 @@ bool NetworkInterface::isConnected()
 
 void NetworkInterface::disconnect()
 {
+    shouldTryToReconnect = false;
     if(isConnected())
     {
         sock->disconnectFromHost();
@@ -91,7 +92,7 @@ void NetworkInterface::handleOnConnected()
  */
 void NetworkInterface::handleConnectionError(QAbstractSocket::SocketError error)
 {
-    if (!reconnectInProgress)
+    if (shouldTryToReconnect && !reconnectInProgress)
     {
         issueReconnectAttempt();
     }
@@ -104,6 +105,7 @@ void NetworkInterface::handleConnectionError(QAbstractSocket::SocketError error)
 void NetworkInterface::issueReconnectAttempt()
 {
     static string timeout = QString::number(reconnectAttemptInterval / 1000).toStdString();
+
     log->println(logPrefix + "Waiting " + timeout + "s to reconnect...");
 
     // This variable prevents us from issuing multiple reconnection attempts at once.
@@ -116,13 +118,16 @@ void NetworkInterface::issueReconnectAttempt()
  */
 void NetworkInterface::attemptToReconnect()
 {
-    log->println(logPrefix + "Attempting to reconnect to server.");
+    if (shouldTryToReconnect) // This value should be false if the race has stopped
+    {
+        log->println(logPrefix + "Attempting to reconnect to server.");
 
-    // QTcpSocket's connectToHost() rather than our own connectToServer() so
-    // that we don't have to destroy and re-allocate sock
-    sock->connectToHost(host, port);
-    // This variable prevents us from issuing multiple reconnection attempts at once.
-    reconnectInProgress = false;
+        // QTcpSocket's connectToHost() rather than our own connectToServer() so
+        // that we don't have to destroy and re-allocate sock
+        sock->connectToHost(host, port);
+        // This variable prevents us from issuing multiple reconnection attempts at once.
+        reconnectInProgress = false;
+    }
 }
 
 NetworkInterface::~NetworkInterface()
