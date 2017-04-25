@@ -4,7 +4,7 @@ CANInterface::CANInterface(DataProcessor *dataProcessor)
 {
     this->dataProcessor = dataProcessor;
     slcandActive = false;
-    startListening(); //TEMP for TEST
+    //startListening(); //TEMP for TEST
 }
 
 CANInterface::~CANInterface()

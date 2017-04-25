@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
 
     //Set up the RaceActionManager to take care of the race progress
-    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset, gps, net);
+    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset, net);
 
 
     //Start aquiring GPS data

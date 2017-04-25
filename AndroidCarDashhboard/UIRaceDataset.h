@@ -11,9 +11,11 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(qreal groundSpeed READ getGroundSpeed WRITE setGroundSpeed NOTIFY groundSpeedNotify)
     Q_PROPERTY(bool speedSensorStatus READ getSpeedSensorStatus NOTIFY speedSensorStatusNotify)
     Q_PROPERTY(bool canStatus READ getCanStatus WRITE setCanStatus NOTIFY canStatusNotify)
+    Q_PROPERTY(bool networkStatus READ getNetworkStatus WRITE setNetworkStatus NOTIFY networkStatusNotify)
     Q_PROPERTY(QString totalTime READ getTotalTime WRITE setTotalTime NOTIFY totalTimeNotify)
     Q_PROPERTY(QString currentLapTime READ getCurrentLapTime WRITE setCurrentLapTime NOTIFY currentLapTimeNotify)
     Q_PROPERTY(bool raceStatus READ getRaceStatus WRITE setRaceStatus NOTIFY raceStatusNotify)
+    Q_PROPERTY(QGeoPositionInfo gpsInfo READ getGPSInfo WRITE setGPSInfo NOTIFY gpsInfoNotify)
 
 public:
     explicit UIRaceDataset(QObject *parent = 0);
@@ -29,6 +31,9 @@ public:
 
     void setCanStatus(bool status);
     bool getCanStatus();
+
+    void setNetworkStatus(bool status);
+    bool getNetworkStatus();
 
     void setTotalTime(QString time);
     QString getTotalTime();
@@ -47,6 +52,7 @@ private:
     qreal groundSpeed;
     bool speedSensorStatus;
     bool canStatus;
+    bool networkStatus;
     bool raceStatus;
     QString totalTime;
     QString currentLapTime;
@@ -57,9 +63,11 @@ signals:
     void groundSpeedNotify();
     void speedSensorStatusNotify();
     void canStatusNotify();
+    void networkStatusNotify();
     void totalTimeNotify();
     void currentLapTimeNotify();
     void raceStatusNotify();
+    void gpsInfoNotify();
 public slots:
 };
 

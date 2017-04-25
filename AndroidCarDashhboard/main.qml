@@ -619,8 +619,7 @@ Window {
                 {
                     id: startRaceButton
                     text: qsTr("Start Race")
-                    checkable: false
-
+                    enabled: !UIRaceDataset.raceStatus
                     style: ButtonStyle
                     {
                         background: Rectangle
@@ -656,7 +655,7 @@ Window {
                 {
                     id: stopRaceButton
                     text: qsTr("Stop Race")
-                    checkable: false
+                    enabled: UIRaceDataset.raceStatus
 
                     style: ButtonStyle
                     {
@@ -742,7 +741,7 @@ Window {
                 {
                     id: networkStatusIndicator
                     color: "#50f200"
-                    active: UIRaceDataSet.networkStatus
+                    active: UIRaceDataset.networkStatus
 
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: networkStatusLabel.horizontalCenter

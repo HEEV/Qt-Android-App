@@ -26,6 +26,7 @@ public:
     //The RaceActionManager is for the callback that will be used.
     bool connectToServer(RaceActionManager *ram);
     void disconnect();
+    bool isConnected();
 
     bool sendJASON(QJsonObject json);
 
@@ -37,11 +38,11 @@ private:
 
     static const QString host;
     static const int port;
+    bool shouldTryToReconnect; // Set this to false if the race has stopped
     void issueReconnectAttempt();
     // Prevents us from issuing more than one reconnection attempt at a time
     bool reconnectInProgress;
     static const int reconnectAttemptInterval;
-    static const int initialConnectionAttemptInterval;
 
     Logger *log;
     static const string logPrefix;
