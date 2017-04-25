@@ -9,21 +9,31 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     network = net;
     currentLapTime = QTime();
     totalRaceTime = QTime();
+
+    raceTimer = new QTimer();
+    connect(raceTimer, SIGNAL(timeout()), this, SLOT(updateCurrentTime()));
+    sendToServerTimer = new QTimer();
+    connect(sendToServerTimer, SIGNAL(timeout()), this, SLOT(sendInfoToServer()));
+    indicatorUpdaterTimer = new QTimer();
+    connect(indicatorUpdaterTimer, SIGNAL(timeout()), this, SLOT(updateIndicatorLights()));
 }
 
 bool RaceActionManager::initConnections()
 {
     //Canbus setup
-    //How can we check whether we are already connected?
-    bool canConnected = canInterface->startListening();
+    if (!canConnected)
+    {
+        canConnected = canInterface->startListening();
+    }
     uiInterface->setCanStatus(canConnected);
     uiInterface->canStatusNotify();
 
     //Network setup.
-    // Assume that we don't need to check whether the network interface is
-    // already connected before calling connectToServer()
-    /*bool*/ networkConnected = network->connectToServer(this);
-    uiInterface->setNetworkStatus(networkConnected);
+    if (!network->isConnected()) // replace this condition with a call to some networkinterface method that gets state
+    {
+        network->connectToServer(this);
+    }
+    uiInterface->setNetworkStatus(network->isConnected());
     uiInterface->networkStatusNotify();
 
     return true; // This return value is meaningless, as of right now
@@ -48,25 +58,21 @@ bool RaceActionManager::startRace()
     */
 
     //Set up pulse to check on things.
-    raceTimer = new QTimer();
-    connect(raceTimer, SIGNAL(timeout()), this, SLOT(updateCurrentTime()));
+    indicatorUpdaterTimer->start(updateIndicatorPeriod);
     raceTimer->start(timerPeriod);
-
-    sendToServerTimer = new QTimer();
-    connect(sendToServerTimer, SIGNAL(timeout()), this, SLOT(sendInfoToServer()));
     sendToServerTimer->start(sendToServerTimerPeriod);
 
     //Start keeping track of time.
-    totalRaceTime.restart();
     totalRaceTime.start();
-    currentLapTime.restart();
     currentLapTime.start();
+    updateCurrentTime();
 
     //Show on the UI that the race has started.
-    uiInterface->setRaceStatus(true);
-    uiInterface->raceStatusNotify();
-    logger->println((logPrefix + "Race started.").toStdString());
     raceStarted = true;
+    uiInterface->setRaceStatus(raceStarted);
+    uiInterface->raceStatusNotify();
+
+    logger->println((logPrefix + "Race started.").toStdString());
 
     return true;
 }
@@ -87,35 +93,50 @@ void RaceActionManager::updateCurrentTime()
     uiInterface->totalTimeNotify();
 }
 
+// Checks the status of the can and network interfaces then sets the UI
+// indicator lights accordingly
+void RaceActionManager::updateIndicatorLights()
+{
+    uiInterface->setNetworkStatus(network->isConnected());
+    uiInterface->networkStatusNotify();
+
+    uiInterface->setCanStatus(canConnected);
+    uiInterface->canStatusNotify();
+
+}
+
 bool RaceActionManager::stopRace()
 {
     // Need to re-evaluate this entire function once startRace() and initConnections() have been figured out
-    /*
+
     if(raceStarted)
     {
         //Stop the update timer.
         raceTimer->stop();
-        //Disconnects everything that is associated with the timer
-        disconnect(raceTimer, 0, 0,0);
-        totalRaceTime.restart();
-        currentLapTime.restart();
+        sendToServerTimer->stop();
+        indicatorUpdaterTimer->stop();
 
+        if (canConnected)
+        {
+            canInterface->stopListening();
+            canConnected = false;
+        }
 
         //Deal with network
-        if(networkConnected)
+        if(network->isConnected())
         {
             network->disconnect();
-            delete network;
         }
 
         //Notify the UI that the race has ended.
+        updateIndicatorLights();
         uiInterface->setRaceStatus(false);
         uiInterface->raceStatusNotify();
+
         raceStarted = false;
-        delete raceTimer;
     }
     logger->println((logPrefix + "Race stopped.").toStdString());
-    */
+
     return true;
 }
 
@@ -125,20 +146,23 @@ bool RaceActionManager::stopRace()
  */
 void RaceActionManager::sendInfoToServer()
 {
-    QGeoCoordinate currentCoordinate = uiInterface->getGPSInfo().coordinate();
-    QJsonObject gpsMessage;
-    gpsMessage.insert("latitude", QJsonValue(currentCoordinate.latitude()));
-    gpsMessage.insert("longitude", QJsonValue(currentCoordinate.longitude()));
-    // I'm guessing we don't actually need to know altitude
-    //gpsMessage.insert("altitude", QJsonValue(currentCoordinate.altitude()));
+    if (network->isConnected())
+    {
+        QGeoCoordinate currentCoordinate = uiInterface->getGPSInfo().coordinate();
+        QJsonObject gpsMessage;
+        gpsMessage.insert("latitude", QJsonValue(currentCoordinate.latitude()));
+        gpsMessage.insert("longitude", QJsonValue(currentCoordinate.longitude()));
+        // I'm guessing we don't actually need to know altitude
+        //gpsMessage.insert("altitude", QJsonValue(currentCoordinate.altitude()));
 
-    QJsonObject mainMessage;
-    mainMessage.insert("time", totalRaceTime.elapsed());
-    mainMessage.insert("groundspeed", uiInterface->getGroundSpeed());
-    //mainMessageinsert("lapNumber", /*lap here*/);
-    mainMessage.insert("coordinate", gpsMessage);
+        QJsonObject mainMessage;
+        mainMessage.insert("time", totalRaceTime.elapsed());
+        mainMessage.insert("groundspeed", uiInterface->getGroundSpeed());
+        //mainMessageinsert("lapNumber", /*lap here*/);
+        mainMessage.insert("coordinate", gpsMessage);
 
-    network->sendJASON(mainMessage);
+        network->sendJASON(mainMessage);
+    }
 }
 
 RaceActionManager::~RaceActionManager()

@@ -33,15 +33,18 @@ public:
 private slots:
     void updateCurrentTime();
     void sendInfoToServer();
+    void updateIndicatorLights();
 
 private:
     const QString logPrefix = "RACE_MANAGER: ";
 
     static const int timerPeriod = 500; //In miliseconds.
     static const int sendToServerTimerPeriod = 1000;
+    static const int updateIndicatorPeriod = 2000;
 
     bool raceStarted;
     bool networkConnected;
+    bool canConnected;
     bool gpsStarted;
 
     CANInterface *canInterface;
@@ -52,6 +55,7 @@ private:
 
     QTimer *raceTimer;
     QTimer *sendToServerTimer;
+    QTimer *indicatorUpdaterTimer;
     QTime totalRaceTime;
     QTime currentLapTime;
 

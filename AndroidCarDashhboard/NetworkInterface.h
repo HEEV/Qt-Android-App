@@ -26,6 +26,7 @@ public:
     //The RaceActionManager is for the callback that will be used.
     bool connectToServer(RaceActionManager *ram);
     void disconnect();
+    bool isConnected();
 
     bool sendJASON(QJsonObject json);
 

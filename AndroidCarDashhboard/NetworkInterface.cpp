@@ -9,44 +9,46 @@ const string NetworkInterface::logPrefix = "NETWORK_INTERFACE: ";
 
 NetworkInterface::NetworkInterface(Logger *log)
 {
-    //Default the socket to a null value.
-    sock = nullptr;
     reconnectInProgress = false;
     raceManager = nullptr;
     this->log = log;
 
-
+    sock = new QTcpSocket();
+    // Hook up event handlers for connection errors and successful connections.
+    connect(sock, SIGNAL(connected()), this, SLOT(handleOnConnected()));
+    connect(sock, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleConnectionError(QAbstractSocket::SocketError)));
+    connect(sock, SIGNAL(readyRead()), this, SLOT(handleReceiveData()));
 }
 
 bool NetworkInterface::connectToServer(RaceActionManager *ram)
 {
-    if(sock == nullptr)
+    if(!isConnected())
     {
         raceManager = ram;
-        sock = new QTcpSocket();
+
         sock->connectToHost(host, port);
 
-        // Hook up event handlers for connection errors and successful connections.
-        connect(sock, SIGNAL(connected()), this, SLOT(handleOnConnected()));
-        connect(sock, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleConnectionError(QAbstractSocket::SocketError)));
-        connect(sock, SIGNAL(readyRead()), this, SLOT(handleReceiveData()));
-
-        if (sock->waitForConnected(initialConnectionAttemptInterval)) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
     return false;
 }
 
+bool NetworkInterface::isConnected()
+{
+    if (sock == nullptr)
+    {
+        return false;
+    } else
+    {
+        return (sock->state() == QAbstractSocket::ConnectedState);
+    }
+}
 
 void NetworkInterface::disconnect()
 {
-    if(sock != nullptr)
+    if(isConnected())
     {
         sock->disconnectFromHost();
-        delete sock;
     }
 }
 
@@ -89,15 +91,9 @@ void NetworkInterface::handleOnConnected()
  */
 void NetworkInterface::handleConnectionError(QAbstractSocket::SocketError error)
 {
-    if (error == QAbstractSocket::RemoteHostClosedError || error == QAbstractSocket::ConnectionRefusedError)
+    if (!reconnectInProgress)
     {
-        if (!reconnectInProgress)
-        {
-            issueReconnectAttempt();
-        }
-    } else
-    {
-        log->println(logPrefix + "Unhandled error type.");
+        issueReconnectAttempt();
     }
 }
 
