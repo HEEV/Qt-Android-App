@@ -305,7 +305,7 @@ Window {
                 {
                     id: averageSpeed
                     color: "#ffffff"
-                    text: qsTr("Avg. V: 25.0 mph")
+                    text: qsTr("Avg. V: " + UIRaceDataset.averageSpeed)
                     font.pointSize: 24
                     fontSizeMode: Text.Fit
                     font.family: "Consolas"
@@ -693,6 +693,8 @@ Window {
                     onClicked:
                     {
                         RaceActionManager.startRace();
+                        urbie.enabled = false;
+                        sting.enabled = false;
                     }
                 }
 
@@ -727,6 +729,8 @@ Window {
                     onClicked:
                     {
                         RaceActionManager.stopRace();
+                        urbie.enabled = true;
+                        sting.enabled = true;
                     }
                 }
 
@@ -740,6 +744,61 @@ Window {
                     anchors.verticalCenter: parent.verticalCenter
 
                     anchors.leftMargin: 5
+                }
+
+                Rectangle
+                {
+                    id: carSelection
+                    width: carSelectionGroupBox.width
+                    height: carSelectionGroupBox.height
+                    color: "#ffffff"
+
+                    anchors.left: raceActiveIndicator.right
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    anchors.leftMargin: parent.width/4 - (startRaceButton.width*2)
+
+                    GroupBox
+                    {
+                        id: carSelectionGroupBox
+                        title: "Car Selection:"
+
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        RowLayout
+                        {
+                            ExclusiveGroup {id: carSeletionGroup }
+
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            anchors.leftMargin: 5
+                            anchors.rightMargin: 5
+
+                            RadioButton
+                            {
+                                id: urbie
+                                text: "Urbie"
+                                checked: true
+                                exclusiveGroup: carSeletionGroup
+                                onClicked:
+                                {
+                                    UIRaceDataset.setCarName(0);
+                                }
+                            }
+                            RadioButton
+                            {
+                                id: sting
+                                text: "Sting"
+                                exclusiveGroup: carSeletionGroup
+                                onClicked:
+                                {
+                                    UIRaceDataset.setCarName(1);
+                                }
+                            }
+                        }
+                    }
                 }
 
 
