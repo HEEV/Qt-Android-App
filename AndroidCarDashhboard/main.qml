@@ -146,6 +146,21 @@ Window {
                 randVal = 0;
             }
 
+            Button
+            {
+                id: getMinValue
+                text: qsTr("")
+                visible: true
+
+                anchors.horizontalCenter: windometer.horizontalCenter
+                anchors.verticalCenter: windometer.verticalCenter
+
+                onClicked:
+                {
+                    parent.randVal = 0;
+                }
+            }
+
             /*
               The a gauge for the relative velocity of the wind to the car.
             */
@@ -368,6 +383,21 @@ Window {
                 }
             }
 
+            Button
+            {
+                id: getRandomValue
+                text: qsTr("")
+                visible: true
+
+                anchors.horizontalCenter: speedometer.horizontalCenter
+                anchors.verticalCenter: speedometer.verticalCenter
+
+                onClicked:
+                {
+                    parent.randVal = Math.random();
+                }
+            }
+
             /*
               The gauge for the velocity of the car.
             */
@@ -457,6 +487,21 @@ Window {
                 Behavior on value
                 {
                     SpringAnimation {spring: 1.2; damping: 0.3;}
+                }
+            }
+
+            Button
+            {
+                id: getMaxValue
+                text: qsTr("")
+                visible: true
+
+                anchors.horizontalCenter: thermometer.horizontalCenter
+                anchors.verticalCenter: thermometer.verticalCenter
+
+                onClicked:
+                {
+                    parent.randVal = 1;
                 }
             }
 
