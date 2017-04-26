@@ -203,6 +203,7 @@ Window {
                     highValues: parent.highValues
                     label: "Ṽgw: mph"
                     values: UIRaceDataset.windSpeed | (parent.randVal * (maxValue - minValue) + minValue)
+                    outerCirclingColor: "#FF3D1F"
                 }
 
                 Canvas
@@ -239,13 +240,12 @@ Window {
                         targetColor = getArcGradientColor();
                         ctx.reset();
                         ctx.beginPath();
-                        ctx.lineWidth = 12;
+                        ctx.lineWidth = 18.5;
                         ctx.strokeStyle = targetColor;
-                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 18, parent.startAngle, parent.needleAngleRad);
+                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
                         ctx.stroke();
                     }
                 }
-
 
                 //Every time the number changes this is the animation to play in response.
                 Behavior on value
@@ -476,9 +476,9 @@ Window {
                         targetColor = getArcGradientColor();
                         ctx.reset();
                         ctx.beginPath();
-                        ctx.lineWidth = 12;
+                        ctx.lineWidth = 18.5;
                         ctx.strokeStyle = targetColor;
-                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 18, parent.startAngle, parent.needleAngleRad);
+                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
                         ctx.stroke();
                     }
                 }
@@ -548,7 +548,7 @@ Window {
                     label: "T: °F"
                     tickmarkLabelVisible: false
                     values: UIRaceDataset.thermometer | (parent.randVal * (maxValue - minValue) + minValue)
-
+                    outerCirclingColor: "#FF3D1F"
                 }
 
                 Canvas
@@ -585,9 +585,9 @@ Window {
                         targetColor = getArcGradientColor();
                         ctx.reset();
                         ctx.beginPath();
-                        ctx.lineWidth = 12;
+                        ctx.lineWidth = 18.5;
                         ctx.strokeStyle = targetColor;
-                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 18, parent.startAngle, parent.needleAngleRad);
+                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
                         ctx.stroke();
                     }
                 }
@@ -626,7 +626,7 @@ Window {
                     font.italic: true
 
                     anchors.bottom: parent.bottom
-                    anchors.horizontalCenter: thermometer.horizontalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
         }
