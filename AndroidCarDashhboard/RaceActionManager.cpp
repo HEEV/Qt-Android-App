@@ -1,4 +1,5 @@
 #include "RaceActionManager.h"
+#include "Enums.h"
 
 RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, NetworkInterface *net)
 {
@@ -43,9 +44,12 @@ bool RaceActionManager::initConnections()
     return true; // This return value is meaningless, as of right now
 }
 
-bool RaceActionManager::startRace()
+bool RaceActionManager::startRace(Car carName)
 {
     initConnections();
+
+    //TODO: set approprate car here
+    dataProcessor->setWheelCircumference(carName);
 
     // Should this be put into a slot that occurs when network is connected?
     /*

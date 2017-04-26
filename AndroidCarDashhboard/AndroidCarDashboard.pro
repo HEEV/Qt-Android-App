@@ -17,7 +17,7 @@ SOURCES += main.cpp \
     Logger.cpp \
     RaceActionManager.cpp \
     GPSPositioningService.cpp \
-    NetworkInterface.cpp \
+    NetworkInterface.cpp
     #QMLLib/ViewManagement.cpp
 
 RESOURCES += qml.qrc
@@ -41,6 +41,7 @@ HEADERS += \
     RaceActionManager.h \
     GPSPositioningService.h \
     NetworkInterface.h \
+    Enums.h
     #QMLLib/ViewManagement.h
 
 DISTFILES += \

@@ -16,13 +16,27 @@ const uint32_t DataProcessor::NO_NEW_DATA = 0xFFFFFFFF;
 const int DataProcessor::WHEEL_TIMEOUT_LENGTH = 6000;
 
 const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
+const double DataProcessor::URBIE_WHEEL_CIRCUMFERENCE = 67.937;
+const double DataProcessor::STING_WHEEL_CIRCUMFERENCE = 60.868;
 
-DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, double inchesPerWheelRevolution, Logger *log)
+DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, Car carName, Logger *log)
 {
     this->raceDataset = uiRaceDataset;
     logger = log;
     // Calculate the velocity multiplier for ground speed
-    velocityMultiplier = VELOCITY_MULTIPLIER_BASE * inchesPerWheelRevolution;
+    setWheelCircumference(carName);
+}
+
+void DataProcessor::setWheelCircumference(Car carName)
+{
+    if (carName == Car::Urbie)
+    {
+        velocityMultiplier = VELOCITY_MULTIPLIER_BASE * URBIE_WHEEL_CIRCUMFERENCE;
+    }
+    else if (carName == Car::Sting)
+    {
+        velocityMultiplier = VELOCITY_MULTIPLIER_BASE * STING_WHEEL_CIRCUMFERENCE;
+    }
 }
 
 void DataProcessor::routeCANFrame(QCanBusFrame frame)

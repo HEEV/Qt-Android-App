@@ -27,7 +27,7 @@ public:
     ~RaceActionManager();
 
     bool initConnections();
-    Q_INVOKABLE bool startRace();
+    Q_INVOKABLE bool startRace(Car carName);
     Q_INVOKABLE bool stopRace();
 
 private slots:

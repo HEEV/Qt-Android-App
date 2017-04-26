@@ -3,12 +3,23 @@
 UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
 {
     //Set defaults.
+    carName = Car::Urbie;
     projectedProgress = 0;
     groundSpeed = 0;
     speedSensorStatus = false;
     canStatus = false;
     totalTime = "00:00:00";
     currentLapTime = "00:00:00";
+}
+
+Car UIRaceDataset::getCarName()
+{
+    return carName;
+}
+
+void UIRaceDataset::setCarName(Car name)
+{
+    carName = name;
 }
 
 qreal UIRaceDataset::getProjectedProgress()
