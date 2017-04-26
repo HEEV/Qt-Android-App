@@ -142,7 +142,7 @@ CircularGaugeStyle {
         visible: true
         implicitWidth: 8
         antialiasing: true
-        implicitHeight: 16
+        implicitHeight: 17.5
         color: "#ffffff"
     }
 
