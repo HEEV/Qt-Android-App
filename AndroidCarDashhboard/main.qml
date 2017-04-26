@@ -414,13 +414,13 @@ Window {
                 anchors.rightMargin: 1
 
                 tickmarksVisible: true
-                maximumValue: 80
+                maximumValue: 60
                 minimumValue: 0
                 value: UIRaceDataset.groundSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
                 property real values: UIRaceDataset.groundSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
                 property real lowValues: 10
-                property real highValues: 50
+                property real highValues: 40
                 property real range : maximumValue - minimumValue
                 property real valuesRatio : (values - minimumValue) / range
                 property real startAngle : Math.PI * 0.691
