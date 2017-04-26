@@ -6,11 +6,14 @@
 #include <QDebug>
 #include "CanNodeParser.h"
 #include "Logger.h"
+#include "Enums.h"
 
 class DataProcessor
 {
 public:
-    DataProcessor(UIRaceDataset *uiRaceDataSet, double inchesPerWheelRevolution, Logger *log);
+    DataProcessor(UIRaceDataset *uiRaceDataSet, Car carName, Logger *log);
+
+    void setWheelCircumference(Car carName);
 
     void routeCANFrame(QCanBusFrame frame);
 
@@ -44,6 +47,9 @@ private:
     // Multiplier to get velocity from revolutions per second
     static const double VELOCITY_MULTIPLIER_BASE;
     double velocityMultiplier;
+
+    static const double URBIE_WHEEL_CIRCUMFERENCE;
+    static const double STING_WHEEL_CIRCUMFERENCE;
 
     // Holds the time of the last tachometer message that
     // included a *new* wheel time interval (i.e. a message

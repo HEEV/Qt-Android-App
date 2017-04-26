@@ -3,10 +3,12 @@
 
 #include <QObject>
 #include <QGeoPositionInfo>
+#include "Enums.h"
 
 class UIRaceDataset : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Car carName READ getCarName WRITE setCarName NOTIFY carNameNotify)
     Q_PROPERTY(qreal projectedProgress READ getProjectedProgress NOTIFY projectedProgressNotify)
     Q_PROPERTY(qreal groundSpeed READ getGroundSpeed WRITE setGroundSpeed NOTIFY groundSpeedNotify)
     Q_PROPERTY(bool speedSensorStatus READ getSpeedSensorStatus NOTIFY speedSensorStatusNotify)
@@ -19,6 +21,9 @@ class UIRaceDataset : public QObject
 
 public:
     explicit UIRaceDataset(QObject *parent = 0);
+
+    Car getCarName();
+    void setCarName(Car name);
 
     void setProjectedProgress(double projectedProgress);
     qreal getProjectedProgress();
@@ -48,6 +53,7 @@ public:
     QGeoPositionInfo getGPSInfo();
 
 private:
+    Car carName;
     qreal projectedProgress;
     qreal groundSpeed;
     bool speedSensorStatus;
@@ -59,6 +65,7 @@ private:
     QGeoPositionInfo gpsInfo;
 
 signals:
+    void carNameNotify();
     void projectedProgressNotify();
     void groundSpeedNotify();
     void speedSensorStatusNotify();

@@ -17,6 +17,7 @@
 #include <RaceActionManager.h>
 #include <GPSPositioningService.h>
 #include <NetworkInterface.h>
+#include <Enums.h>
 
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
@@ -52,7 +53,7 @@ int main(int argc, char *argv[])
     logger->println("This is another line of text");
 
     //Make a DataProcessor.
-    DataProcessor *dataProcessor = new DataProcessor(raceDataset, 69.115 /*this number is just a guess*/, logger);
+    DataProcessor *dataProcessor = new DataProcessor(raceDataset, Car::Urbie /*Default to Urbie*/, logger);
 
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
