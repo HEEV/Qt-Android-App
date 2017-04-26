@@ -44,12 +44,12 @@ bool RaceActionManager::initConnections()
     return true; // This return value is meaningless, as of right now
 }
 
-bool RaceActionManager::startRace(Car carName)
+bool RaceActionManager::startRace()
 {
     initConnections();
 
     //TODO: set approprate car here
-    dataProcessor->setWheelCircumference(carName);
+    dataProcessor->setWheelCircumference(uiInterface->getCarName());
 
     // Should this be put into a slot that occurs when network is connected?
     /*
