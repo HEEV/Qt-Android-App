@@ -324,7 +324,7 @@ Window {
             {
                 id: raceStatistics2
                 color: "#000000"
-                width: total.width
+                width: totalTime.width
                 height: totalTime.height
 
                 anchors.top: parent.top
@@ -356,7 +356,7 @@ Window {
             {
                 id: raceStatistics3
                 color: "#000000"
-                width: currentLap.width
+                width: lapTime.width
                 height: lapTime.height + lastLapTime.height
 
                 anchors.top: parent.top
