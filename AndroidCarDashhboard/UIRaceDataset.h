@@ -16,6 +16,8 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(bool networkStatus READ getNetworkStatus WRITE setNetworkStatus NOTIFY networkStatusNotify)
     Q_PROPERTY(QString totalTime READ getTotalTime WRITE setTotalTime NOTIFY totalTimeNotify)
     Q_PROPERTY(QString currentLapTime READ getCurrentLapTime WRITE setCurrentLapTime NOTIFY currentLapTimeNotify)
+    Q_PROPERTY(QString lastLapTime READ getLastLapTime WRITE setLastLapTime NOTIFY lastLapTimeNotify)
+    Q_PROPERTY(int currentLapNumber READ getCurrentLapNumber WRITE setCurrentLapNumber NOTIFY currentLapNumberNotify)
     Q_PROPERTY(bool raceStatus READ getRaceStatus WRITE setRaceStatus NOTIFY raceStatusNotify)
     Q_PROPERTY(QGeoPositionInfo gpsInfo READ getGPSInfo WRITE setGPSInfo NOTIFY gpsInfoNotify)
 
@@ -46,6 +48,12 @@ public:
     void setCurrentLapTime(QString time);
     QString getCurrentLapTime();
 
+    void setLastLapTime(QString time);
+    QString getLastLapTime();
+
+    void setCurrentLapNumber(int lapNumber);
+    int getCurrentLapNumber();
+
     void setRaceStatus(bool status);
     bool getRaceStatus();
 
@@ -66,6 +74,8 @@ private:
     bool raceStatus;
     QString totalTime;
     QString currentLapTime;
+    QString lastLapTime;
+    int currentLapNumber;
     QGeoPositionInfo gpsInfo;
 
 signals:
@@ -77,6 +87,8 @@ signals:
     void networkStatusNotify();
     void totalTimeNotify();
     void currentLapTimeNotify();
+    void lastLapTimeNotify();
+    void currentLapNumberNotify();
     void raceStatusNotify();
     void gpsInfoNotify();
 public slots:

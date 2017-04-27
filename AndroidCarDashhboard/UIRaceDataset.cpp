@@ -10,6 +10,8 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     canStatus = false;
     totalTime = "00:00";
     currentLapTime = "00:00";
+    lastLapTime = "00:00";
+    currentLapNumber = 1;
 }
 
 QString UIRaceDataset::getCarName()
@@ -90,6 +92,26 @@ void UIRaceDataset::setCurrentLapTime(QString time)
 QString UIRaceDataset::getCurrentLapTime()
 {
     return currentLapTime;
+}
+
+void UIRaceDataset::setLastLapTime(QString time)
+{
+    lastLapTime = time;
+}
+
+QString UIRaceDataset::getLastLapTime()
+{
+    return lastLapTime;
+}
+
+void UIRaceDataset::setCurrentLapNumber(int lapNumber)
+{
+    currentLapNumber = lapNumber;
+}
+
+int UIRaceDataset::getCurrentLapNumber()
+{
+    return currentLapNumber;
 }
 
 void UIRaceDataset::setRaceStatus(bool status)

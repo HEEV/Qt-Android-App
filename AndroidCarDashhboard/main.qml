@@ -286,7 +286,7 @@ Window {
                 {
                     id: lapNumber
                     color: "#ffffff"
-                    text: qsTr("2")
+                    text: UIRaceDataset.currentLapNumber
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 45
@@ -385,7 +385,7 @@ Window {
                     font.pointSize: 45
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
-                    text: qsTr("Last Lap: 00:00")
+                    text: qsTr("Last Lap: " + UIRaceDataset.lastLapTime)
                     font.family: "Consolas"
                     font.bold: true
 

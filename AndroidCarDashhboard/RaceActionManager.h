@@ -13,6 +13,7 @@ class RaceActionManager;
 #include "DataProcessor.h"
 #include "Logger.h"
 #include "UIRaceDataset.h"
+#include "GPSPositioningService.h"
 #include "NetworkInterface.h"
 
 
@@ -23,7 +24,7 @@ class RaceActionManager: public QObject
 
 public:
     //We require pretty much all of the other classes in order to make this class work correctly.
-    RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, NetworkInterface *net);
+    RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net);
     ~RaceActionManager();
 
     bool initConnections();
@@ -34,6 +35,7 @@ private slots:
     void updateCurrentTime();
     void sendInfoToServer();
     void updateIndicatorLights();
+    void incrementCurrentLap();
 
 private:
     const QString logPrefix = "RACE_MANAGER: ";
@@ -51,6 +53,7 @@ private:
     DataProcessor *dataProcessor;
     Logger *logger;
     UIRaceDataset *uiInterface;
+    GPSPositioningService *gpsService;
     NetworkInterface *network;
 
     QTimer *raceTimer;
