@@ -38,7 +38,7 @@ private slots:
 private:
     const QString logPrefix = "RACE_MANAGER: ";
 
-    static const int timerPeriod = 500; //In miliseconds.
+    static const int timerPeriod = 1000; //In miliseconds.
     static const int sendToServerTimerPeriod = 1000;
     static const int updateIndicatorPeriod = 2000;
 

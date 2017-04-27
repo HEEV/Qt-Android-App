@@ -29,6 +29,7 @@ Window {
 
         anchors.fill: parent
 
+
         /*
           flickSlowThreshold: The slowest flick speed to tolerate before snapping
           to either the dashboard or the logging screen.
@@ -47,10 +48,6 @@ Window {
         */
         property int flickFastThreshold: flickDeceleration * 2
         property bool fastEnoughToAutoSnap: Math.abs(horizontalVelocity) > flickFastThreshold
-
-        // The number of milliseconds a snap animation should take
-        property int snapDuration: 200
-
 
         onHorizontalVelocityChanged: decideToSnap()
         // this is important in case the user keeps his finger on the screen
@@ -101,7 +98,7 @@ Window {
         NumberAnimation on contentX
         {
             id: snapAnimation
-            duration: snapDuration
+            duration: 200
         }
 
         /*
@@ -116,143 +113,143 @@ Window {
             color : "#000000"
             Component.onCompleted: forceActiveFocus();
 
-            property real randVal : 0;
+//            property real randVal : 0;
 
-            /*
-              Desktop animations for gauges.
-            */
-            Keys.onSpacePressed:
-            {
-                randVal = Math.random();
-            }
+//            /*
+//              Desktop animations for gauges.
+//            */
+//            Keys.onSpacePressed:
+//            {
+//                randVal = Math.random();
+//            }
 
-            Keys.onUpPressed:
-            {
-                randVal = 1;
-            }
+//            Keys.onUpPressed:
+//            {
+//                randVal = 1;
+//            }
 
-            Keys.onDownPressed:
-            {
-                randVal = 0;
-            }
+//            Keys.onDownPressed:
+//            {
+//                randVal = 0;
+//            }
 
-            Keys.onVolumeUpPressed:
-            {
-                randVal = 1;
-            }
+//            Keys.onVolumeUpPressed:
+//            {
+//                randVal = 1;
+//            }
 
-            Keys.onVolumeDownPressed:
-            {
-                randVal = 0;
-            }
+//            Keys.onVolumeDownPressed:
+//            {
+//                randVal = 0;
+//            }
 
-            Button
-            {
-                id: getMinValue
-                text: qsTr("")
-                visible: true
+//            Button
+//            {
+//                id: getMinValue
+//                text: qsTr("")
+//                visible: true
 
-                anchors.horizontalCenter: windometer.horizontalCenter
-                anchors.verticalCenter: windometer.verticalCenter
+//                anchors.horizontalCenter: windometer.horizontalCenter
+//                anchors.verticalCenter: windometer.verticalCenter
 
-                onClicked:
-                {
-                    parent.randVal = 0;
-                }
-            }
+//                onClicked:
+//                {
+//                    parent.randVal = 0;
+//                }
+//            }
 
-            /*
-              The a gauge for the relative velocity of the wind to the car.
-            */
-            CircularGauge {
-                id: windometer
-                width: parent.width*3/10
-                height: parent.width*3/10
+//            /*
+//              The a gauge for the relative velocity of the wind to the car.
+//            */
+//            CircularGauge {
+//                id: windometer
+//                width: parent.width*3/10
+//                height: parent.width*3/10
 
-                anchors.top: parent.top
-                anchors.left: parent.left
+//                anchors.top: parent.top
+//                anchors.left: parent.left
 
-                anchors.topMargin: 5
-                anchors.leftMargin: 5
-                anchors.rightMargin: 0
+//                anchors.topMargin: 5
+//                anchors.leftMargin: 5
+//                anchors.rightMargin: 0
 
-                tickmarksVisible: true
-                maximumValue: 35
-                minimumValue: -35
-                value: UIRaceDataset.windSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+//                tickmarksVisible: true
+//                maximumValue: 35
+//                minimumValue: -35
+//                value: 0//UIRaceDataset.windSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
-                property real values: UIRaceDataset.windSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
-                property real lowValues: -20
-                property real highValues: 20
-                property real range : maximumValue - minimumValue
-                property real valuesRatio : (values - minimumValue) / range
-                property real startAngle : Math.PI * 0.691
-                property real endAngle : Math.PI * 2.310
-                property real wholeAngle : endAngle - startAngle
-                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
-                property real needleAngle : needleAngleRad  * 180 / Math.PI
+//                property real values: 0//UIRaceDataset.windSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+//                property real lowValues: -20
+//                property real highValues: 20
+//                property real range : maximumValue - minimumValue
+//                property real valuesRatio : (values - minimumValue) / range
+//                property real startAngle : Math.PI * 0.691
+//                property real endAngle : Math.PI * 2.310
+//                property real wholeAngle : endAngle - startAngle
+//                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
+//                property real needleAngle : needleAngleRad  * 180 / Math.PI
 
-                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
-                onNeedleAngleRadChanged: windometerValueGradient.requestPaint();
+//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+//                onNeedleAngleRadChanged: windometerValueGradient.requestPaint();
 
-                style: NewDashboardGaugeStyle
-                {
-                    minValue: parent.minimumValue
-                    maxValue: parent.maximumValue
-                    lowValues: parent.lowValues
-                    highValues: parent.highValues
-                    label: "Ṽgw: mph"
-                    values: UIRaceDataset.windSpeed | (parent.randVal * (maxValue - minValue) + minValue)
-                    outerCirclingColor: "#FF3D1F"
-                }
+//                style: NewDashboardGaugeStyle
+//                {
+//                    minValue: parent.minimumValue
+//                    maxValue: parent.maximumValue
+//                    lowValues: parent.lowValues
+//                    highValues: parent.highValues
+//                    label: "Ṽgw: mph"
+//                    values: 0//UIRaceDataset.windSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
+//                    outerCirclingColor: "#FF3D1F"
+//                }
 
-                Canvas
-                {
-                    id: windometerValueGradient
-                    anchors.fill: parent
-                    antialiasing: true
+//                Canvas
+//                {
+//                    id: windometerValueGradient
+//                    anchors.fill: parent
+//                    antialiasing: true
 
-                    property real startAngle : Math.PI * 0.691
-                    property real endAngle : Math.PI * 2.310
-                    property color lowValuesColor: "#0066FF"
-                    property color highValuesColor: "#cc0000"
-                    property real values: parent.values
+//                    property real startAngle : Math.PI * 0.691
+//                    property real endAngle : Math.PI * 2.310
+//                    property color lowValuesColor: "#0066FF"
+//                    property color highValuesColor: "#cc0000"
+//                    property real values: parent.values
 
-                    function getArcGradientColor()
-                    {
-                        if (values <= parent.lowValues)
-                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
-                        else if (values >= parent.highValues)
-                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
-                        else
-                        {
-                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
-                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
-                        }
-                    }
+//                    function getArcGradientColor()
+//                    {
+//                        if (values <= parent.lowValues)
+//                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
+//                        else if (values >= parent.highValues)
+//                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
+//                        else
+//                        {
+//                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
+//                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
+//                        }
+//                    }
 
-                    property color targetColor : getArcGradientColor();
-                    Behavior on targetColor {ColorAnimation {duration: 750}}
+//                    property color targetColor : getArcGradientColor();
+//                    Behavior on targetColor {ColorAnimation {duration: 750}}
 
-                    onPaint:
-                    {
-                        var ctx = getContext("2d");
-                        targetColor = getArcGradientColor();
-                        ctx.reset();
-                        ctx.beginPath();
-                        ctx.lineWidth = 18.5;
-                        ctx.strokeStyle = targetColor;
-                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
-                        ctx.stroke();
-                    }
-                }
+//                    onPaint:
+//                    {
+//                        var ctx = getContext("2d");
+//                        targetColor = getArcGradientColor();
+//                        ctx.reset();
+//                        ctx.beginPath();
+//                        ctx.lineWidth = 18.5;
+//                        ctx.strokeStyle = targetColor;
+//                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
+//                        ctx.stroke();
+//                    }
+//                }
 
-                //Every time the number changes this is the animation to play in response.
-                Behavior on value
-                {
-                    SpringAnimation {spring: 1.2; damping: 0.3;}
-                }
-            }
+//                //Every time the number changes this is the animation to play in response.
+//                Behavior on value
+//                {
+//                    SpringAnimation {spring: 1.2; damping: 0.3;}
+//                }
+//            }
 
             /*
               A rectangle to align a collection of race statistics.
@@ -265,9 +262,10 @@ Window {
                 height: lap.height + lapNumber.height + averageSpeed.height
 
                 anchors.bottom: parent.bottom
-                anchors.horizontalCenter: windometer.horizontalCenter
+                anchors.left: parent.left
 
                 anchors.bottomMargin: 5
+                anchors.leftMargin: 5
 
                 Text
                 {
@@ -276,13 +274,12 @@ Window {
                     text: qsTr("Lap")
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 32
+                    font.pointSize: 45
                     font.family: "Consolas"
                     font.bold: true
-                    font.italic: true
 
                     anchors.bottom: lapNumber.top
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenter: averageSpeed.horizontalCenter
                 }
 
                 Text
@@ -292,10 +289,9 @@ Window {
                     text: qsTr("2")
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 32
+                    font.pointSize: 45
                     font.family: "Consolas"
                     font.bold: true
-                    font.italic: true
 
                     anchors.bottom: averageSpeed.top
                     anchors.horizontalCenter: lap.horizontalCenter
@@ -306,16 +302,16 @@ Window {
                     id: averageSpeed
                     color: "#ffffff"
                     text: qsTr("Avg. V: " + UIRaceDataset.averageSpeed)
-                    font.pointSize: 24
+                    font.pointSize: 45
                     fontSizeMode: Text.Fit
                     font.family: "Consolas"
                     font.bold: true
-                    font.italic: true
 
                     anchors.bottom: parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.left: parent.left
 
                     anchors.bottomMargin: 5
+                    anchors.leftMargin: 5
                 }
             }
 
@@ -326,87 +322,102 @@ Window {
             {
                 id: raceStatistics2
                 color: "#000000"
-                width: lapTime.width
+                width: currentLap.width
                 height: totalTime.height + lapTime.height + lastLapTime.height
 
                 anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.left: parent.left
 
                 anchors.topMargin: 5
+                anchors.leftMargin: 5
 
                 Text
                 {
                     id: totalTime
                     color: "#ffffff"
-                    font.pointSize: 24
+                    font.pointSize: 45
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
                     text: qsTr("Total Time: " + UIRaceDataset.totalTime)
                     font.family: "Consolas"
                     font.bold: true
-                    font.italic: true
 
                     anchors.top: parent.top
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.left: parent.left
                 }
+            }
+
+            /*
+              Another rectangle to align a second collection of race statistics.
+            */
+            Rectangle
+            {
+                id: raceStatistics3
+                color: "#000000"
+                width: currentLap.width
+                height: totalTime.height + lapTime.height + lastLapTime.height
+
+                anchors.top: parent.top
+                anchors.right: parent.right
+
+                anchors.topMargin: 5
+                anchors.rightMargin: 5
 
                 Text
                 {
                     id: lapTime
                     color: "#ffffff"
-                    font.pointSize: 24
+                    font.pointSize: 45
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
                     text: qsTr("Current Lap: " + UIRaceDataset.currentLapTime)
                     font.family: "Consolas"
                     font.bold: true
-                    font.italic: true
 
-                    anchors.top: totalTime.bottom
-                    anchors.right: totalTime.right
+                    anchors.top: parent.top
+                    anchors.right: parent.right
                 }
 
                 Text
                 {
                     id: lastLapTime
                     color: "#ffffff"
-                    font.pointSize: 24
+                    font.pointSize: 45
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
-                    text: qsTr("Last Lap: 7:77:777")
+                    text: qsTr("Last Lap: 00:00")
                     font.family: "Consolas"
                     font.bold: true
-                    font.italic: true
 
                     anchors.top: lapTime.bottom
-                    anchors.right: totalTime.right
+                    anchors.right: lapTime.right
                 }
             }
 
-            Button
-            {
-                id: getRandomValue
-                text: qsTr("")
-                visible: true
+//            Button
+//            {
+//                id: getRandomValue
+//                text: qsTr("")
+//                visible: true
 
-                anchors.horizontalCenter: speedometer.horizontalCenter
-                anchors.verticalCenter: speedometer.verticalCenter
+//                anchors.horizontalCenter: speedometer.horizontalCenter
+//                anchors.verticalCenter: speedometer.verticalCenter
 
-                onClicked:
-                {
-                    parent.randVal = Math.random();
-                }
-            }
+//                onClicked:
+//                {
+//                    parent.randVal = Math.random();
+//                }
+//            }
 
             /*
               The gauge for the velocity of the car.
             */
             CircularGauge {
                 id: speedometer
-                width: parent.width*4/10
-                height: parent.width*4/10
+                width: parent.width*5/10
+                height: parent.width*5/10
 
-                anchors.bottom: parent.bottom
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 anchors.bottomMargin: 5
@@ -416,21 +427,24 @@ Window {
                 tickmarksVisible: true
                 maximumValue: 60
                 minimumValue: 0
-                value: UIRaceDataset.groundSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
-                property real values: UIRaceDataset.groundSpeed | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
                 property real lowValues: 10
                 property real highValues: 40
-                property real range : maximumValue - minimumValue
-                property real valuesRatio : (values - minimumValue) / range
-                property real startAngle : Math.PI * 0.691
-                property real endAngle : Math.PI * 2.310
-                property real wholeAngle : endAngle - startAngle
-                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
-                property real needleAngle : needleAngleRad  * 180 / Math.PI
 
-                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
-                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
+                value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+
+                property real values: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+
+//                property real range : maximumValue - minimumValue
+//                property real valuesRatio : (values - minimumValue) / range
+//                property real startAngle : Math.PI * 0.691
+//                property real endAngle : Math.PI * 2.310
+//                property real wholeAngle : endAngle - startAngle
+//                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
+//                property real needleAngle : needleAngleRad  * 180 / Math.PI
+
+//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+//                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
 
                 style: NewDashboardGaugeStyle
                 {
@@ -439,165 +453,178 @@ Window {
                     lowValues: parent.lowValues
                     highValues: parent.highValues
                     label: "Vg: mph"
-                    values: UIRaceDataset.groundSpeed | (parent.randVal * (maxValue - minValue) + minValue)
+                    values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
                 }
 
-                Canvas
-                {
-                    id: speedometerValueGradient
-                    anchors.fill: parent
-                    antialiasing: true
+//                Canvas
+//                {
+//                    id: speedometerValueGradient
+//                    anchors.fill: parent
+//                    antialiasing: true
 
-                    property real startAngle : Math.PI * 0.691
-                    property real endAngle : Math.PI * 2.310
-                    property color lowValuesColor: "#0066FF"
-                    property color highValuesColor: "#cc0000"
-                    property real values: parent.values
+//                    property real startAngle : Math.PI * 0.691
+//                    property real endAngle : Math.PI * 2.310
+//                    property color lowValuesColor: "#0066FF"
+//                    property color highValuesColor: "#cc0000"
+//                    property real values: parent.values
 
-                    function getArcGradientColor()
-                    {
-                        if (values <= parent.lowValues)
-                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
-                        else if (values >= parent.highValues)
-                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
-                        else
-                        {
-                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
-                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
-                        }
-                    }
+//                    function getArcGradientColor()
+//                    {
+//                        if (values <= parent.lowValues)
+//                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
+//                        else if (values >= parent.highValues)
+//                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
+//                        else
+//                        {
+//                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
+//                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
+//                        }
+//                    }
 
-                    property color targetColor : getArcGradientColor();
-                    Behavior on targetColor {ColorAnimation {duration: 750}}
+//                    property color targetColor : getArcGradientColor();
+//                    Behavior on targetColor
+//                    {
+//                        ColorAnimation
+//                        {
+//                            duration: 300
+//                            easing.type: Easing.InOutSine
+//                        }
+//                    }
 
-                    onPaint:
-                    {
-                        var ctx = getContext("2d");
-                        targetColor = getArcGradientColor();
-                        ctx.reset();
-                        ctx.beginPath();
-                        ctx.lineWidth = 18.5;
-                        ctx.strokeStyle = targetColor;
-                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
-                        ctx.stroke();
-                    }
-                }
+//                    onPaint:
+//                    {
+//                        var ctx = getContext("2d");
+//                        targetColor = getArcGradientColor();
+//                        ctx.reset();
+//                        ctx.beginPath();
+//                        ctx.lineWidth = 18.5;
+//                        ctx.strokeStyle = targetColor;
+//                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
+//                        ctx.stroke();
+//                    }
+//                }
 
                 //Every time the number changes this is the animation to play in response.
                 Behavior on value
                 {
-                    SpringAnimation {spring: 1.2; damping: 0.3;}
-                }
-            }
-
-            Button
-            {
-                id: getMaxValue
-                text: qsTr("")
-                visible: true
-
-                anchors.horizontalCenter: thermometer.horizontalCenter
-                anchors.verticalCenter: thermometer.verticalCenter
-
-                onClicked:
-                {
-                    parent.randVal = 1;
-                }
-            }
-
-            /*
-              The guage for the temperature of the engine.
-            */
-            CircularGauge {
-                id: thermometer
-                width: windometer.width
-                height: windometer.height
-
-                anchors.top: parent.top
-                anchors.right: parent.right
-
-                anchors.bottomMargin: 5
-                anchors.leftMargin: 0
-                anchors.rightMargin: 5
-
-                tickmarksVisible: true
-                maximumValue: 180
-                minimumValue: 0
-                value: UIRaceDataset.thermometer | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
-
-                property real values: UIRaceDataset.thermometer | (parent.randVal * (maximumValue - minimumValue) + minimumValue)
-                property real lowValues: 30
-                property real highValues: 150
-                property real range : maximumValue - minimumValue
-                property real valuesRatio : (values - minimumValue) / range
-                property real startAngle : Math.PI * 0.691
-                property real endAngle : Math.PI * 2.310
-                property real wholeAngle : endAngle - startAngle
-                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
-                property real needleAngle : needleAngleRad  * 180 / Math.PI
-
-                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
-                onNeedleAngleRadChanged: thermometerValueGradient.requestPaint();
-
-                style: NewDashboardGaugeStyle
-                {
-                    minValue: parent.minimumValue
-                    maxValue: parent.maximumValue
-                    lowValues: parent.lowValues
-                    highValues: parent.highValues
-                    label: "T: °F"
-                    tickmarkLabelVisible: false
-                    values: UIRaceDataset.thermometer | (parent.randVal * (maxValue - minValue) + minValue)
-                    outerCirclingColor: "#FF3D1F"
-                }
-
-                Canvas
-                {
-                    id: thermometerValueGradient
-                    anchors.fill: parent
-                    antialiasing: true
-
-                    property real startAngle : Math.PI * 0.691
-                    property real endAngle : Math.PI * 2.310
-                    property color lowValuesColor: "#0066FF"
-                    property color highValuesColor: "#cc0000"
-                    property real values: parent.values
-
-                    function getArcGradientColor()
+                    NumberAnimation
                     {
-                        if (values <= parent.lowValues)
-                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
-                        else if (values >= parent.highValues)
-                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
-                        else
-                        {
-                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
-                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
-                        }
-                    }
-
-                    property color targetColor : getArcGradientColor();
-                    Behavior on targetColor {ColorAnimation {duration: 750}}
-
-                    onPaint:
-                    {
-                        var ctx = getContext("2d");
-                        targetColor = getArcGradientColor();
-                        ctx.reset();
-                        ctx.beginPath();
-                        ctx.lineWidth = 18.5;
-                        ctx.strokeStyle = targetColor;
-                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
-                        ctx.stroke();
+                        //How long the animation should take in milliseconds
+                        duration: 300
+                        //The style of animation to be played.
+                        easing.type: Easing.InOutSine
                     }
                 }
-
-                //Every time the number changes this is the animation to play in response.
-                Behavior on value
-                {
-                    SpringAnimation {spring: 1.2; damping: 0.3;}
-                }
             }
+
+//            Button
+//            {
+//                id: getMaxValue
+//                text: qsTr("")
+//                visible: true
+
+//                anchors.horizontalCenter: thermometer.horizontalCenter
+//                anchors.verticalCenter: thermometer.verticalCenter
+
+//                onClicked:
+//                {
+//                    parent.randVal = 1;
+//                }
+//            }
+
+//            /*
+//              The guage for the temperature of the engine.
+//            */
+//            CircularGauge {
+//                id: thermometer
+//                width: windometer.width
+//                height: windometer.height
+
+//                anchors.top: parent.top
+//                anchors.right: parent.right
+
+//                anchors.bottomMargin: 5
+//                anchors.leftMargin: 0
+//                anchors.rightMargin: 5
+
+//                tickmarksVisible: true
+//                maximumValue: 180
+//                minimumValue: 0
+//                value: 0//UIRaceDataset.thermometer //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+
+//                property real values: 0//UIRaceDataset.thermometer //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+//                property real lowValues: 30
+//                property real highValues: 150
+//                property real range : maximumValue - minimumValue
+//                property real valuesRatio : (values - minimumValue) / range
+//                property real startAngle : Math.PI * 0.691
+//                property real endAngle : Math.PI * 2.310
+//                property real wholeAngle : endAngle - startAngle
+//                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
+//                property real needleAngle : needleAngleRad  * 180 / Math.PI
+
+//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+//                onNeedleAngleRadChanged: thermometerValueGradient.requestPaint();
+
+//                style: NewDashboardGaugeStyle
+//                {
+//                    minValue: parent.minimumValue
+//                    maxValue: parent.maximumValue
+//                    lowValues: parent.lowValues
+//                    highValues: parent.highValues
+//                    label: "T: °F"
+//                    tickmarkLabelVisible: false
+//                    values: 0//UIRaceDataset.thermometer //| (parent.randVal * (maxValue - minValue) + minValue)
+//                    outerCirclingColor: "#FF3D1F"
+//                }
+
+//                Canvas
+//                {
+//                    id: thermometerValueGradient
+//                    anchors.fill: parent
+//                    antialiasing: true
+
+//                    property real startAngle : Math.PI * 0.691
+//                    property real endAngle : Math.PI * 2.310
+//                    property color lowValuesColor: "#0066FF"
+//                    property color highValuesColor: "#cc0000"
+//                    property real values: parent.values
+
+//                    function getArcGradientColor()
+//                    {
+//                        if (values <= parent.lowValues)
+//                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
+//                        else if (values >= parent.highValues)
+//                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
+//                        else
+//                        {
+//                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
+//                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
+//                        }
+//                    }
+
+//                    property color targetColor : getArcGradientColor();
+//                    Behavior on targetColor {ColorAnimation {duration: 750}}
+
+//                    onPaint:
+//                    {
+//                        var ctx = getContext("2d");
+//                        targetColor = getArcGradientColor();
+//                        ctx.reset();
+//                        ctx.beginPath();
+//                        ctx.lineWidth = 18.5;
+//                        ctx.strokeStyle = targetColor;
+//                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
+//                        ctx.stroke();
+//                    }
+//                }
+
+//                //Every time the number changes this is the animation to play in response.
+//                Behavior on value
+//                {
+//                    SpringAnimation {spring: 1.2; damping: 0.3;}
+//                }
+//            }
 
             /*
               A rectangle to align a collection of device statistics.
@@ -609,21 +636,21 @@ Window {
                 height: batteryLevel.height
 
                 anchors.bottom: parent.bottom
-                anchors.horizontalCenter: thermometer.horizontalCenter
+                anchors.right: parent.right
 
                 anchors.bottomMargin: 5
+                anchors.rightMargin: 5
 
                 Text
                 {
                     id: batteryLevel
                     color: "#ffffff"
-                    font.pointSize: 24
+                    font.pointSize: 45
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
                     text: qsTr("Battery: " + "100" + "%")
                     font.family: "Consolas"
                     font.bold: true
-                    font.italic: true
 
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter

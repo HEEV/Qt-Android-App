@@ -88,12 +88,10 @@ void RaceActionManager::updateCurrentTime()
 {
     int totalTimeMS = totalRaceTime.elapsed();
     int currentLapTimeMS = currentLapTime.elapsed();
-    QString totalText = QString("%1:%2:%3").arg( totalTimeMS / 60000        , 2, 10, QChar('0'))
-                                           .arg((totalTimeMS % 60000) / 1000, 2, 10, QChar('0'))
-                                           .arg((totalTimeMS % 1000)        , 3, 10, QChar('0'));
-    QString currentLapText = QString("%1:%2:%3").arg( currentLapTimeMS / 60000        , 2, 10, QChar('0'))
-                                                .arg((currentLapTimeMS % 60000) / 1000, 2, 10, QChar('0'))
-                                                .arg((currentLapTimeMS % 1000)        , 3, 10, QChar('0'));
+    QString totalText = QString("%1:%2").arg( totalTimeMS / 60000        , 2, 10, QChar('0'))
+                                           .arg((totalTimeMS % 60000) / 1000, 2, 10, QChar('0'));
+    QString currentLapText = QString("%1:%2").arg( currentLapTimeMS / 60000        , 2, 10, QChar('0'))
+                                                .arg((currentLapTimeMS % 60000) / 1000, 2, 10, QChar('0'));
     uiInterface->setCurrentLapTime(totalText);
     uiInterface->currentLapTimeNotify();
     uiInterface->setTotalTime(currentLapText);

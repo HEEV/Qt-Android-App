@@ -112,7 +112,7 @@ CircularGaugeStyle {
     property real  values: 0
 
     property color innerCirclingColor: "#ffffff"
-    property color outerCirclingColor: "#ff2200"
+    property color outerCirclingColor: "#cc0000"
     property color lowValuesColor : "#0066FF"
     property color highValuesColor : "#cc0000"
     property color backgroundColor: "#000000"
@@ -140,9 +140,9 @@ CircularGaugeStyle {
 
     tickmark: Rectangle {
         visible: true
-        implicitWidth: 8
+        implicitWidth: 10
         antialiasing: true
-        implicitHeight: 21.5
+        implicitHeight: 35
         color: "#ffffff"
     }
 
@@ -157,7 +157,7 @@ CircularGaugeStyle {
     tickmarkLabel:  Text {
             visible: tickmarkLabelVisible
             font.family: "Consolas"
-            font.pixelSize: Math.max(6, outerRadius * 0.07)
+            font.pixelSize: Math.max(6, outerRadius * 0.14)
             text: styleData.value
             color: "#ffffff"
             antialiasing: true
@@ -181,30 +181,30 @@ CircularGaugeStyle {
 
         // BORDER
         ctx.beginPath();
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 16;
         ctx.strokeStyle = outerCirclingColor;
-        ctx.ellipse(6, 6, ctx.canvas.width - 12, ctx.canvas.width - 12);
+        ctx.ellipse(14, 14, ctx.canvas.width - 28, ctx.canvas.width - 28);
         ctx.stroke();
 
         // LOW VALUE ARC
         ctx.beginPath();
-        ctx.lineWidth = 15;
+        ctx.lineWidth = 35;
         ctx.strokeStyle = lowValuesColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 48, startAngle, startAngle + ((lowValues - minValue) / range) * (wholeAngle));
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 57, startAngle, startAngle + ((lowValues - minValue) / range) * (wholeAngle));
         ctx.stroke();
 
         // HIGH VALUE ARC
         ctx.beginPath();
-        ctx.lineWidth = 15;
+        ctx.lineWidth = 35;
         ctx.strokeStyle = highValuesColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 48, endAngle - (((range  - (highValues - minValue)) / range) * (wholeAngle)), endAngle);
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 57, endAngle - (((range  - (highValues - minValue)) / range) * (wholeAngle)), endAngle);
         ctx.stroke();
 
         // BORDER WHITE CIRCLE
         ctx.beginPath();
         ctx.lineWidth = 8;
         ctx.strokeStyle = innerCirclingColor;
-        ctx.ellipse(11, 11, ctx.canvas.width - 22, ctx.canvas.height - 22);
+        ctx.ellipse(19, 19, ctx.canvas.width - 38, ctx.canvas.height - 38);
         ctx.stroke();
 
         // OUTER CIRCLE ARC FOR VALUES
@@ -218,7 +218,7 @@ CircularGaugeStyle {
         ctx.beginPath();
         ctx.lineWidth = 6;
         ctx.strokeStyle = innerCirclingColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 57, startAngle, endAngle);
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 75, startAngle, endAngle);
         ctx.stroke();
     }
 
@@ -247,7 +247,7 @@ CircularGaugeStyle {
         {
             text: label
             color: "white"
-            font.pixelSize: toPixels(0.09)
+            font.pixelSize: toPixels(0.10)
             anchors.top: speedText.bottom
             anchors.horizontalCenter: parent.horizontalCenter
         }

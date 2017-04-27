@@ -8,8 +8,8 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     groundSpeed = 0;
     speedSensorStatus = false;
     canStatus = false;
-    totalTime = "00:00:00";
-    currentLapTime = "00:00:00";
+    totalTime = "00:00";
+    currentLapTime = "00:00";
 }
 
 QString UIRaceDataset::getCarName()

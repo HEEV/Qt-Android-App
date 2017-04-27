@@ -24,6 +24,10 @@ DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, QString carName, Logg
     this->raceDataset = uiRaceDataset;
     logger = log;
     // Calculate the velocity multiplier for ground speed
+    if(carName != "Urbie" & carName != "Sting")
+    {
+        carName = "Urbie";
+    }
     setWheelCircumference(carName);
 }
 
@@ -113,6 +117,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 
         // Calculate the velocity
         milesPerHour = calculateMPH(intervalOfLastRevolution);
+        //logger->println("Speed: " + QString::number(milesPerHour).toStdString());
     }
 
     raceDataset->setGroundSpeed(milesPerHour);
@@ -151,7 +156,7 @@ void DataProcessor::updateAirSpeed(QByteArray data)
     windSpeed *= scalingFactor2;
     windSpeed += offset1;
 
-    logger->println("Wind value: " + QString::number(windSpeed).toStdString());
+//    logger->println("Wind value: " + QString::number(windSpeed).toStdString());
 }
 
 void DataProcessor::updateEFIPressure(QByteArray data)
