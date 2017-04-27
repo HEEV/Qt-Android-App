@@ -18,7 +18,7 @@ bool CANInterface::startListening()
     bool slcandSuccess = activateSlcand();
     bool success = false;
     //Start by making sure that we can use the slcan plugin that is provided by the QT library.
-    if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")))
+    if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")) && device == nullptr)
     {
         device = QCanBus::instance()->createDevice(
                     QStringLiteral("socketcan"), QStringLiteral("can0"));
@@ -38,7 +38,12 @@ bool CANInterface::startListening()
 void CANInterface::stopListening()
 {
     device->disconnectDevice();
+    disconnect(device, 0,0,0);
     disableSlcand();
+    if(device != nullptr)
+    {
+        delete device;
+    }
 }
 
 bool CANInterface::writeCANFrame(int ID, QByteArray payload)
@@ -62,9 +67,7 @@ void CANInterface::readFrame()
         }
         else
         {
-            qDebug() << "Recieved frame. ID: " << QString::number(frame.frameId()) << "Content: " << (QString)QTextCodec::codecForMib(1015)->toUnicode(frame.payload()) << "\n"; //TEMP for TEST
             dataProcessor->routeCANFrame(frame);
-
         }
     }
 }
