@@ -85,7 +85,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 {
     static time_t currentTime = 0;
     currentTime = time(nullptr);
-    qreal milesPerHour = 0;
+    static qreal milesPerHour = 0;
 
      // Grab the time interval from data byte 1.
     uint32_t intervalOfLastRevolution = NO_NEW_DATA;
@@ -102,12 +102,12 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
             // Set the ground speed as if it the car has stopped.
             milesPerHour = 0.0;
         }
-        else
-        {
-            // Stop now and don't update the speed  since it has not been
-            // long enough to assume that the has stopped
-            return;
-        }
+//        else
+//        {
+//            // Stop now and don't update the speed  since it has not been
+//            // long enough to assume that the has stopped
+//            return;
+//        }
     }
     else
     {
@@ -119,9 +119,9 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
         milesPerHour = calculateMPH(intervalOfLastRevolution);
         //logger->println("Speed: " + QString::number(milesPerHour).toStdString());
 
-        updateAverageSpeed(milesPerHour);
-    }
+        }
 
+    updateAverageSpeed(milesPerHour);
     raceDataset->setGroundSpeed(milesPerHour);
     raceDataset->groundSpeedNotify();
 }
@@ -141,6 +141,7 @@ void DataProcessor::updateAverageSpeed(qreal currentSpeed)
     }
     else
     {
+        firstValue = false;
         numerator += currentSpeed;
         raceDataset->setAverageSpeed(QString::number(currentSpeed, 'f', 1));
         raceDataset->averageSpeedNotify();
