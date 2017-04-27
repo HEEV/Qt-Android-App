@@ -6,6 +6,7 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     carName = Car::Name::Urbie;
     projectedProgress = 0;
     groundSpeed = 0;
+    averageSpeed = "0.0";
     speedSensorStatus = false;
     canStatus = false;
     totalTime = "00:00";
@@ -40,6 +41,16 @@ void UIRaceDataset::setGroundSpeed(qreal speed)
 qreal UIRaceDataset::getGroundSpeed()
 {
     return groundSpeed;
+}
+
+void UIRaceDataset::setAverageSpeed(QString average)
+{
+    averageSpeed = average;
+}
+
+QString UIRaceDataset::getAverageSpeed()
+{
+    return averageSpeed;
 }
 
 void UIRaceDataset::setSpeedSensorStatus(bool status)

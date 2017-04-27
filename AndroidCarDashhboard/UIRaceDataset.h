@@ -11,6 +11,7 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(QString carName READ getCarName WRITE setCarName NOTIFY carNameNotify)
     Q_PROPERTY(qreal projectedProgress READ getProjectedProgress NOTIFY projectedProgressNotify)
     Q_PROPERTY(qreal groundSpeed READ getGroundSpeed WRITE setGroundSpeed NOTIFY groundSpeedNotify)
+    Q_PROPERTY(QString averageSpeed READ getAverageSpeed WRITE setAverageSpeed NOTIFY averageSpeedNotify)
     Q_PROPERTY(bool speedSensorStatus READ getSpeedSensorStatus NOTIFY speedSensorStatusNotify)
     Q_PROPERTY(bool canStatus READ getCanStatus WRITE setCanStatus NOTIFY canStatusNotify)
     Q_PROPERTY(bool networkStatus READ getNetworkStatus WRITE setNetworkStatus NOTIFY networkStatusNotify)
@@ -30,6 +31,9 @@ public:
 
     void setGroundSpeed(qreal speed);
     qreal getGroundSpeed();
+
+    void setAverageSpeed(QString average);
+    QString getAverageSpeed();
 
     void setSpeedSensorStatus(bool status);
     bool getSpeedSensorStatus();
@@ -60,6 +64,7 @@ private:
     QString carName;
     qreal projectedProgress;
     qreal groundSpeed;
+    QString averageSpeed;
     bool speedSensorStatus;
     bool canStatus;
     bool networkStatus;
@@ -72,6 +77,7 @@ signals:
     void carNameNotify();
     void projectedProgressNotify();
     void groundSpeedNotify();
+    void averageSpeedNotify();
     void speedSensorStatusNotify();
     void canStatusNotify();
     void networkStatusNotify();

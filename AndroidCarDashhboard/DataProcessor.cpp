@@ -118,10 +118,33 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
         // Calculate the velocity
         milesPerHour = calculateMPH(intervalOfLastRevolution);
         //logger->println("Speed: " + QString::number(milesPerHour).toStdString());
+
+        updateAverageSpeed(milesPerHour);
     }
 
     raceDataset->setGroundSpeed(milesPerHour);
     raceDataset->groundSpeedNotify();
+}
+
+void DataProcessor::updateAverageSpeed(qreal currentSpeed)
+{
+    static qreal numerator = 0;
+    static qreal denominator = 1;
+    static bool firstValue = true;
+
+    if(!firstValue)
+    {
+        numerator += currentSpeed;
+        qreal average = numerator/(++denominator);
+        raceDataset->setAverageSpeed(QString::number(average, 'f', 1));
+        raceDataset->averageSpeedNotify();
+    }
+    else
+    {
+        numerator += currentSpeed;
+        raceDataset->setAverageSpeed(QString::number(currentSpeed, 'f', 1));
+        raceDataset->averageSpeedNotify();
+    }
 }
 
 qreal DataProcessor::calculateMPH(uint32_t revolutionInterval)
