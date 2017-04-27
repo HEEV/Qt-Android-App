@@ -279,7 +279,9 @@ Window {
                     font.bold: true
 
                     anchors.bottom: lapNumber.top
-                    anchors.horizontalCenter: averageSpeed.horizontalCenter
+                    anchors.left: parent.left
+
+                    anchors.leftMargin: 5
                 }
 
                 Text
@@ -322,8 +324,8 @@ Window {
             {
                 id: raceStatistics2
                 color: "#000000"
-                width: currentLap.width
-                height: totalTime.height + lapTime.height + lastLapTime.height
+                width: total.width
+                height: totalTime.height
 
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -355,7 +357,7 @@ Window {
                 id: raceStatistics3
                 color: "#000000"
                 width: currentLap.width
-                height: totalTime.height + lapTime.height + lastLapTime.height
+                height: lapTime.height + lastLapTime.height
 
                 anchors.top: parent.top
                 anchors.right: parent.right
