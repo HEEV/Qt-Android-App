@@ -1,5 +1,4 @@
 #include "RaceActionManager.h"
-#include "Enums.h"
 
 RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, NetworkInterface *net)
 {

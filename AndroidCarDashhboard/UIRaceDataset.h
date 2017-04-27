@@ -3,12 +3,12 @@
 
 #include <QObject>
 #include <QGeoPositionInfo>
-#include "Enums.h"
+#include <Car.h>
 
 class UIRaceDataset : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Car carName READ getCarName WRITE setCarName NOTIFY carNameNotify)
+    Q_PROPERTY(QString carName READ getCarName WRITE setCarName NOTIFY carNameNotify)
     Q_PROPERTY(qreal projectedProgress READ getProjectedProgress NOTIFY projectedProgressNotify)
     Q_PROPERTY(qreal groundSpeed READ getGroundSpeed WRITE setGroundSpeed NOTIFY groundSpeedNotify)
     Q_PROPERTY(bool speedSensorStatus READ getSpeedSensorStatus NOTIFY speedSensorStatusNotify)
@@ -22,8 +22,8 @@ class UIRaceDataset : public QObject
 public:
     explicit UIRaceDataset(QObject *parent = 0);
 
-    Car getCarName();
-    void setCarName(Car name);
+    QString getCarName();
+    void setCarName(QString name);
 
     void setProjectedProgress(double projectedProgress);
     qreal getProjectedProgress();
@@ -53,7 +53,11 @@ public:
     QGeoPositionInfo getGPSInfo();
 
 private:
-    Car carName;
+    // Used by DataProcessor to choose whether to use Urbie's wheel circumference or
+    // Sting's wheel circumference when calculating ground speed.
+    // An enum would be a cleaner solution here, but I could not figure out how to expose an
+    // enum to the qml GUI.
+    QString carName;
     qreal projectedProgress;
     qreal groundSpeed;
     bool speedSensorStatus;

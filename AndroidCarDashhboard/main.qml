@@ -784,7 +784,7 @@ Window {
                                 exclusiveGroup: carSeletionGroup
                                 onClicked:
                                 {
-                                    UIRaceDataset.setCarName(0);
+                                    UIRaceDataset.carName = "Urbie";
                                 }
                             }
                             RadioButton
@@ -794,7 +794,7 @@ Window {
                                 exclusiveGroup: carSeletionGroup
                                 onClicked:
                                 {
-                                    UIRaceDataset.setCarName(1);
+                                    UIRaceDataset.carName = "Sting";
                                 }
                             }
                         }

@@ -19,7 +19,7 @@ const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
 const double DataProcessor::URBIE_WHEEL_CIRCUMFERENCE = 67.937;
 const double DataProcessor::STING_WHEEL_CIRCUMFERENCE = 60.868;
 
-DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, Car carName, Logger *log)
+DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, QString carName, Logger *log)
 {
     this->raceDataset = uiRaceDataset;
     logger = log;
@@ -27,13 +27,13 @@ DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, Car carName, Logger *
     setWheelCircumference(carName);
 }
 
-void DataProcessor::setWheelCircumference(Car carName)
+void DataProcessor::setWheelCircumference(QString carName)
 {
-    if (carName == Car::Urbie)
+    if (carName == QString("Urbie"))
     {
         velocityMultiplier = VELOCITY_MULTIPLIER_BASE * URBIE_WHEEL_CIRCUMFERENCE;
     }
-    else if (carName == Car::Sting)
+    else if (carName == QString("Sting"))
     {
         velocityMultiplier = VELOCITY_MULTIPLIER_BASE * STING_WHEEL_CIRCUMFERENCE;
     }

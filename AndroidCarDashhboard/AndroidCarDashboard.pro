@@ -40,8 +40,7 @@ HEADERS += \
     Logger.h \
     RaceActionManager.h \
     GPSPositioningService.h \
-    NetworkInterface.h \
-    Enums.h
+    NetworkInterface.h
     #QMLLib/ViewManagement.h
 
 DISTFILES += \

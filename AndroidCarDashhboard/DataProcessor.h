@@ -6,14 +6,13 @@
 #include <QDebug>
 #include "CanNodeParser.h"
 #include "Logger.h"
-#include "Enums.h"
 
 class DataProcessor
 {
 public:
-    DataProcessor(UIRaceDataset *uiRaceDataSet, Car carName, Logger *log);
+    DataProcessor(UIRaceDataset *uiRaceDataSet, QString carName, Logger *log);
 
-    void setWheelCircumference(Car carName);
+    void setWheelCircumference(QString carName);
 
     void routeCANFrame(QCanBusFrame frame);
 
