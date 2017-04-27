@@ -1,27 +1,34 @@
 #include "GPSPositioningService.h"
 
 const int GPSPositioningService::gpsUpdateInterval = 500;
+const qreal GPSPositioningService::lapStartLocationEnterRadius = 15.0;
+const qreal GPSPositioningService::lapStartLocationExitRadius = 20.0;
 
 GPSPositioningService::GPSPositioningService(Logger *log, UIRaceDataset *data)
 {
     tracking = false;
     logger = log;
     dataStore = data;
+    lapStartLocationHasBeenSet = false;
+    haveLeftStartRadius = false;
+
+    source = QGeoPositionInfoSource::createDefaultSource(this);
+    connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)), this, SLOT(positionUpdated(QGeoPositionInfo)));
+    source->setUpdateInterval(gpsUpdateInterval);
 }
 
 
 bool GPSPositioningService::startTracking()
 {
-    source = QGeoPositionInfoSource::createDefaultSource(this);
-    if(source)
+    if (!tracking)
     {
-        connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)), this, SLOT(positionUpdated(QGeoPositionInfo)));
-        source->setUpdateInterval(gpsUpdateInterval);
+        lapStartLocationHasBeenSet = false;
+        haveLeftStartRadius = false;
         source->startUpdates();
         tracking = true;
-        return true;
     }
-    return false;
+
+    return true; // Does this return value have meaning?
 }
 
 void GPSPositioningService::stopTracking()
@@ -29,8 +36,8 @@ void GPSPositioningService::stopTracking()
     if(tracking)
     {
         source->stopUpdates();
-        disconnect(source, 0,0,0);
-        delete source;
+        lapStartLocationHasBeenSet = false;
+        haveLeftStartRadius = false;
         tracking = false;
     }
 }
@@ -42,5 +49,21 @@ void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
     //coords += " : " + QString::number(coord.longitude());
     //coords += " : " + QString::number(coord.altitude());
     //logger->println((logTag + coords).toStdString());
+    if (!lapStartLocationHasBeenSet)
+    {
+        lapStartLocation = info.coordinate();
+        lapStartLocationHasBeenSet = true;
+        logger->println(logPrefix + "Lap start location set: " + lapStartLocation.toString().toStdString());
+    }
+
     dataStore->setGPSInfo(QGeoPositionInfo(info));
+
+    if (haveLeftStartRadius && info.coordinate().distanceTo(lapStartLocation) < lapStartLocationEnterRadius)
+    {
+        haveLeftStartRadius = false;
+        lapIncremented();
+    } else if (info.coordinate().distanceTo(lapStartLocation) > lapStartLocationExitRadius)
+    {
+        haveLeftStartRadius = true;
+    }
 }

@@ -73,7 +73,7 @@ void NetworkInterface::handleReceiveData()
     while (sock->canReadLine())
     {
         QString data = inStream->readLine();
-        //log->println(logPrefix + data.toStdString());
+        log->println(logPrefix + data.toStdString());
     }
 }
 
@@ -83,7 +83,7 @@ void NetworkInterface::handleReceiveData()
 void NetworkInterface::handleOnConnected()
 {
     inStream = new QTextStream(sock);
-    //log->println(logPrefix + "Connected to server.");
+    log->println(logPrefix + "Connected to server.");
 }
 
 /**
@@ -106,7 +106,7 @@ void NetworkInterface::issueReconnectAttempt()
 {
     static string timeout = QString::number(reconnectAttemptInterval / 1000).toStdString();
 
-    //log->println(logPrefix + "Waiting " + timeout + "s to reconnect...");
+    log->println(logPrefix + "Waiting " + timeout + "s to reconnect...");
 
     // This variable prevents us from issuing multiple reconnection attempts at once.
     reconnectInProgress = true;
@@ -120,7 +120,7 @@ void NetworkInterface::attemptToReconnect()
 {
     if (shouldTryToReconnect) // This value should be false if the race has stopped
     {
-        //log->println(logPrefix + "Attempting to reconnect to server.");
+        log->println(logPrefix + "Attempting to reconnect to server.");
 
         // QTcpSocket's connectToHost() rather than our own connectToServer() so
         // that we don't have to destroy and re-allocate sock

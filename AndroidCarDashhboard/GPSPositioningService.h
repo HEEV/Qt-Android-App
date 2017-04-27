@@ -17,14 +17,23 @@ public:
     bool startTracking();
     void stopTracking();
 
+signals:
+    void lapIncremented();
+
 private slots:
     void positionUpdated(const QGeoPositionInfo &info);
 
 private:
     QGeoPositionInfoSource *source;
+    QGeoCoordinate lapStartLocation;
+    bool lapStartLocationHasBeenSet;
+    static const qreal lapStartLocationEnterRadius;
+    static const qreal lapStartLocationExitRadius;
+    bool haveLeftStartRadius;
+
     Logger *logger;
     UIRaceDataset *dataStore;
-    const QString logTag = "GPS_SERVICE: ";
+    const string logPrefix = "GPS_SERVICE: ";
     static const int gpsUpdateInterval;
     bool tracking;
 };

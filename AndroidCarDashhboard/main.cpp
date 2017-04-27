@@ -65,11 +65,7 @@ int main(int argc, char *argv[])
 
 
     //Set up the RaceActionManager to take care of the race progress
-    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset, net);
-
-
-    //Start aquiring GPS data
-    gps->startTracking();
+    RaceActionManager *manager = new RaceActionManager(interface, dataProcessor, logger, raceDataset, gps, net);
 
     //Make the UIRaceDataset, Logger and RaceActionManager accessable to the QML segment of the code.
     engine.rootContext()->setContextProperty("UIRaceDataset", raceDataset);
@@ -80,8 +76,6 @@ int main(int argc, char *argv[])
     component.create();
 
     const int returnval = app.exec();
-
-
 
     //Kill the GPS usage.
     gps->stopTracking();

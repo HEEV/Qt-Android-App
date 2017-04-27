@@ -1,12 +1,20 @@
 #include "RaceActionManager.h"
 
-RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, NetworkInterface *net)
+RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net)
 {
     canInterface = can;
+
     dataProcessor = data;
+
     logger = log;
+
     uiInterface = ui;
+
+    gpsService = gps;
+    connect(gps, SIGNAL(lapIncremented()), this, SLOT(incrementCurrentLap()));
+
     network = net;
+
     currentLapTime = QTime();
     totalRaceTime = QTime();
 
@@ -31,6 +39,9 @@ bool RaceActionManager::initConnections()
     }
     uiInterface->setCanStatus(canConnected);
     uiInterface->canStatusNotify();
+
+    //GPS setup
+    gpsService->startTracking();
 
     //Network setup.
     // connecToServer() does no harm if called when network is already connected
@@ -64,6 +75,8 @@ bool RaceActionManager::startRace()
     }
     */
 
+    uiInterface->setCurrentLapNumber(1);
+
     //Set up pulse to check on things.
     indicatorUpdaterTimer->start(updateIndicatorPeriod);
     raceTimer->start(timerPeriod);
@@ -92,10 +105,23 @@ void RaceActionManager::updateCurrentTime()
                                            .arg((totalTimeMS % 60000) / 1000, 2, 10, QChar('0'));
     QString currentLapText = QString("%1:%2").arg( currentLapTimeMS / 60000        , 2, 10, QChar('0'))
                                                 .arg((currentLapTimeMS % 60000) / 1000, 2, 10, QChar('0'));
-    uiInterface->setCurrentLapTime(totalText);
+    uiInterface->setCurrentLapTime(currentLapText);
     uiInterface->currentLapTimeNotify();
-    uiInterface->setTotalTime(currentLapText);
+    uiInterface->setTotalTime(totalText);
     uiInterface->totalTimeNotify();
+}
+
+void RaceActionManager::incrementCurrentLap()
+{
+    logger->println("Time to increment the lap counter!");
+
+    uiInterface->setLastLapTime(uiInterface->getCurrentLapTime());
+    uiInterface->lastLapTimeNotify();
+
+    currentLapTime.restart();
+
+    uiInterface->setCurrentLapNumber(uiInterface->getCurrentLapNumber() + 1);
+    uiInterface->currentLapNumberNotify();
 }
 
 // Checks the status of the can and network interfaces then sets the UI
@@ -126,6 +152,9 @@ bool RaceActionManager::stopRace()
             canInterface->stopListening();
             canConnected = false;
         }
+
+        //Stop GPS updates.
+        gpsService->stopTracking();
 
         //Deal with network
         // disconnect() does no harm if called when the network interface is
