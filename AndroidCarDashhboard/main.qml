@@ -427,11 +427,11 @@ Window {
                 anchors.rightMargin: 1
 
                 tickmarksVisible: true
-                maximumValue: 60
+                maximumValue: 40
                 minimumValue: 0
 
                 property real lowValues: 10
-                property real highValues: 40
+                property real highValues: 30
 
                 value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
