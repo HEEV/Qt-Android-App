@@ -830,6 +830,44 @@ Window {
                     }
                 }
 
+                Rectangle
+                {
+                    id: gpsSpeedToggleBackground
+                    width: gpsSpeedToggle.width + 10
+                    height: gpsSpeedToggle.height + 10
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    anchors.leftMargin: parent.width/5
+
+                    Text
+                    {
+                        id: gpsSpeedToggleLabel
+                        color: "#ffffff"
+                        text: qsTr("Use GPS for Speed")
+
+                        anchors.bottom: gpsSpeedToggle.top
+                        anchors.left: gpsSpeedToggle.left
+
+                        anchors.bottomMargin: 5
+
+                    }
+
+                    Switch
+                    {
+                        id: gpsSpeedToggle
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        onClicked:
+                        {
+                            UIRaceDataset.useGPSSpeed = gpsSpeedToggle.checked;
+                        }
+
+                    }
+                }
 
                 Label
                 {
@@ -838,10 +876,11 @@ Window {
                     text: qsTr("Can Status")
 
                     anchors.bottom: canStatusIndicator.top
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.left: parent.horizontalCenter
 
                     anchors.topMargin: 5
                     anchors.bottomMargin: 5
+                    anchors.leftMargin: parent.width/4 - canStatusLabel.width/2
                 }
 
                 StatusIndicator

@@ -35,6 +35,15 @@ void UIRaceDataset::setProjectedProgress(double projectedProgress)
     this->projectedProgress = projectedProgress;
 }
 
+void UIRaceDataset::setUseGPSSpeed(bool useGPS){
+    useGPSSpeed = useGPS;
+}
+
+bool UIRaceDataset::getUseGPSSpeed()
+{
+    return useGPSSpeed;
+}
+
 void UIRaceDataset::setGroundSpeed(qreal speed)
 {
     groundSpeed = speed;

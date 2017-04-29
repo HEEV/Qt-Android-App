@@ -35,6 +35,7 @@ private:
     UIRaceDataset *dataStore;
     const string logPrefix = "GPS_SERVICE: ";
     static const int gpsUpdateInterval;
+    static const qreal metersPerSecondToMilesPerHour;
     bool tracking;
 };
 

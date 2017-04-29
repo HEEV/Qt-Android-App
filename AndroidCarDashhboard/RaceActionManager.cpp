@@ -28,6 +28,8 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     connect(sendToServerTimer, SIGNAL(timeout()), this, SLOT(sendInfoToServer()));
     indicatorUpdaterTimer = new QTimer();
     connect(indicatorUpdaterTimer, SIGNAL(timeout()), this, SLOT(updateIndicatorLights()));
+    averageSpeedTimer = new QTimer();
+    connect(averageSpeedTimer, SIGNAL(timeout()), this, SLOT(doSpeedAveraging()));
 }
 
 bool RaceActionManager::initConnections()
@@ -81,6 +83,7 @@ bool RaceActionManager::startRace()
     indicatorUpdaterTimer->start(updateIndicatorPeriod);
     raceTimer->start(timerPeriod);
     sendToServerTimer->start(sendToServerTimerPeriod);
+    averageSpeedTimer->start(callAveragingFunctionPeriod);
 
     //Start keeping track of time.
     totalRaceTime.start();
@@ -109,6 +112,11 @@ void RaceActionManager::updateCurrentTime()
     uiInterface->currentLapTimeNotify();
     uiInterface->setTotalTime(totalText);
     uiInterface->totalTimeNotify();
+}
+
+void RaceActionManager::doSpeedAveraging()
+{
+    dataProcessor->updateAverageSpeed();
 }
 
 void RaceActionManager::incrementCurrentLap()
@@ -146,6 +154,7 @@ bool RaceActionManager::stopRace()
         raceTimer->stop();
         sendToServerTimer->stop();
         indicatorUpdaterTimer->stop();
+        averageSpeedTimer->stop();
 
         if (canConnected)
         {

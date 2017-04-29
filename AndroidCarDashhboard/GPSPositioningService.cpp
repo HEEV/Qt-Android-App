@@ -3,6 +3,7 @@
 const int GPSPositioningService::gpsUpdateInterval = 500;
 const qreal GPSPositioningService::lapStartLocationEnterRadius = 15.0;
 const qreal GPSPositioningService::lapStartLocationExitRadius = 20.0;
+const qreal GPSPositioningService::metersPerSecondToMilesPerHour = 2.237;
 
 GPSPositioningService::GPSPositioningService(Logger *log, UIRaceDataset *data)
 {
@@ -54,6 +55,12 @@ void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
         lapStartLocation = info.coordinate();
         lapStartLocationHasBeenSet = true;
         logger->println(logPrefix + "Lap start location set: " + lapStartLocation.toString().toStdString());
+    }
+
+    if (dataStore->getUseGPSSpeed())
+    {
+        dataStore->setGroundSpeed(info.attribute(QGeoPositionInfo::GroundSpeed) * metersPerSecondToMilesPerHour);
+        dataStore->groundSpeedNotify();
     }
 
     dataStore->setGPSInfo(QGeoPositionInfo(info));

@@ -35,6 +35,7 @@ private slots:
     void updateCurrentTime();
     void sendInfoToServer();
     void updateIndicatorLights();
+    void doSpeedAveraging();
     void incrementCurrentLap();
 
 private:
@@ -43,6 +44,7 @@ private:
     static const int timerPeriod = 1000; //In miliseconds.
     static const int sendToServerTimerPeriod = 1000;
     static const int updateIndicatorPeriod = 2000;
+    static const int callAveragingFunctionPeriod = 200;
 
     bool raceStarted;
     bool networkConnected;
@@ -59,6 +61,7 @@ private:
     QTimer *raceTimer;
     QTimer *sendToServerTimer;
     QTimer *indicatorUpdaterTimer;
+    QTimer *averageSpeedTimer;
     QTime totalRaceTime;
     QTime currentLapTime;
 

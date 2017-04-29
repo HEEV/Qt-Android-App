@@ -10,6 +10,7 @@ class UIRaceDataset : public QObject
     Q_OBJECT
     Q_PROPERTY(QString carName READ getCarName WRITE setCarName NOTIFY carNameNotify)
     Q_PROPERTY(qreal projectedProgress READ getProjectedProgress NOTIFY projectedProgressNotify)
+    Q_PROPERTY(bool useGPSSpeed READ getUseGPSSpeed WRITE setUseGPSSpeed NOTIFY useGPSSpeedNotify)
     Q_PROPERTY(qreal groundSpeed READ getGroundSpeed WRITE setGroundSpeed NOTIFY groundSpeedNotify)
     Q_PROPERTY(QString averageSpeed READ getAverageSpeed WRITE setAverageSpeed NOTIFY averageSpeedNotify)
     Q_PROPERTY(bool speedSensorStatus READ getSpeedSensorStatus NOTIFY speedSensorStatusNotify)
@@ -30,6 +31,9 @@ public:
 
     void setProjectedProgress(double projectedProgress);
     qreal getProjectedProgress();
+
+    void setUseGPSSpeed(bool useGPS);
+    bool getUseGPSSpeed();
 
     void setGroundSpeed(qreal speed);
     qreal getGroundSpeed();
@@ -71,6 +75,7 @@ private:
     // enum to the qml GUI.
     QString carName;
     qreal projectedProgress;
+    bool useGPSSpeed;
     qreal groundSpeed;
     QString averageSpeed;
     bool speedSensorStatus;
@@ -86,6 +91,7 @@ private:
 signals:
     void carNameNotify();
     void projectedProgressNotify();
+    void useGPSSpeedNotify();
     void groundSpeedNotify();
     void averageSpeedNotify();
     void speedSensorStatusNotify();

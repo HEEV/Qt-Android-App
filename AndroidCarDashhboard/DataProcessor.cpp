@@ -54,7 +54,10 @@ void DataProcessor::routeCANFrame(QCanBusFrame frame)
     switch(id)
     {
     case DataProcessor::TACHOMETER_TIME_LAST_PULSE_ID:
-        updateGroundSpeed(data);
+        if (!(raceDataset->getUseGPSSpeed()))
+        {
+            updateGroundSpeed(data);
+        }
         break;
     case DataProcessor::PITOT_ID:
         updateAirSpeed(data);
@@ -121,13 +124,13 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 
         }
 
-    updateAverageSpeed(milesPerHour);
     raceDataset->setGroundSpeed(milesPerHour);
     raceDataset->groundSpeedNotify();
 }
 
-void DataProcessor::updateAverageSpeed(qreal currentSpeed)
+void DataProcessor::updateAverageSpeed()
 {
+    qreal currentSpeed = raceDataset->getGroundSpeed();
     static qreal numerator = 0;
     static qreal denominator = 1;
     static bool firstValue = true;

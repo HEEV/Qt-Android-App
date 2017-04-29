@@ -18,7 +18,7 @@ public:
 
     // Setters for values that come from CANInterface
     void updateGroundSpeed(QByteArray data);
-    void updateAverageSpeed(qreal currentSpeed);
+    void updateAverageSpeed();
     void updateAirSpeed(QByteArray data);
     void updateEFIPressure(QByteArray data);
     void updateMegasquirt(QByteArray data);
