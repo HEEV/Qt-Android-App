@@ -1,7 +1,7 @@
 #include "NetworkInterface.h"
 
 const QString NetworkInterface::host = "jacob.cedarville.edu";
-const int NetworkInterface::port = 3306;
+const int NetworkInterface::port = 64738;
 const int NetworkInterface::reconnectAttemptInterval = 2000;
 
 const string NetworkInterface::logPrefix = "NETWORK_INTERFACE: ";
