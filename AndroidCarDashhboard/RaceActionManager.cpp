@@ -2,13 +2,18 @@
 
 RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Logger *log, UIRaceDataset *ui, GPSPositioningService *gps, NetworkInterface *net)
 {
-    canInterface = can;
-
     dataProcessor = data;
 
     logger = log;
 
     uiInterface = ui;
+    canInterface = can;
+    // Until a better start/stop solution has been found,
+    // we call startListening() here and at the start of races,
+    // but we don't ever call stopListening().
+    canConnected = canInterface->startListening();
+    uiInterface->setCanStatus(canConnected);
+    uiInterface->canStatusNotify();
 
     gpsService = gps;
     connect(gps, SIGNAL(lapIncremented()), this, SLOT(incrementCurrentLap()));
@@ -35,12 +40,12 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
 bool RaceActionManager::initConnections()
 {
     //Canbus setup
-    if (!canConnected)
-    {
-        canConnected = canInterface->startListening();
-    }
-    uiInterface->setCanStatus(canConnected);
-    uiInterface->canStatusNotify();
+//    if (!canConnected)
+//    {
+//        canConnected = canInterface->startListening();
+//    }
+//    uiInterface->setCanStatus(canConnected);
+//    uiInterface->canStatusNotify();
 
     //GPS setup
     gpsService->startTracking();
