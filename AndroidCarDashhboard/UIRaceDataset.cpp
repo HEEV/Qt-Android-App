@@ -1,5 +1,7 @@
 #include "UIRaceDataset.h"
 
+const int UIRaceDataset::FINAL_LAP_NUMBER = 10;
+
 UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
 {
     //Set defaults.
@@ -13,6 +15,7 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     currentLapTime = "00:00";
     lastLapTime = "00:00";
     currentLapNumber = 1;
+    isFinalLap = false;
 }
 
 QString UIRaceDataset::getCarName()
@@ -127,6 +130,16 @@ QString UIRaceDataset::getLastLapTime()
 void UIRaceDataset::setCurrentLapNumber(int lapNumber)
 {
     currentLapNumber = lapNumber;
+    if (currentLapNumber == FINAL_LAP_NUMBER)
+    {
+        isFinalLap = true;
+        isFinalLapNotify();
+    }
+    else
+    {
+        isFinalLap = false;
+        isFinalLapNotify();
+    }
 }
 
 int UIRaceDataset::getCurrentLapNumber()
@@ -152,4 +165,9 @@ void UIRaceDataset::setGPSInfo(QGeoPositionInfo info)
 QGeoPositionInfo UIRaceDataset::getGPSInfo()
 {
     return gpsInfo;
+}
+
+bool UIRaceDataset::getIsFinalLap()
+{
+    return isFinalLap;
 }

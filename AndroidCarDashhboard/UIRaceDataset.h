@@ -22,6 +22,7 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(int currentLapNumber READ getCurrentLapNumber WRITE setCurrentLapNumber NOTIFY currentLapNumberNotify)
     Q_PROPERTY(bool raceStatus READ getRaceStatus WRITE setRaceStatus NOTIFY raceStatusNotify)
     Q_PROPERTY(QGeoPositionInfo gpsInfo READ getGPSInfo WRITE setGPSInfo NOTIFY gpsInfoNotify)
+    Q_PROPERTY(bool isFinalLap READ getIsFinalLap NOTIFY isFinalLapNotify)
 
 public:
     explicit UIRaceDataset(QObject *parent = 0);
@@ -68,6 +69,8 @@ public:
     void setGPSInfo(QGeoPositionInfo info);
     QGeoPositionInfo getGPSInfo();
 
+    bool getIsFinalLap();
+
 private:
     // Used by DataProcessor to choose whether to use Urbie's wheel circumference or
     // Sting's wheel circumference when calculating ground speed.
@@ -87,6 +90,8 @@ private:
     QString lastLapTime;
     int currentLapNumber;
     QGeoPositionInfo gpsInfo;
+    bool isFinalLap;
+    static const int FINAL_LAP_NUMBER;
 
 signals:
     void carNameNotify();
@@ -103,6 +108,7 @@ signals:
     void currentLapNumberNotify();
     void raceStatusNotify();
     void gpsInfoNotify();
+    void isFinalLapNotify();
 public slots:
 };
 

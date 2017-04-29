@@ -634,8 +634,8 @@ Window {
             Rectangle {
                 id: deviceStatus
                 color: "#000000"
-                width: batteryLevel.width
-                height: batteryLevel.height
+                width: finalLapIndicator.width
+                height: finalLapIndicator.height
 
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
@@ -645,12 +645,13 @@ Window {
 
                 Text
                 {
-                    id: batteryLevel
+                    id: finalLapIndicator
                     color: "#ffffff"
+                    visible: UIRaceDataset.isFinalLap
                     font.pointSize: 45
                     fontSizeMode: Text.Fit
                     horizontalAlignment: Text.AlignRight
-                    text: qsTr("Battery: " + "100" + "%")
+                    text: qsTr("FINAL LAP")
                     font.family: "Consolas"
                     font.bold: true
 
@@ -721,6 +722,7 @@ Window {
 
                     onClicked:
                     {
+                        flickable.snapToDashboard();
                         RaceActionManager.startRace();
                         urbie.enabled = false;
                         sting.enabled = false;
