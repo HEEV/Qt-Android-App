@@ -95,6 +95,9 @@ bool RaceActionManager::startRace()
     uiInterface->setRaceStatus(raceStarted);
     uiInterface->raceStatusNotify();
 
+    //Initiate averaging
+    dataProcessor->initiateAverageSpeed();
+
     logger->println((logPrefix + "Race started.").toStdString());
 
     return true;
@@ -156,11 +159,11 @@ bool RaceActionManager::stopRace()
         indicatorUpdaterTimer->stop();
         averageSpeedTimer->stop();
 
-        if (canConnected)
-        {
-            canInterface->stopListening();
-            canConnected = false;
-        }
+//        if (canConnected)
+//        {
+//            canInterface->stopListening();
+//            canConnected = false;
+//        }
 
         //Stop GPS updates.
         gpsService->stopTracking();

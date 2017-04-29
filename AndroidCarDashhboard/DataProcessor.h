@@ -25,6 +25,9 @@ public:
     void updateCurrent(QByteArray data);
     void updateVoltage(QByteArray data);
 
+    void initiateAverageSpeed();
+
+
 private:
     // CAN frame ids. These numbers have not been finalized or verified.
     static const int TACHOMETER_PULSES_ID;
@@ -34,6 +37,8 @@ private:
     static const int MEGASQUIRT_ID; // Used for engine temperature and other info
     static const int CURRENT_ID;
     static const int VOLTAGE_ID;
+
+    static bool initialAverage;
 
     // the value received when a sensor sends a message that
     // does not contain new information

@@ -19,6 +19,8 @@ const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
 const double DataProcessor::URBIE_WHEEL_CIRCUMFERENCE = 67.937;
 const double DataProcessor::STING_WHEEL_CIRCUMFERENCE = 60.868;
 
+bool   DataProcessor::initialAverage = true;
+
 DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, QString carName, Logger *log)
 {
     this->raceDataset = uiRaceDataset;
@@ -128,14 +130,18 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
     raceDataset->groundSpeedNotify();
 }
 
+void DataProcessor::initiateAverageSpeed()
+{
+    initialAverage = true;
+}
+
 void DataProcessor::updateAverageSpeed()
 {
     qreal currentSpeed = raceDataset->getGroundSpeed();
     static qreal numerator = 0;
     static qreal denominator = 1;
-    static bool firstValue = true;
 
-    if(!firstValue)
+    if(!initialAverage)
     {
         numerator += currentSpeed;
         qreal average = numerator/(++denominator);
@@ -144,7 +150,9 @@ void DataProcessor::updateAverageSpeed()
     }
     else
     {
-        firstValue = false;
+        numerator = 0;
+        denominator = 1;
+        initialAverage = false;
         numerator += currentSpeed;
         raceDataset->setAverageSpeed(QString::number(currentSpeed, 'f', 1));
         raceDataset->averageSpeedNotify();
