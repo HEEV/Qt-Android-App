@@ -3,7 +3,7 @@
 UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
 {
     //Set defaults.
-    carName = Car::Name::Urbie;
+    carName = "Urbie";
     projectedProgress = 0;
     groundSpeed = 0;
     averageSpeed = "0.0";

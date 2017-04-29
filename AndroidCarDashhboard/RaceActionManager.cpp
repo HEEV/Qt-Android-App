@@ -78,6 +78,7 @@ bool RaceActionManager::startRace()
     */
 
     uiInterface->setCurrentLapNumber(1);
+    uiInterface->setLastLapTime("00:00");
 
     //Set up pulse to check on things.
     indicatorUpdaterTimer->start(updateIndicatorPeriod);
@@ -203,9 +204,11 @@ void RaceActionManager::sendInfoToServer()
         //gpsMessage.insert("altitude", QJsonValue(currentCoordinate.altitude()));
 
         QJsonObject mainMessage;
+        mainMessage.insert("carName", uiInterface->getCarName());
+        mainMessage.insert("currentLap", uiInterface->getCurrentLapNumber());
         mainMessage.insert("time", totalRaceTime.elapsed());
+        mainMessage.insert("lastLapTime", uiInterface->getLastLapTime());
         mainMessage.insert("groundspeed", uiInterface->getGroundSpeed());
-        //mainMessageinsert("lapNumber", /*lap here*/);
         mainMessage.insert("coordinate", gpsMessage);
 
         network->sendJASON(mainMessage);
