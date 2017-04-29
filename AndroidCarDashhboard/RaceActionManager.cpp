@@ -213,7 +213,8 @@ void RaceActionManager::sendInfoToServer()
         mainMessage.insert("currentLap", uiInterface->getCurrentLapNumber());
         mainMessage.insert("time", totalRaceTime.elapsed());
         mainMessage.insert("lastLapTime", uiInterface->getLastLapTime());
-        mainMessage.insert("groundspeed", uiInterface->getGroundSpeed());
+        mainMessage.insert("groundSpeed", uiInterface->getGroundSpeed());
+        mainMessage.insert("averageSpeed", uiInterface->getAverageSpeed());
         mainMessage.insert("coordinate", gpsMessage);
 
         network->sendJASON(mainMessage);
