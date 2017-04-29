@@ -13,7 +13,7 @@ const int DataProcessor::MEGASQUIRT_ID = 2;
 const int DataProcessor::CURRENT_ID = 3;
 const int DataProcessor::VOLTAGE_ID = 4;
 const uint32_t DataProcessor::NO_NEW_DATA = 0xFFFFFFFF;
-const int DataProcessor::WHEEL_TIMEOUT_LENGTH = 6000;
+const int DataProcessor::WHEEL_TIMEOUT_LENGTH = 5000;
 
 const double DataProcessor::VELOCITY_MULTIPLIER_BASE = 56.8181818181;
 const double DataProcessor::URBIE_WHEEL_CIRCUMFERENCE = 67.937;
