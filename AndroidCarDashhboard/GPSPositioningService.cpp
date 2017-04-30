@@ -1,8 +1,8 @@
 #include "GPSPositioningService.h"
 
 const int GPSPositioningService::gpsUpdateInterval = 500;
-const qreal GPSPositioningService::lapStartLocationEnterRadius = 15.0;
-const qreal GPSPositioningService::lapStartLocationExitRadius = 20.0;
+const qreal GPSPositioningService::lapStartLocationEnterRadius = 20.0;
+const qreal GPSPositioningService::lapStartLocationExitRadius = 30.0;
 const qreal GPSPositioningService::metersPerSecondToMilesPerHour = 2.237;
 
 GPSPositioningService::GPSPositioningService(Logger *log, UIRaceDataset *data)
@@ -50,16 +50,20 @@ void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
     //coords += " : " + QString::number(coord.longitude());
     //coords += " : " + QString::number(coord.altitude());
     //logger->println((logTag + coords).toStdString());
-    if (!lapStartLocationHasBeenSet)
+    if (!lapStartLocationHasBeenSet && info.attribute(QGeoPositionInfo::HorizontalAccuracy) < 6.7)
     {
         lapStartLocation = info.coordinate();
         lapStartLocationHasBeenSet = true;
         logger->println(logPrefix + "Lap start location set: " + lapStartLocation.toString().toStdString());
+        logger->println(logPrefix + "Accuracy: " + QString::number(info.attribute(QGeoPositionInfo::HorizontalAccuracy)).toStdString());
     }
+    //logger->println(logPrefix + "Accuracy: " + QString::number(info.attribute(QGeoPositionInfo::HorizontalAccuracy)).toStdString());
 
-    if (dataStore->getUseGPSSpeed())
+    if (dataStore->getUseGPSSpeed() && info.hasAttribute(QGeoPositionInfo::GroundSpeed))
     {
-        dataStore->setGroundSpeed(info.attribute(QGeoPositionInfo::GroundSpeed) * metersPerSecondToMilesPerHour);
+        qreal mphGroundSpeed = info.attribute(QGeoPositionInfo::GroundSpeed) * metersPerSecondToMilesPerHour;
+
+        dataStore->setGroundSpeed(mphGroundSpeed);
         dataStore->groundSpeedNotify();
     }
 
