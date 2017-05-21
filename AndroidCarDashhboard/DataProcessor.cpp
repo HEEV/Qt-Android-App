@@ -171,27 +171,43 @@ int DataProcessor::timeDifferenceInMilliseconds(time_t endTime, time_t startTime
 
 void DataProcessor::updateAirSpeed(QByteArray data)
 {
-    //voltage -> pressure;
+	
+	//constants
+	//measureable constants
+	const float rho = 1.225; //A good value for rho.
+	const float vcc = 3.6; // Presure sensor supply voltage.
+	const float speedConversionFactor = 2.2369;
+
+	//calibration constants (derived from actual data!!!)
+	const float scalingFactor1 = 0.81081;
+	const float scalingFactor2 = 1.41430;
+	const float offset1 = 0.26;
+
+	//convert the CAN data into a voltage (in mili-volts)
     uint16_t voltage;
     CanNodeParser::getData(data, voltage);
-    double pressure;
-    float vcc = 3.6; // Presure sensor supply voltage.
-    float scalingFactor1 = 0.81081;
-    float voltageMath = voltage;
-    voltageMath /= 1000.0f;
-    voltageMath *= scalingFactor1;
-    pressure = (((voltage * 10.0f)/vcc) - 4.0f) * 100.0f;
 
-    float rho = 1.225; //A good value for rho.
-    float scalingFactor2 = 1.41430;
-    float offset1 = -0.26;
-    double windSpeed;
-    windSpeed = sqrt((2 * pressure)/ rho); // In m/s
-    windSpeed *= 2.2369;
-    windSpeed *= scalingFactor2;
-    windSpeed += offset1;
+	//voltage -> pressure;
+	double pressure;
+	// convert the voltage to pressure (sorry for the magic numbers)
+	pressure = scalingFactor1*(voltage/vcc) - 400.0f; 
 
-//    logger->println("Wind value: " + QString::number(windSpeed).toStdString());
+	// we don't want a value less than 0 (will mess up the sqrt)
+	if(pressure<0.0f){
+		pressure=0.0f;
+	}
+	//pressure -> wind speed (mph)
+	double windSpeed;
+	// bernouli's eqn (pressure -> wind speed (m/s) 
+	windSpeed = scalingFactor2 * sqrt((2 * pressure)/ rho); 
+	//convert m/s into mi/hr
+	windSpeed *= speedConversionFactor; 
+	//apply one more calibration constant
+	windSpeed += offset1;
+
+	//We are done! Wasn't that fun!?!
+
+//  logger->println("Wind value: " + QString::number(windSpeed).toStdString());
 }
 
 void DataProcessor::updateEFIPressure(QByteArray data)
