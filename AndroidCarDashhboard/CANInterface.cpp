@@ -4,12 +4,11 @@ CANInterface::CANInterface(DataProcessor *dataProcessor)
 {
     this->dataProcessor = dataProcessor;
     slcandActive = false;
-    //startListening(); //TEMP for TEST
 }
 
 CANInterface::~CANInterface()
 {
-    stopListening(); //TEMP for TEST.
+    stopListening();
     this->dataProcessor = nullptr;
 }
 
@@ -23,12 +22,14 @@ bool CANInterface::startListening()
         device = QCanBus::instance()->createDevice(
                     QStringLiteral("socketcan"), QStringLiteral("can0"));
 
-        connect(device, &QCanBusDevice::framesReceived, this, &CANInterface::readFrame); //Connect the framesReceived signal interrupt to the readFrame method to deal with.
+        //Connect the framesReceived signal interrupt to the readFrame method to deal with.
+        connect(device, &QCanBusDevice::framesReceived, this, &CANInterface::readFrame);
 
         success = device->connectDevice();
 
     }
-    if(!success && slcandSuccess) // If we could not connect to the instance of slcand then go ahead and kill and say we failed.
+    // If we could not connect to the instance of slcand then go ahead and kill and say we failed.
+    if(!success && slcandSuccess)
     {
         disableSlcand();
     }
@@ -75,6 +76,7 @@ void CANInterface::readFrame()
 bool CANInterface::activateSlcand()
 {
     QProcess ifconfigStop;
+    //We have to pass the parameters as a list otherwise they get globbed together and fail to do anything.
     ifconfigStop.start("su", QStringList() << "-c" << "ifconfig" << "can0" << "down");
     ifconfigStop.waitForStarted();
     ifconfigStop.waitForFinished();
