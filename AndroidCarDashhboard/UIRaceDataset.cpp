@@ -171,3 +171,13 @@ bool UIRaceDataset::getIsFinalLap()
 {
     return isFinalLap;
 }
+
+void UIRaceDataset::setWindSpeed(qreal speed)
+{
+    windSpeed = speed;
+}
+
+qreal UIRaceDataset::getWindSpeed()
+{
+    return windSpeed;
+}
