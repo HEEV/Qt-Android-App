@@ -1,5 +1,6 @@
 #include "GPSPositioningService.h"
 
+//This is in miliseconds and is how oftain the GPS is polled.
 const int GPSPositioningService::gpsUpdateInterval = 500;
 const qreal GPSPositioningService::lapStartLocationEnterRadius = 20.0;
 const qreal GPSPositioningService::lapStartLocationExitRadius = 30.0;
@@ -13,8 +14,11 @@ GPSPositioningService::GPSPositioningService(Logger *log, UIRaceDataset *data)
     lapStartLocationHasBeenSet = false;
     haveLeftStartRadius = false;
 
+    //This will try to grab any GPS source it can, including IP address.
     source = QGeoPositionInfoSource::createDefaultSource(this);
+    //Get the callback registered.
     connect(source, SIGNAL(positionUpdated(QGeoPositionInfo)), this, SLOT(positionUpdated(QGeoPositionInfo)));
+    //Set polling time.
     source->setUpdateInterval(gpsUpdateInterval);
 }
 
@@ -25,17 +29,19 @@ bool GPSPositioningService::startTracking()
     {
         lapStartLocationHasBeenSet = false;
         haveLeftStartRadius = false;
+        //Start polling.
         source->startUpdates();
         tracking = true;
     }
 
-    return true; // Does this return value have meaning?
+    return true; // Does this return value have meaning? No.
 }
 
 void GPSPositioningService::stopTracking()
 {
     if(tracking)
     {
+        //Stop polling.
         source->stopUpdates();
         lapStartLocationHasBeenSet = false;
         haveLeftStartRadius = false;
@@ -50,6 +56,8 @@ void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
     //coords += " : " + QString::number(coord.longitude());
     //coords += " : " + QString::number(coord.altitude());
     //logger->println((logTag + coords).toStdString());
+
+    //This if is for setting the start location once we have the required accuracy on the GPS data.
     if (!lapStartLocationHasBeenSet && info.attribute(QGeoPositionInfo::HorizontalAccuracy) < 6.7)
     {
         lapStartLocation = info.coordinate();
@@ -73,7 +81,8 @@ void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
     {
         haveLeftStartRadius = false;
         lapIncremented();
-    } else if (info.coordinate().distanceTo(lapStartLocation) > lapStartLocationExitRadius)
+    }
+    else if (info.coordinate().distanceTo(lapStartLocation) > lapStartLocationExitRadius)
     {
         haveLeftStartRadius = true;
     }
