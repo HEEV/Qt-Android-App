@@ -1,6 +1,8 @@
 #include "NetworkInterface.h"
 
 const QString NetworkInterface::host = "jacob.cedarville.edu";
+
+//This port is a placeholder please talk to a team leader about what it should actually be.
 const int NetworkInterface::port = 64738;
 const int NetworkInterface::reconnectAttemptInterval = 2000;
 
@@ -38,7 +40,8 @@ bool NetworkInterface::isConnected()
     if (sock == nullptr)
     {
         return false;
-    } else
+    }
+    else
     {
         return (sock->state() == QAbstractSocket::ConnectedState);
     }
@@ -53,7 +56,7 @@ void NetworkInterface::disconnect()
     }
 }
 
-bool NetworkInterface::sendJASON(QJsonObject json)
+bool NetworkInterface::sendJSON(QJsonObject json)
 {
     QJsonDocument jDoc = QJsonDocument(json);
     int written = sock->write(jDoc.toJson());

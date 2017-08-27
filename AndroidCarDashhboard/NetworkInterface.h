@@ -28,7 +28,7 @@ public:
     void disconnect();
     bool isConnected();
 
-    bool sendJASON(QJsonObject json);
+    bool sendJSON(QJsonObject json);
 
 private:
     QTcpSocket *sock;
