@@ -21,11 +21,11 @@
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
-/*
+
 #ifdef Q_OS_ANDROID
 void performJNIOperations();
 #endif
-*/
+
 
 int main(int argc, char *argv[])
 {
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
     //Get the screen to stay on hopefuly
-    //performJNIOperations();
+    performJNIOperations();
 #endif
 
     UIRaceDataset *raceDataset = new UIRaceDataset();
@@ -47,12 +47,10 @@ int main(int argc, char *argv[])
             + "/" + LOG_FILE_BASE_NAME + "_" + (QDateTime::currentDateTime().toString(Qt::TextDate))
             + LOG_FILE_EXTENSION;
     Logger *logger = new Logger(logFilePath);
-    logger->println("Begin logging test.");
-    logger->println("This is a line of text");
-    logger->println("This is another line of text");
+    logger->println((QString)"Begin Logfile.");
 
     //Make a DataProcessor.
-    DataProcessor *dataProcessor = new DataProcessor(raceDataset, "Urbie" /*Default to Urbie*/, logger);
+    DataProcessor *dataProcessor = new DataProcessor(raceDataset, "Sting" /*Default to String*/, logger);
 
     //Make a instance of CANInterface.
     CANInterface *interface = new CANInterface(dataProcessor);
@@ -75,15 +73,19 @@ int main(int argc, char *argv[])
     QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
     component.create();
 
+    //Run the app here. Main will "halt" here until the app is killed.
     const int returnval = app.exec();
 
     //Kill the GPS usage.
     gps->stopTracking();
 
+    //Us being lazy and not cleaning up our pointers.
+    //TODO: handle memory falts.
+
     return returnval;
 }
 
-/*
+
 #ifdef Q_OS_ANDROID
 void performJNIOperations()
 {
@@ -100,6 +102,5 @@ void performJNIOperations()
         QAndroidJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
     }
 }
-
 #endif
-*/
+
