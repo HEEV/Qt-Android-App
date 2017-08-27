@@ -25,6 +25,7 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
 
     raceStarted = false;
     uiInterface->setRaceStatus(raceStarted);
+    //For every UI change its corrisponding notify function must be called for redraw to occur.
     uiInterface->raceStatusNotify();
 
     raceTimer = new QTimer();
@@ -58,7 +59,7 @@ bool RaceActionManager::initConnections()
     uiInterface->setNetworkStatus(network->isConnected());
     uiInterface->networkStatusNotify();
 
-    return true; // This return value is meaningless, as of right now
+    return true; // This return value is meaningless, as of right now.
 }
 
 bool RaceActionManager::startRace()
@@ -85,7 +86,7 @@ bool RaceActionManager::startRace()
     uiInterface->setCurrentLapNumber(1);
     uiInterface->setLastLapTime("00:00");
 
-    //Set up pulse to check on things.
+    //Set up pulses to check on things.
     indicatorUpdaterTimer->start(updateIndicatorPeriod);
     raceTimer->start(timerPeriod);
     sendToServerTimer->start(sendToServerTimerPeriod);
@@ -114,9 +115,9 @@ void RaceActionManager::updateCurrentTime()
     int totalTimeMS = totalRaceTime.elapsed();
     int currentLapTimeMS = currentLapTime.elapsed();
     QString totalText = QString("%1:%2").arg( totalTimeMS / 60000        , 2, 10, QChar('0'))
-                                           .arg((totalTimeMS % 60000) / 1000, 2, 10, QChar('0'));
+                                        .arg((totalTimeMS % 60000) / 1000, 2, 10, QChar('0'));
     QString currentLapText = QString("%1:%2").arg( currentLapTimeMS / 60000        , 2, 10, QChar('0'))
-                                                .arg((currentLapTimeMS % 60000) / 1000, 2, 10, QChar('0'));
+                                             .arg((currentLapTimeMS % 60000) / 1000, 2, 10, QChar('0'));
     uiInterface->setCurrentLapTime(currentLapText);
     uiInterface->currentLapTimeNotify();
     uiInterface->setTotalTime(totalText);
@@ -130,7 +131,7 @@ void RaceActionManager::doSpeedAveraging()
 
 void RaceActionManager::incrementCurrentLap()
 {
-    logger->println("Time to increment the lap counter!");
+    logger->println((QString)"Time to increment the lap counter!");
 
     uiInterface->setLastLapTime(uiInterface->getCurrentLapTime());
     uiInterface->lastLapTimeNotify();
@@ -214,10 +215,11 @@ void RaceActionManager::sendInfoToServer()
         mainMessage.insert("time", totalRaceTime.elapsed());
         mainMessage.insert("lastLapTime", uiInterface->getLastLapTime());
         mainMessage.insert("groundSpeed", uiInterface->getGroundSpeed());
+        mainMessage.insert("windSpeed", uiInterface->getWindSpeed());
         mainMessage.insert("averageSpeed", uiInterface->getAverageSpeed());
         mainMessage.insert("coordinate", gpsMessage);
 
-        network->sendJASON(mainMessage);
+        network->sendJSON(mainMessage);
     }
 }
 

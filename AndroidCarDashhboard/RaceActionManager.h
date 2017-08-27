@@ -28,6 +28,8 @@ public:
     ~RaceActionManager();
 
     bool initConnections();
+
+    //Q_INVOKABLE is a giant "Peach" macro that allows QML "UI" to call the functions.
     Q_INVOKABLE bool startRace();
     Q_INVOKABLE bool stopRace();
 
