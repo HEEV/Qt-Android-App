@@ -174,11 +174,11 @@ void DataProcessor::updateAirSpeed(QByteArray data)
 	
 	//constants
 	//measureable constants
-	const float rho = 1.225; //A good value for rho.
+    const float rho = 1.225; //A good value for rho. Rho Rho your boat gently down the I/O stream.
 	const float vcc = 3.6; // Presure sensor supply voltage.
-	const float speedConversionFactor = 2.2369;
+    const float speedConversionFactor = 2.2369;// Converts m/s to miles per hour.
 
-	//calibration constants (derived from actual data!!!)
+    //calibration constants (derived from actual data!!!)
 	const float scalingFactor1 = 0.81081;
 	const float scalingFactor2 = 1.41430;
 	const float offset1 = 0.26;
@@ -206,8 +206,8 @@ void DataProcessor::updateAirSpeed(QByteArray data)
 	windSpeed += offset1;
 
 	//We are done! Wasn't that fun!?!
-
-//  logger->println("Wind value: " + QString::number(windSpeed).toStdString());
+    raceDataset->setWindSpeed(windSpeed);
+    qDebug() << "This is the wind speed. " << QString::number(windSpeed) << "\n";
 }
 
 void DataProcessor::updateEFIPressure(QByteArray data)
