@@ -19,6 +19,7 @@ public:
 
      QString getLog();
     void println(string message);
+    void println(QString message);
 
     bool openLogFile();
     void closeLogFile();

@@ -41,12 +41,19 @@ void Logger::closeLogFile()
 
 void Logger::println(string message)
 {
+    //Cast the c++ string to a QString as that has the best compatiblity with Qt file system.
     QString newEntry = QString::fromStdString(message + "\n");
-    log.append(newEntry);
+    //Use the overloaded method for conviencence sake.
+    println((QString)newEntry);
+}
+
+void Logger::println(QString message)
+{
+    log.append(message);
 
     if (logStream->device()->isOpen())
     {
-        *logStream << newEntry;
+        *logStream << message;
         // If we do not flush, the text will not get written to the file
         // unless and until the file is closed.
         logStream->flush();
