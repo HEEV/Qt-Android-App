@@ -77,11 +77,18 @@ int main(int argc, char *argv[])
     //Run the app here. Main will "halt" here until the app is killed.
     const int returnval = app.exec();
 
-    //Kill the GPS usage.
+    //Stop the GPS usage so the system does not believe that a process is using it any more. Saves battery long term.
     gps->stopTracking();
 
-    //Us being lazy and not cleaning up our pointers.
-    //TODO: handle memory falts.
+    //Clean up the pointers so we don't force the OS to deal with the memory falts.
+    //Delete in the reverse order in which modules are created.
+    delete manager;
+    delete net;
+    delete gps;
+    delete interface;
+    delete dataProcessor;
+    delete logger;
+
 
     return returnval;
 }
