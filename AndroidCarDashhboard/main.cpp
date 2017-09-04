@@ -23,6 +23,7 @@ static const QString LOG_FILE_EXTENSION = QString(".txt");
 
 
 #ifdef Q_OS_ANDROID
+//Foward declare any function that will apear after the main function.
 void performJNIOperations();
 #endif
 
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
     QQmlEngine engine;
 
 #ifdef Q_OS_ANDROID
-    //Get the screen to stay on hopefuly
+    //Get the screen to stay on as long as the app has focus.
     performJNIOperations();
 #endif
 
