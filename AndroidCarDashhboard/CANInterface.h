@@ -6,6 +6,11 @@
 #include <QProcess>
 #include "DataProcessor.h"
 
+#ifdef Q_OS_WIN
+#include "LinuxCANTypes.h"
+#include <windows.h>
+#endif
+
 
 #ifndef CANINTERFACE_H
 #define CANINTERFACE_H
