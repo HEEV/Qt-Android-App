@@ -21,6 +21,8 @@
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
+static const bool simulateInput = false;
+
 
 #ifdef Q_OS_ANDROID
 //Foward declare any function that will apear after the main function.
@@ -54,7 +56,7 @@ int main(int argc, char *argv[])
     DataProcessor *dataProcessor = new DataProcessor(raceDataset, "Sting" /*Default to String*/, logger);
 
     //Make a instance of CANInterface.
-    CANInterface *interface = new CANInterface(dataProcessor);
+    CANInterface *interface = new CANInterface(dataProcessor, simulateInput);
 
     //Make a GPS Service
     GPSPositioningService *gps = new GPSPositioningService(logger, raceDataset);

@@ -1,8 +1,9 @@
 #include "CANInterface.h"
 
-CANInterface::CANInterface(DataProcessor *dataProcessor)
+CANInterface::CANInterface(DataProcessor *dataProcessor, bool simulateInput)
 {
     this->dataProcessor = dataProcessor;
+    this->simulateInput = simulateInput;
     slcandActive = false;
 }
 
@@ -14,36 +15,51 @@ CANInterface::~CANInterface()
 
 bool CANInterface::startListening()
 {
-    bool slcandSuccess = activateSlcand();
-    bool success = false;
-    //Start by making sure that we can use the slcan plugin that is provided by the QT library.
-    if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")) && device == nullptr)
+    bool slcandSuccess = false;
+    if(simulateInput)
     {
-        device = QCanBus::instance()->createDevice(
-                    QStringLiteral("socketcan"), QStringLiteral("can0"));
-
-        //Connect the framesReceived signal interrupt to the readFrame method to deal with.
-        connect(device, &QCanBusDevice::framesReceived, this, &CANInterface::readFrame);
-
-        success = device->connectDevice();
 
     }
-    // If we could not connect to the instance of slcand then go ahead and kill and say we failed.
-    if(!success && slcandSuccess)
+    else
     {
-        disableSlcand();
+        slcandSuccess = activateSlcand();
+        bool success = false;
+        //Start by making sure that we can use the slcan plugin that is provided by the QT library.
+        if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")) && device == nullptr)
+        {
+            device = QCanBus::instance()->createDevice(
+                        QStringLiteral("socketcan"), QStringLiteral("can0"));
+
+            //Connect the framesReceived signal interrupt to the readFrame method to deal with.
+            connect(device, &QCanBusDevice::framesReceived, this, &CANInterface::readFrame);
+
+            success = device->connectDevice();
+
+        }
+        // If we could not connect to the instance of slcand then go ahead and kill and say we failed.
+        if(!success && slcandSuccess)
+        {
+            disableSlcand();
+        }
     }
     return success;
 }
 
 void CANInterface::stopListening()
 {
-    device->disconnectDevice();
-    disconnect(device, 0,0,0);
-    disableSlcand();
-    if(device != nullptr)
+    if(simulateInput)
     {
-        delete device;
+
+    }
+    else
+    {
+        device->disconnectDevice();
+        disconnect(device, 0,0,0);
+        disableSlcand();
+        if(device != nullptr)
+        {
+            delete device;
+        }
     }
 }
 
