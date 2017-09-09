@@ -2,6 +2,7 @@ TEMPLATE = app
 
 QT += qml quick serialport serialbus widgets core positioning network
 
+#If we are compiling for android platform we should also compile with the androidextras library.
 android {
     QT += androidextras
 } else {
@@ -18,7 +19,6 @@ SOURCES += main.cpp \
     RaceActionManager.cpp \
     GPSPositioningService.cpp \
     NetworkInterface.cpp
-    #QMLLib/ViewManagement.cpp
 
 RESOURCES += qml.qrc
 
@@ -41,7 +41,6 @@ HEADERS += \
     RaceActionManager.h \
     GPSPositioningService.h \
     NetworkInterface.h
-    #QMLLib/ViewManagement.h
 
 DISTFILES += \
     QMLLib/View.pri

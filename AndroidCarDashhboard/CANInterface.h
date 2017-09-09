@@ -4,17 +4,11 @@
 #include <QCanBusFrame>
 #include <QObject>
 #include <QProcess>
+#include <QTimer>
 #include "DataProcessor.h"
-
-#ifdef Q_OS_WIN
-#include "LinuxCANTypes.h"
-#include <windows.h>
-#endif
-
 
 #ifndef CANINTERFACE_H
 #define CANINTERFACE_H
-
 
 class CANInterface : public QObject
 {
@@ -33,11 +27,14 @@ private Q_SLOTS:
 private:
     bool slcandActive;
     bool simulateInput;
+    QTimer *simulationTimer;
     QCanBusDevice *device;
     DataProcessor *dataProcessor;
     const string logPrefix = "CANInterface_SERVICE: ";
     bool activateSlcand();
     bool disableSlcand();
+
+    QCanBusFrame simulationData[2] = ;
 
 };
 

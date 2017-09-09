@@ -5,6 +5,11 @@ CANInterface::CANInterface(DataProcessor *dataProcessor, bool simulateInput)
     this->dataProcessor = dataProcessor;
     this->simulateInput = simulateInput;
     slcandActive = false;
+
+    if(simulateInput)
+    {
+        simulationTimer = new QTimer();
+    }
 }
 
 CANInterface::~CANInterface()
@@ -16,14 +21,15 @@ CANInterface::~CANInterface()
 bool CANInterface::startListening()
 {
     bool slcandSuccess = false;
+    bool success = false;
     if(simulateInput)
     {
 
+        success = true;
     }
     else
     {
         slcandSuccess = activateSlcand();
-        bool success = false;
         //Start by making sure that we can use the slcan plugin that is provided by the QT library.
         if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")) && device == nullptr)
         {
@@ -69,6 +75,11 @@ bool CANInterface::writeCANFrame(int ID, QByteArray payload)
     frame.setFrameId(ID);
     frame.setPayload(payload);
     return device->writeFrame(frame);
+}
+
+void CANInterface::simulateInputFrames()
+{
+
 }
 
 void CANInterface::readFrame()
