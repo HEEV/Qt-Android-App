@@ -43,4 +43,5 @@ HEADERS += \
     NetworkInterface.h
 
 DISTFILES += \
-    QMLLib/View.pri
+    QMLLib/View.pri \
+    simulationData.csv
