@@ -1,1 +1,4 @@
-PITOT_ID , 950, 0,
+Pitot tube , 950 , 0 , , sin
+Tacometer , 1150 , 0 , , sin
+Tacometer last pulse , 1154 , 0 , , sin
+current ,
