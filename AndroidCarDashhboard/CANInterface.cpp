@@ -8,6 +8,8 @@ CANInterface::CANInterface(DataProcessor *dataProcessor, bool simulateInput)
 
     if(simulateInput)
     {
+        QFile simuDataFile(QUrl(QLatin1String("qrc://simulationData.csv")));
+
         simulationTimer = new QTimer();
     }
 }
