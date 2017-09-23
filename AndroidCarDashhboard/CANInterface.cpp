@@ -8,7 +8,33 @@ CANInterface::CANInterface(DataProcessor *dataProcessor, bool simulateInput)
 
     if(simulateInput)
     {
-        QFile simuDataFile(QUrl(QLatin1String("qrc://simulationData.csv")));
+        QFile simuDataFile(":/simulationData.csv");
+
+        if (!simuDataFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+
+            qDebug() << simuDataFile.errorString();
+            return;
+        }
+
+        QTextStream in(&simuDataFile);
+        while (!in.atEnd()) {
+            simuData temp;
+            QString line = in.readLine();
+            QStringList sLine = line.split(',');
+
+            qDebug() << sLine.size();
+
+            temp.typeID = sLine[0];
+            temp.canID = sLine[1].toInt();
+            temp.min = sLine[2].toInt();
+            temp.max = sLine[3].toInt();
+            temp.wForm = sLine[4];
+
+            simuDataVector.append(temp);
+
+            //qDebug() << simuDataVector.size() << endl;
+
+        }
 
         simulationTimer = new QTimer();
     }

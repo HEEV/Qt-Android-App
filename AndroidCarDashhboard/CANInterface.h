@@ -5,6 +5,14 @@
 #include <QObject>
 #include <QProcess>
 #include <QTimer>
+#include <QVector>
+#include <QString>
+#include <QUrl>
+#include <QLatin1String>
+#include <QIODevice>
+#include <QTextStream>
+#include <QDebug>
+#include <QStringList>
 #include "DataProcessor.h"
 
 #ifndef CANINTERFACE_H
@@ -33,8 +41,17 @@ private:
     const string logPrefix = "CANInterface_SERVICE: ";
     bool activateSlcand();
     bool disableSlcand();
+    typedef struct {        // Struct to store simulation data from csv file
+        QString typeID;
+        int canID;
+        int min;
+        int max;
+        QString wForm;
 
-    QCanBusFrame simulationData[2] = ;
+    } simuData;
+    QVector<simuData> simuDataVector;
+
+    //QCanBusFrame simulationData[2] = ;
 
 };
 

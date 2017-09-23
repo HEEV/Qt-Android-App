@@ -6,5 +6,6 @@
         <file>needle.png</file>
         <file>RoundGauge.qml</file>
         <file>NewDashboardGaugeStyle.qml</file>
+        <file>simulationData.csv</file>
     </qresource>
 </RCC>
