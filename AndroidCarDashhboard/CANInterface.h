@@ -41,18 +41,16 @@ private:
     const string logPrefix = "CANInterface_SERVICE: ";
     bool activateSlcand();
     bool disableSlcand();
+
     typedef struct {        // Struct to store simulation data from csv file
         QString typeID;
         int canID;
         int min;
         int max;
         QString wForm;
-
     } simuData;
-    QVector<simuData> simuDataVector;
 
-    //QCanBusFrame simulationData[2] = ;
-
+    QVector<simuData> simulationDataVector;
 };
 
 #endif // CANINTERFACE_H

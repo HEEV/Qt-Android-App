@@ -28,11 +28,11 @@ CANInterface::CANInterface(DataProcessor *dataProcessor, bool simulateInput)
             temp.max = sLine[3].toInt();
             temp.wForm = sLine[4];
 
-            simuDataVector.append(temp);
-
+            simulationDataVector.append(temp);
         }
 
         simulationTimer = new QTimer();
+        connect(simulationTimer, SIGNAL(timeout()), this, SLOT(simulateInputFrames()));
     }
 }
 
@@ -40,6 +40,7 @@ CANInterface::~CANInterface()
 {
     stopListening();
     this->dataProcessor = nullptr;
+    delete simulationTimer;
 }
 
 bool CANInterface::startListening()
@@ -48,7 +49,7 @@ bool CANInterface::startListening()
     bool success = false;
     if(simulateInput)
     {
-
+        simulationTimer->start(500);//Set the sampling reate to be half a second. In ms.
         success = true;
     }
     else
@@ -79,7 +80,7 @@ void CANInterface::stopListening()
 {
     if(simulateInput)
     {
-
+        simulationTimer->stop();
     }
     else
     {
@@ -103,7 +104,23 @@ bool CANInterface::writeCANFrame(int ID, QByteArray payload)
 
 void CANInterface::simulateInputFrames()
 {
+    QVectorIterator<simuData> simIter(simulationDataVector);
+    while(i.hasNext())
+    {
+        simuData currentData = simIter.next();
+        QCanBusFrame simulatedFrame;
+        simulatedFrame.setFrameId(currentData.canID);
 
+        //Now we should simulate the byte data based on simulation type
+        if(currentData.wForm == "sin")
+        {
+
+        }
+        else if(currentData.wForm == "random")
+        {
+            qrand()
+        }
+    }
 }
 
 void CANInterface::readFrame()
