@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QProcess>
 #include <QTimer>
+#include <QDateTime>
 #include <QVector>
 #include <QString>
 #include <QUrl>
