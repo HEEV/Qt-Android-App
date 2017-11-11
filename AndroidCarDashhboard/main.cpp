@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Logger", logger);
     engine.rootContext()->setContextProperty("RaceActionManager", manager);
 
-    QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
+    QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main2017.qml")));
     component.create();
 
     //Run the app here. Main will "halt" here until the app is killed.

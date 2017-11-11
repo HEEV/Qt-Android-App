@@ -7,5 +7,6 @@
         <file>RoundGauge.qml</file>
         <file>NewDashboardGaugeStyle.qml</file>
         <file>main2017.qml</file>
+        <file>UIRedesign.png</file>
     </qresource>
 </RCC>
