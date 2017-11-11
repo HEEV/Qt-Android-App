@@ -34,6 +34,8 @@ CANInterface::CANInterface(DataProcessor *dataProcessor, bool simulateInput)
         simulationTimer = new QTimer();
         connect(simulationTimer, SIGNAL(timeout()), this, SLOT(simulateInputFrames()));
     }
+
+    canBus.registerCallback("GetFrame", std::bind(&CANInterface::readFrame, this, std::placeholders::_1));
 }
 
 CANInterface::~CANInterface()
@@ -55,22 +57,9 @@ bool CANInterface::startListening()
     else
     {
         slcandSuccess = activateSlcand();
-        //Start by making sure that we can use the slcan plugin that is provided by the QT library.
-        if(QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")) && device == nullptr)
-        {
-            device = QCanBus::instance()->createDevice(
-                        QStringLiteral("socketcan"), QStringLiteral("can0"));
-
-            //Connect the framesReceived signal interrupt to the readFrame method to deal with.
-            connect(device, &QCanBusDevice::framesReceived, this, &CANInterface::readFrame);
-
-            success = device->connectDevice();
-
-        }
-        // If we could not connect to the instance of slcand then go ahead and kill and say we failed.
-        if(!success && slcandSuccess)
-        {
-            disableSlcand();
+        if (slcandSuccess) {
+            canBus.StartupModule();
+            slcandActive = true;
         }
     }
     return success;
@@ -84,22 +73,21 @@ void CANInterface::stopListening()
     }
     else
     {
-        device->disconnectDevice();
-        disconnect(device, 0,0,0);
+        canBus.ShutdownModule();
+        slcandActive = false;
         disableSlcand();
-        if(device != nullptr)
-        {
-            delete device;
-        }
     }
 }
 
 bool CANInterface::writeCANFrame(int ID, QByteArray payload)
 {
-    QCanBusFrame frame;
-    frame.setFrameId(ID);
-    frame.setPayload(payload);
-    return device->writeFrame(frame);
+    int d[payload.size()];
+
+    for(int i = 0; i < payload.size(); i++) {
+        d[i] = payload[i];
+    }
+
+    canBus.sendFrame(ID, d,payload.size());
 }
 
 void CANInterface::simulateInputFrames()
@@ -123,22 +111,9 @@ void CANInterface::simulateInputFrames()
     }
 }
 
-void CANInterface::readFrame()
+void CANInterface::readFrame(can_frame frame)
 {
-    while (device->framesAvailable())
-    {
-        const QCanBusFrame frame = device->readFrame();
-
-        if (frame.frameType() == QCanBusFrame::ErrorFrame)
-        {
-            qDebug() << "Error frame\n";
-            return;
-        }
-        else
-        {
-            dataProcessor->routeCANFrame(frame);
-        }
-    }
+    dataProcessor->routeCANFrame(frame);
 }
 
 bool CANInterface::activateSlcand()

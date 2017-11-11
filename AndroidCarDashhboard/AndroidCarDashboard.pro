@@ -18,7 +18,9 @@ SOURCES += main.cpp \
     Logger.cpp \
     RaceActionManager.cpp \
     GPSPositioningService.cpp \
-    NetworkInterface.cpp
+    NetworkInterface.cpp \
+    canBus.cpp \
+    canSocket.cpp
 
 RESOURCES += qml.qrc
 
@@ -40,7 +42,9 @@ HEADERS += \
     Logger.h \
     RaceActionManager.h \
     GPSPositioningService.h \
-    NetworkInterface.h
+    NetworkInterface.h \
+    canBus.h \
+    canSocket.h
 
 DISTFILES += \
     QMLLib/View.pri \
