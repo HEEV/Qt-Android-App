@@ -100,13 +100,13 @@ Window {
             id: snapAnimation
             duration: 200
         }
+    }
 
-        Image {
-            id: background
-            source: "UIRedesign.png"
-            width: parent.width;
-            height: parent.height;
-
-        }
+    Image {
+        id: background
+        source: "Guages.jpg"
+        width: parent.width;
+        height: parent.height;
+        fillMode: Image.PreserveAspectFit
     }
 }
