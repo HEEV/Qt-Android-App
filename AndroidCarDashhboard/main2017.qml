@@ -102,11 +102,19 @@ Window {
         }
     }
 
-    Image {
-        id: background
-        source: "Guages.jpg"
-        width: parent.width;
-        height: parent.height;
-        fillMode: Image.PreserveAspectFit
+    Rectangle {
+        id: mainRectangle
+        color: "black"
+        width: parent.width
+        height: parent.height
+
+
+        Image {
+            id: background
+            source: "Guages.jpg"
+            width: parent.width*3/4;
+            height: parent.height*3/4;
+            fillMode: Image.PreserveAspectFit
+        }
     }
 }
