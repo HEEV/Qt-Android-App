@@ -2,9 +2,8 @@
 
 #pragma once
 
-#if Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
 /*Linux includes*/
-#include <linux/can.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <netinet/in.h>
@@ -42,7 +41,7 @@ public:
     bool sendErrorFrame(int id, int data[], int size);
 
 private:
-    std::thread* thread;
+    std::thread thread;
 	CANSocket* can;
 };
 

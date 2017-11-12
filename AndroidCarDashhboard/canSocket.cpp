@@ -1,6 +1,7 @@
 #include "canSocket.h"
 
 std::map<std::string ,std::function<void(can_frame)>> CANSocket::callbacks;
+volatile bool CANSocket::closeThread = false;
 
 CANSocket::CANSocket()
 {
@@ -10,7 +11,6 @@ CANSocket::CANSocket()
 CANSocket::CANSocket(std::string connectionName)
 {
     socketOpen = false;
-    closeThread = false;
     busName = connectionName;
 }
 
@@ -20,8 +20,7 @@ CANSocket::~CANSocket()
 
 bool CANSocket::Init()
 {
-
-    #if Q_OS_ANDROID
+    #ifdef Q_OS_ANDROID
     //Now we should set up the socket connection.
     struct ifreq ifr;
     struct sockaddr_can addr;
@@ -58,9 +57,9 @@ bool CANSocket::Init()
     return true;
 }
 
-uint32 CANSocket::Run()
+void CANSocket::Run()
 {
-    #if Q_OS_ANDROID
+    #ifdef Q_OS_ANDROID
     //Allocate some space for received frames and the map iterator.
     can_frame receivedFrame;
     std::map<std::string, std::function<void(can_frame)>>::iterator it;
@@ -79,31 +78,33 @@ uint32 CANSocket::Run()
         std::this_thread::sleep_for(0.1);
     }
 	#endif
-	
-    return 0;
 }
 
 void CANSocket::Stop()
 {
-    closeThread = true;
+    CANSocket::closeThread = true;
 }
 
 bool CANSocket::isOpen() {
     return socketOpen;
 }
 
-bool CANSocket::sendFrame(can_frame frame) {
-    if (socketOpen) {
+bool CANSocket::sendFrame(can_frame frame)
+{
+    #ifdef Q_OS_ANDROID
+    if (socketOpen)
+    {
         int retval;
         retval = write(socketHandle, frame, sizeof(struct can_frame));
-        if (retval != sizeof(struct can_frame)) {
+        if (retval != sizeof(struct can_frame))
+        {
             return false;
         }
-        else {
+        else
+        {
             return true;
         }
     }
-    else {
-        return false;
-    }
+    #endif
+    return false;
 }

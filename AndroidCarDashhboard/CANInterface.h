@@ -14,6 +14,7 @@
 #include <functional>
 #include "DataProcessor.h"
 #include "canBus.h"
+#include "canSocket.h"
 
 #ifndef CANINTERFACE_H
 #define CANINTERFACE_H

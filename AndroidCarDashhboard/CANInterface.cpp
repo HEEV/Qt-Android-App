@@ -93,7 +93,7 @@ bool CANInterface::writeCANFrame(int ID, QByteArray payload)
 void CANInterface::simulateInputFrames()
 {
     QVectorIterator<simuData> simIter(simulationDataVector);
-    while(i.hasNext())
+    /*while(i.hasNext())
     {
         simuData currentData = simIter.next();
         QCanBusFrame simulatedFrame;
@@ -108,12 +108,12 @@ void CANInterface::simulateInputFrames()
         {
             qrand()
         }
-    }
+    }*/
 }
 
 void CANInterface::readFrame(can_frame frame)
 {
-    dataProcessor->routeCANFrame(frame);
+    //dataProcessor->routeCANFrame(frame);
 }
 
 bool CANInterface::activateSlcand()

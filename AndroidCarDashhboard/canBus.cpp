@@ -10,7 +10,7 @@ void CanBusModule::StartupModule()
     can = new CANSocket("can0");
 	//Now we should try to connect to the CAN bus.
     can->Init();
-    thread = new std::thread(can->Run());
+    thread = std::thread(CANSocket::Run);
 }
 
 /* This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
@@ -18,8 +18,8 @@ void CanBusModule::StartupModule()
 */
 void CanBusModule::ShutdownModule()
 {
-    thread->Stop();
-    thread->join();
+    can->Stop();
+    thread.join();
 }
 
 /** For callbacks that a UObject has sent us we should add them to the vector of callbacks the thread has to deal with. */
