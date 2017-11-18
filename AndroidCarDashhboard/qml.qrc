@@ -10,5 +10,8 @@
         <file>UIRedesign.png</file>
         <file>Guages.jpg</file>
         <file>Guages.png</file>
+        <file>RPMometer.png</file>
+        <file>Speedometer.png</file>
+        <file>Windometer.png</file>
     </qresource>
 </RCC>
