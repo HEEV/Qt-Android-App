@@ -44,4 +44,5 @@ HEADERS += \
     #QMLLib/ViewManagement.h
 
 DISTFILES += \
-    QMLLib/View.pri
+    QMLLib/View.pri \
+    Windometer.png

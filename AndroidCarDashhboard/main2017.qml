@@ -7,6 +7,8 @@ import QtQuick.Controls.Styles 1.4
 
 /*
   The main application window.
+
+  TODO: make Rectangle to hold images & CircularGauge
 */
 Window {
     id: applicationWindow
@@ -112,32 +114,39 @@ Window {
         Image {
             id: rpmometer
             source: "RPMometer.png"
-            height: parent.height*73/75;
-            anchors.verticalCenter: parent.verticalCenter
+            height: parent.height*.52;
+            fillMode: Image.PreserveAspectFit
+            anchors.verticalCenter: speedthingy.verticalCenter
+            anchors.horizontalCenter: speedthingy.left
+        }
+
+
+        Image {
+            id: windometer
+            source: "Windometer.png"
+            height: parent.height*.52;
+            fillMode: Image.PreserveAspectFit
+            anchors.verticalCenter: speedthingy.bottom
+            anchors.horizontalCenter: speedthingy.horizontalCenter
         }
 
         Image {
             id: speedthingy
             source: "Speedometer.png"
-            height: parent.height*73/75;
-            anchors.verticalCenter: parent.verticalCenter
+            height: parent.height*3/5;
+            fillMode: Image.PreserveAspectFit
+            anchors.right: parent.horizontalCenter
         }
 
-        Image {
-            id: windometer
-            source: "Windometer.png"
-            height: parent.height*73/75;
-            anchors.verticalCenter: parent.verticalCenter
-        }
 
         CircularGauge {
             id: speedometer
-            width: parent.height*7/10
-            height: parent.height*7/10
+            parent: speedthingy
+            width: parent.height
+            height: parent.height
             anchors.verticalCenter: parent.verticalCenter;
 
-            x: 216
-            y: 100
+
 
             //anchors.verticalCenter: parent.verticalCenter *.4
             //anchors.horizontalCenter: parent.horizontalCenter
