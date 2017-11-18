@@ -111,10 +111,10 @@ Window {
 
         Image {
             id: background
-            source: "Guages.jpg"
-            width: parent.width*3/4;
-            height: parent.height*3/4;
+            source: "Guages.png"
+            height: parent.height*73/75;
             fillMode: Image.PreserveAspectFit
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 }
