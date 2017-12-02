@@ -122,7 +122,7 @@ Window {
 
 
         Image {
-            id: windometer
+            id: windometerBackground
             source: "Windometer.png"
             height: parent.height*.52;
             fillMode: Image.PreserveAspectFit
@@ -138,6 +138,54 @@ Window {
             anchors.right: parent.horizontalCenter
         }
 
+
+        CircularGauge {
+            id: windometer
+            parent: windometerBackground
+            width: windometerBackground.width
+            height: windometerBackground.height
+            anchors.verticalCenter: windometerBackground.verticalCenter;
+            anchors.horizontalCenter: windometerBackground.horizontalCenter;
+
+            anchors.bottomMargin: 5
+            anchors.leftMargin: 1
+            anchors.rightMargin: 1
+
+            tickmarksVisible: true
+            maximumValue: 35
+            minimumValue: -35
+
+            value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+
+            property real values: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+
+//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+//                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
+
+            style: NewDashboardGaugeStyle
+            {
+                startingAngle: 90
+                endingAngle: 270
+                minValue: parent.minimumValue
+                maxValue: parent.maximumValue
+                lowValues: 15
+                highValues: -15
+                label: "mph"
+                values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
+            }
+
+            //Every time the number changes this is the animation to play in response.
+            Behavior on value
+            {
+                NumberAnimation
+                {
+                    //How long the animation should take in milliseconds
+                    duration: 300
+                    //The style of animation to be played.
+                    easing.type: Easing.InOutSine
+                }
+            }
+        }
 
         CircularGauge {
             id: speedometer
