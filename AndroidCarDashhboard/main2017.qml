@@ -112,7 +112,7 @@ Window {
 
 
         Image {
-            id: rpmometer
+            id: rpmometerBackground
             source: "RPMometer.png"
             height: parent.height*.52;
             fillMode: Image.PreserveAspectFit
@@ -138,6 +138,55 @@ Window {
             anchors.right: parent.horizontalCenter
         }
 
+
+        CircularGauge {
+            id: rpmometer
+            parent: rpmometerBackground
+            width: rpmometerBackground.width
+            height: rpmometerBackground.height
+            anchors.verticalCenter: rpmometerBackground.verticalCenter;
+            anchors.horizontalCenter: rpmometerBackground.horizontalCenter;
+
+            anchors.bottomMargin: 5
+            anchors.leftMargin: 1
+            anchors.rightMargin: 1
+
+            tickmarksVisible: true
+            maximumValue: 750
+            minimumValue: 0
+
+            value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+
+            property real values: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+
+//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
+//                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
+
+            style: NewDashboardGaugeStyle
+            {
+                startingAngle: 180
+                endingAngle: 360
+                stepSize: 150
+                minValue: parent.minimumValue
+                maxValue: parent.maximumValue
+                lowValues: 150
+                highValues: 600
+                label: "rpm"
+                values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
+            }
+
+            //Every time the number changes this is the animation to play in response.
+            Behavior on value
+            {
+                NumberAnimation
+                {
+                    //How long the animation should take in milliseconds
+                    duration: 300
+                    //The style of animation to be played.
+                    easing.type: Easing.InOutSine
+                }
+            }
+        }
 
         CircularGauge {
             id: windometer

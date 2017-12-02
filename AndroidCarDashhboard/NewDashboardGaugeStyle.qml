@@ -4,10 +4,12 @@ import QtQuick.Controls.Styles 1.4
 CircularGaugeStyle {
     property real startingAngle: -145
     property real endingAngle: 145
+    property real stepSize: 5
 
     tickmarkInset: 30
     minorTickmarkInset: tickmarkInset
-    labelStepSize: 5
+    tickmarkStepSize: stepSize
+    labelStepSize: stepSize
     minimumValueAngle: startingAngle
     maximumValueAngle: endingAngle
     labelInset: toPixels(0.42)
