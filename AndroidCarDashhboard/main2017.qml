@@ -147,11 +147,6 @@ Window {
             anchors.verticalCenter: speedthingy.verticalCenter;
             anchors.horizontalCenter: speedthingy.horizontalCenter;
 
-
-
-            //anchors.verticalCenter: parent.verticalCenter *.4
-            //anchors.horizontalCenter: parent.horizontalCenter
-
             anchors.bottomMargin: 5
             anchors.leftMargin: 1
             anchors.rightMargin: 1
@@ -160,20 +155,9 @@ Window {
             maximumValue: 40
             minimumValue: 0
 
-            property real lowValues: 10
-            property real highValues: 30
-
             value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
 
             property real values: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
-
-//                property real range : maximumValue - minimumValue
-//                property real valuesRatio : (values - minimumValue) / range
-//                property real startAngle : Math.PI * 0.691
-//                property real endAngle : Math.PI * 2.310
-//                property real wholeAngle : endAngle - startAngle
-//                property real needleAngleRad : startAngle + valuesRatio * wholeAngle
-//                property real needleAngle : needleAngleRad  * 180 / Math.PI
 
 //                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
 //                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
@@ -182,59 +166,11 @@ Window {
             {
                 minValue: parent.minimumValue
                 maxValue: parent.maximumValue
-                lowValues: parent.lowValues
-                highValues: parent.highValues
+                lowValues: 10
+                highValues: 30
                 label: "mph"
                 values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
             }
-
-//                Canvas
-//                {
-//                    id: speedometerValueGradient
-//                    anchors.fill: parent
-//                    antialiasing: true
-
-//                    property real startAngle : Math.PI * 0.691
-//                    property real endAngle : Math.PI * 2.310
-//                    property color lowValuesColor: "#0066FF"
-//                    property color highValuesColor: "#cc0000"
-//                    property real values: parent.values
-
-//                    function getArcGradientColor()
-//                    {
-//                        if (values <= parent.lowValues)
-//                            return Qt.rgba(lowValuesColor.r, lowValuesColor.g - ((values - parent.lowValues) / (parent.minimumValue - parent.lowValues)), lowValuesColor.b);
-//                        else if (values >= parent.highValues)
-//                            return Qt.rgba(highValuesColor.r, (1 - ((values - parent.highValues) / (parent.maximumValue - parent.highValues))) * 0.5, highValuesColor.b);
-//                        else
-//                        {
-//                            var colorRatio = (values - parent.lowValues) / (parent.highValues - parent.lowValues);
-//                            return Qt.rgba(colorRatio, 1, (1 - colorRatio) * 0.5);
-//                        }
-//                    }
-
-//                    property color targetColor : getArcGradientColor();
-//                    Behavior on targetColor
-//                    {
-//                        ColorAnimation
-//                        {
-//                            duration: 300
-//                            easing.type: Easing.InOutSine
-//                        }
-//                    }
-
-//                    onPaint:
-//                    {
-//                        var ctx = getContext("2d");
-//                        targetColor = getArcGradientColor();
-//                        ctx.reset();
-//                        ctx.beginPath();
-//                        ctx.lineWidth = 18.5;
-//                        ctx.strokeStyle = targetColor;
-//                        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 24, parent.startAngle, parent.needleAngleRad);
-//                        ctx.stroke();
-//                    }
-//                }
 
             //Every time the number changes this is the animation to play in response.
             Behavior on value

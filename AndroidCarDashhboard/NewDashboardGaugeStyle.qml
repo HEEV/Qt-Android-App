@@ -93,17 +93,20 @@ import QtQuick.Controls.Styles 1.4
 //        }
 
 CircularGaugeStyle {
+    property real startingAngle: -145
+    property real endingAngle: 145
+
     tickmarkInset: 30
     minorTickmarkInset: tickmarkInset
     labelStepSize: 5
-    minimumValueAngle: -145
-    maximumValueAngle: 145
+    minimumValueAngle: startingAngle
+    maximumValueAngle: endingAngle
     labelInset: toPixels(0.42)
 
     property real xCenter: outerRadius
     property real yCenter: outerRadius
-    property real startAngle : Math.PI * 0.691;
-    property real endAngle : Math.PI * 2.310;
+    property real startAngle : Math.PI * (minimumValueAngle - 90) / 180;
+    property real endAngle : Math.PI * (maximumValueAngle - 90) / 180;
     property real needleLength: outerRadius - tickmarkInset * 1.25
     property real needleTipWidth: toPixels(0.02)
     property real needleBaseWidth: toPixels(0.06)
