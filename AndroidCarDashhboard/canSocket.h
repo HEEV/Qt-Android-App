@@ -27,7 +27,6 @@ struct can_frame {
     uint8_t    data[8];
 };
 
-
 class CANSocket
 {
     public:

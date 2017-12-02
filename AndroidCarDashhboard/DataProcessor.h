@@ -5,6 +5,7 @@
 #include <UIRaceDataset.h>
 #include <QDebug>
 #include "CanNodeParser.h"
+#include "canSocket.h"
 #include "Logger.h"
 
 class DataProcessor
@@ -14,7 +15,7 @@ public:
 
     void setWheelCircumference(QString carName);
 
-    void routeCANFrame(QCanBusFrame frame);
+    void routeCANFrame(can_frame frame);
 
     // Setters for values that come from CANInterface
     void updateGroundSpeed(QByteArray data);
