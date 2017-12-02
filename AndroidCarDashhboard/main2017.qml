@@ -14,8 +14,8 @@ Window {
     id: applicationWindow
     visible: true
     //visibility: "FullScreen"
-    width: Screen.width
-    height: Screen.height
+    width: 1920
+    height: 1200
     title: qsTr("AndroidCANDashboard")
 
     /*
@@ -142,9 +142,10 @@ Window {
         CircularGauge {
             id: speedometer
             parent: speedthingy
-            width: parent.height
-            height: parent.height
-            anchors.verticalCenter: parent.verticalCenter;
+            width: speedthingy.width
+            height: speedthingy.height
+            anchors.verticalCenter: speedthingy.verticalCenter;
+            anchors.horizontalCenter: speedthingy.horizontalCenter;
 
 
 

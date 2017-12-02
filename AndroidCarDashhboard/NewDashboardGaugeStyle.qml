@@ -93,12 +93,12 @@ import QtQuick.Controls.Styles 1.4
 //        }
 
 CircularGaugeStyle {
-    tickmarkInset: 38
+    tickmarkInset: 30
     minorTickmarkInset: tickmarkInset
     labelStepSize: 5
     minimumValueAngle: -145
     maximumValueAngle: 145
-    labelInset: toPixels(0.30)
+    labelInset: toPixels(0.42)
 
     property real xCenter: outerRadius
     property real yCenter: outerRadius
@@ -165,60 +165,25 @@ CircularGaugeStyle {
 
     function paintBackground(ctx)
     {
-        // BACKGROUND GRADIENT
-//        var fillGradiant = ctx.createRadialGradient(xCenter, yCenter, 0.10 * (ctx.canvas.width/2),
-//                                                    xCenter, yCenter, 0.75 * (ctx.canvas.width/2));
-//        fillGradiant.addColorStop(0, outerCirclingColor);
-//        fillGradiant.addColorStop(1, backgroundColor);
-
-        // BACKGROUND CIRCLE
-//        ctx.beginPath();
-//        ctx.ellipse(0, 0, ctx.canvas.width, ctx.canvas.height);
-//        ctx.fillStyle = fillGradiant;
-//        //ctx.shadowBlur = 1;
-//        //ctx.shadowColor = outerCirclingColor;
-//        ctx.fill();
-
-        // BORDER
-//        ctx.beginPath();
-//        ctx.lineWidth = 16;
-//        ctx.strokeStyle = outerCirclingColor;
-//        ctx.ellipse(14, 14, ctx.canvas.width - 28, ctx.canvas.width - 28);
-//        ctx.stroke();
-
         // LOW VALUE ARC
         ctx.beginPath();
         ctx.lineWidth = 35;
         ctx.strokeStyle = lowValuesColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 57, startAngle, startAngle + ((lowValues - minValue) / range) * (wholeAngle));
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 47, startAngle, startAngle + ((lowValues - minValue) / range) * (wholeAngle));
         ctx.stroke();
 
         // HIGH VALUE ARC
         ctx.beginPath();
         ctx.lineWidth = 35;
         ctx.strokeStyle = highValuesColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 57, endAngle - (((range  - (highValues - minValue)) / range) * (wholeAngle)), endAngle);
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 47, endAngle - (((range  - (highValues - minValue)) / range) * (wholeAngle)), endAngle);
         ctx.stroke();
-
-        // BORDER WHITE CIRCLE
-//        ctx.beginPath();
-//        ctx.lineWidth = 8;
-//        ctx.strokeStyle = innerCirclingColor;
-//        ctx.ellipse(19, 19, ctx.canvas.width - 38, ctx.canvas.height - 38);
-//        ctx.stroke();
-
-        // OUTER CIRCLE ARC FOR VALUES
-//        ctx.beginPath();
-//        ctx.lineWidth = 7.5;
-//        ctx.strokeStyle = innerCirclingColor;
-//        ctx.ellipse(37, 37, ctx.canvas.width - 74, ctx.canvas.height - 74);
-//        ctx.stroke();
 
         // INNER WHITE ARC FOR VALUES
         ctx.beginPath();
         ctx.lineWidth = 6;
         ctx.strokeStyle = innerCirclingColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 75, startAngle, endAngle);
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 66.5, startAngle, endAngle);
         ctx.stroke();
     }
 
