@@ -49,6 +49,7 @@ void DataProcessor::routeCANFrame(QCanBusFrame frame)
 {
     int id = frame.frameId();
     QByteArray data = frame.payload();
+    logger->println("Got Frame ID: " + QString::number(id).toStdString());
     //qDebug() << "Frame ID: " << QString::number(id) << "\n";
 
     // For efficienty, these cases should be ordered with the most

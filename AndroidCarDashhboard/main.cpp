@@ -21,7 +21,7 @@
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
-static const bool simulateInput = true;
+static const bool simulateInput = false;
 
 
 #ifdef Q_OS_ANDROID

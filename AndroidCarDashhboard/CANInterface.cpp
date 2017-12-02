@@ -113,7 +113,7 @@ void CANInterface::simulateInputFrames()
 
 void CANInterface::readFrame(can_frame frame)
 {
-    //dataProcessor->routeCANFrame(frame);
+    dataProcessor->routeCANFrame(frame);
 }
 
 bool CANInterface::activateSlcand()
