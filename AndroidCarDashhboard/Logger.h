@@ -17,7 +17,7 @@ public:
     explicit Logger(string logFileName, QObject *parent = 0);
     ~Logger();
 
-     QString getLog();
+    QString getLog();
     void println(string message);
     void println(QString message);
 
