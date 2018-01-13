@@ -15,10 +15,10 @@ Window {
     id: applicationWindow
     visible: true
     //visibility: "FullScreen"
-    maximumWidth: 1920
-    maximumHeight: 1200
-    minimumWidth: 1920
-    minimumHeight: 1200
+    maximumWidth: 1920/2
+    maximumHeight: 1200/2
+    minimumWidth: 1920/2
+    minimumHeight: 1200/2
 
     title: qsTr("AndroidCANDashboard")
 
@@ -115,40 +115,64 @@ Window {
         height: parent.height
 
 
-        Image {
-            id: rpmometerBackground
-            source: "RPMometer.png"
-            height: parent.height*.52;
-            fillMode: Image.PreserveAspectFit
-            anchors.verticalCenter: speedometerBackground.verticalCenter
-            anchors.horizontalCenter: speedometerBackground.left
+
+        Rectangle {
+            id:speedometerPositioner
+            color: "black"
+            x: 903.2/2
+            y: 411.8/2
         }
 
+        Rectangle {
+            id:rpmPositioner
+            color: "black"
+            width: parent.width * .40
+            height: parent.height
+            anchors.right: parent.right
+        }
+
+        Rectangle {
+            id:windometerPositioner
+            color: "black"
+            width: parent.width * .40
+            height: parent.height
+            anchors.right: parent.right
+        }
 
         Image {
             id: windometerBackground
             source: "Windometer.png"
-            height: parent.height*.52;
+            height: parent.height * 0.52
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: speedometerBackground.bottom
             anchors.horizontalCenter: speedometerBackground.horizontalCenter
         }
 
         Image {
+            id: rpmometerBackground
+            source: "RPMometer.png"
+            height: parent.height * 0.52
+            fillMode: Image.PreserveAspectFit
+
+            anchors.top:  speedometerBackground.top
+            anchors.horizontalCenter: speedometerBackground.left
+        }
+
+        Image {
             id: speedometerBackground
             source: "Speedometer.png"
-            height: parent.height*3/5;
+            height: parent.height * 0.6
             fillMode: Image.PreserveAspectFit
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: -90
+            anchors.horizontalCenter: speedometerPositioner.horizontalCenter
+            anchors.verticalCenter: speedometerPositioner.verticalCenter
         }
 
 
         CircularGauge {
             id: rpmometer
             parent: rpmometerBackground
-            width: rpmometerBackground.width
-            height: rpmometerBackground.height
+            width: rpmometerBackground.width * 0.9
+            height: rpmometerBackground.height * 0.9
             anchors.verticalCenter: rpmometerBackground.verticalCenter;
             anchors.horizontalCenter: rpmometerBackground.horizontalCenter;
 
@@ -196,8 +220,8 @@ Window {
         CircularGauge {
             id: windometer
             parent: windometerBackground
-            width: windometerBackground.width
-            height: windometerBackground.height
+            width: windometerBackground.width * 0.9
+            height: windometerBackground.height * 0.9
             anchors.verticalCenter: windometerBackground.verticalCenter;
             anchors.horizontalCenter: windometerBackground.horizontalCenter;
 
@@ -218,12 +242,14 @@ Window {
 
             style: NewDashboardGaugeStyle
             {
-                startingAngle: 90
-                endingAngle: 270
+                startingAngle: 270
+                endingAngle: 90
+                reverseArc: true
                 minValue: parent.minimumValue
                 maxValue: parent.maximumValue
-                lowValues: 15
-                highValues: -15
+                stepSize: 10
+                lowValues: -15
+                highValues: 15
                 label: "mph"
                 values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
             }
@@ -244,8 +270,8 @@ Window {
         CircularGauge {
             id: speedometer
             parent: speedometerBackground
-            width: speedometerBackground.width
-            height: speedometerBackground.height
+            width: speedometerBackground.width * 0.9
+            height: speedometerBackground.height * 0.9
             anchors.verticalCenter: speedometerBackground.verticalCenter;
             anchors.horizontalCenter: speedometerBackground.horizontalCenter;
 

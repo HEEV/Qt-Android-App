@@ -6,13 +6,15 @@ CircularGaugeStyle {
     property real endingAngle: 145
     property real stepSize: 5
 
-    tickmarkInset: 30
+    tickmarkInset: 10
     minorTickmarkInset: tickmarkInset
     tickmarkStepSize: stepSize
     labelStepSize: stepSize
     minimumValueAngle: startingAngle
     maximumValueAngle: endingAngle
-    labelInset: toPixels(0.42)
+    labelInset: toPixels(0.32)
+
+    property bool reverseArc: false
 
     property real xCenter: outerRadius
     property real yCenter: outerRadius
@@ -83,21 +85,21 @@ CircularGaugeStyle {
         ctx.beginPath();
         ctx.lineWidth = 35;
         ctx.strokeStyle = lowValuesColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 47, startAngle, startAngle + ((lowValues - minValue) / range) * (wholeAngle));
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, parent.height/2 - 17.5, startAngle, startAngle + ((lowValues - minValue) / range) * (wholeAngle), reverseArc);
         ctx.stroke();
 
         // HIGH VALUE ARC
         ctx.beginPath();
         ctx.lineWidth = 35;
         ctx.strokeStyle = highValuesColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 47, endAngle - (((range  - (highValues - minValue)) / range) * (wholeAngle)), endAngle);
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, parent.height/2 - 17.5, endAngle - (((range  - (highValues - minValue)) / range) * (wholeAngle)), endAngle, reverseArc);
         ctx.stroke();
 
         // INNER WHITE ARC FOR VALUES
         ctx.beginPath();
         ctx.lineWidth = 6;
         ctx.strokeStyle = innerCirclingColor;
-        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, ctx.canvas.width/2 - 66.5, startAngle, endAngle);
+        ctx.arc(ctx.canvas.width/2, ctx.canvas.height/2, parent.height/2 - 3, startAngle, endAngle, reverseArc);
         ctx.stroke();
     }
 
