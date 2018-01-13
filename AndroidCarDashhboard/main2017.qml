@@ -10,12 +10,16 @@ import QtQuick.Controls.Styles 1.4
 
   TODO: make Rectangle to hold images & CircularGauge
 */
+
 Window {
     id: applicationWindow
     visible: true
     //visibility: "FullScreen"
-    width: 1920
-    height: 1200
+    maximumWidth: 1920
+    maximumHeight: 1200
+    minimumWidth: 1920
+    minimumHeight: 1200
+
     title: qsTr("AndroidCANDashboard")
 
     /*
@@ -116,8 +120,8 @@ Window {
             source: "RPMometer.png"
             height: parent.height*.52;
             fillMode: Image.PreserveAspectFit
-            anchors.verticalCenter: speedthingy.verticalCenter
-            anchors.horizontalCenter: speedthingy.left
+            anchors.verticalCenter: speedometerBackground.verticalCenter
+            anchors.horizontalCenter: speedometerBackground.left
         }
 
 
@@ -126,16 +130,17 @@ Window {
             source: "Windometer.png"
             height: parent.height*.52;
             fillMode: Image.PreserveAspectFit
-            anchors.verticalCenter: speedthingy.bottom
-            anchors.horizontalCenter: speedthingy.horizontalCenter
+            anchors.verticalCenter: speedometerBackground.bottom
+            anchors.horizontalCenter: speedometerBackground.horizontalCenter
         }
 
         Image {
-            id: speedthingy
+            id: speedometerBackground
             source: "Speedometer.png"
             height: parent.height*3/5;
             fillMode: Image.PreserveAspectFit
             anchors.right: parent.horizontalCenter
+            anchors.rightMargin: -90
         }
 
 
@@ -238,11 +243,11 @@ Window {
 
         CircularGauge {
             id: speedometer
-            parent: speedthingy
-            width: speedthingy.width
-            height: speedthingy.height
-            anchors.verticalCenter: speedthingy.verticalCenter;
-            anchors.horizontalCenter: speedthingy.horizontalCenter;
+            parent: speedometerBackground
+            width: speedometerBackground.width
+            height: speedometerBackground.height
+            anchors.verticalCenter: speedometerBackground.verticalCenter;
+            anchors.horizontalCenter: speedometerBackground.horizontalCenter;
 
             anchors.bottomMargin: 5
             anchors.leftMargin: 1
