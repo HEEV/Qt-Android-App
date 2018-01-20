@@ -24,12 +24,9 @@
 class CanBusModule
 {
 public:
-
-	/** IModuleInterface implementation */
     virtual void StartupModule();
     virtual void ShutdownModule();
 
-	/** For callbacks that a UObject has sent us we should add them to the vector of callbacks the thread has to deal with. */
 	static bool registerCallback(std::string name, std::function<void(can_frame)> callback);
 
 	//CAN bus interface.
@@ -39,8 +36,7 @@ public:
     bool sendErrorFrame(int id, int data[], int size);
 
 private:
-    std::thread thread;
-	CANSocket* can;
+    int threadID;
 };
 
 

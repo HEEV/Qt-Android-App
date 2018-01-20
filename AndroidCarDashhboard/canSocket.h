@@ -17,8 +17,10 @@
 #include <iomanip>
 #include <map>
 #include <thread>
+#include <vector>
 
-struct can_frame {
+struct can_frame
+{
     uint32_t   can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
     uint8_t    can_dlc; /* frame payload length in byte (0 .. CAN_MAX_DLEN) */
     uint8_t    __pad;   /* padding */
@@ -27,30 +29,30 @@ struct can_frame {
     uint8_t    data[8];
 };
 
+struct canThread
+{
+    volatile bool stop;
+    int socketHandle;
+    bool socketOpen;
+    std::string busName;
+    std::thread *actualThread;
+};
+
 class CANSocket
 {
     public:
-        CANSocket();
-        CANSocket(std::string connectionName);
-        ~CANSocket();
+        static int Init(std::string connectionName);
+        static void Run(int threadNumber);
+        static void Stop(int threadNumber);
 
-        // Begin FRunnable interface.
-        bool Init();
-        static void Run();
-        void Stop();
-	    // End FRunnable interface
+        static bool isOpen(int threadNumber);
+        static bool sendFrame(can_frame frame, int threadNumber);
 
-        bool isOpen();
-        bool sendFrame(can_frame frame);
-
-        static std::map<std::string ,std::function<void(can_frame)>> callbacks;
+        static std::map<std::string, std::function<void(can_frame)>> callbacks;
+        static std::vector<struct canThread*> activeThreads;
 
     protected:
 
     private:
-        int socketHandle;
-        bool socketOpen;
-        volatile static bool closeThread;
-        std::string busName;
-        
+        static int socketHandle;
 };

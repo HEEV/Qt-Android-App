@@ -1,24 +1,9 @@
 #include "canSocket.h"
 
 std::map<std::string ,std::function<void(can_frame)>> CANSocket::callbacks;
-volatile bool CANSocket::closeThread = false;
+std::vector<struct canThread*> CANSocket::activeThreads;
 
-CANSocket::CANSocket()
-{
-    CANSocket("can0");
-}
-
-CANSocket::CANSocket(std::string connectionName)
-{
-    socketOpen = false;
-    busName = connectionName;
-}
-
-CANSocket::~CANSocket()
-{
-}
-
-bool CANSocket::Init()
+int CANSocket::Init(std::string connectionName)
 {
     #ifdef Q_OS_ANDROID
     //Now we should set up the socket connection.
@@ -48,25 +33,36 @@ bool CANSocket::Init()
     {
         return false;
     }
+
+
     //If we made it here the socket is set up and ready to go.
-    socketOpen = true;
+    //Now we should create the new thread to use.
+    canThread *newThreadEntry = new canThread;
+    newThreadEntr->stop = false;
+    newThreadEntry->socketHandle = socketHandle;
+    newThreadEntry->socketOpen = true;
+    newThreadEntry->busName = connectionName;
+    activeThreads.push_back(newThreadEntry);
+    std::thread *tempThreadPointer = new std::thread(CANSocket::Run, activeThreads.size() - 1);
+    newThreadEntry->actualThread = tempThreadPointer;
 	
+    return activeThreads.size() - 1;
 	#endif
 	
 	
-    return true;
+    return -1;
 }
 
-void CANSocket::Run()
+void CANSocket::Run(int index)
 {
     #ifdef Q_OS_ANDROID
     //Allocate some space for received frames and the map iterator.
     can_frame receivedFrame;
     std::map<std::string, std::function<void(can_frame)>>::iterator it;
 
-    while(!closeThread)
+    while(!activeThreads.at(threadNumber)->stop)
     {
-        while(read(socketHandle, &receivedFrame, sizeof(can_frame)) > 0)
+        while(read(activeThreads.at(threadNumber)->socketHandle, &receivedFrame, sizeof(can_frame)) > 0)
         {
             for(it = callbacks.begin(); it != callbacks.end(); it++)
             {
@@ -80,22 +76,31 @@ void CANSocket::Run()
 	#endif
 }
 
-void CANSocket::Stop()
+void CANSocket::Stop(int threadNumber)
 {
-    CANSocket::closeThread = true;
+    activeThreads.at(threadNumber)->stop = true;
+    activeThreads.at(threadNumber)->actualThread->join();
 }
 
-bool CANSocket::isOpen() {
-    return socketOpen;
+bool CANSocket::isOpen(int threadNumber)
+{
+    if(threadNumber < activeThreads.size())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-bool CANSocket::sendFrame(can_frame frame)
+bool CANSocket::sendFrame(can_frame frame, int threadNumber)
 {
     #ifdef Q_OS_ANDROID
-    if (socketOpen)
+    if(isOpen(threadNumber))
     {
         int retval;
-        retval = write(socketHandle, frame, sizeof(struct can_frame));
+        retval = write(activeThreads.at(threadNumber)->socketHandle, frame, sizeof(struct can_frame));
         if (retval != sizeof(struct can_frame))
         {
             return false;
