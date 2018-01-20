@@ -4,6 +4,11 @@
 #include <QObject>
 #include <QTimer>
 #include <QTime>
+#include <sys/
+
+#ifdef Q_OS_ANDROID
+    #include <sys/system_properties.h>
+#endif
 
 //Removes annoying circular dependancy issue.
 class RaceActionManager;
@@ -66,6 +71,8 @@ private:
     QTimer *averageSpeedTimer;
     QTime totalRaceTime;
     QTime currentLapTime;
+
+    char model_string[20];
 
 };
 

@@ -202,22 +202,26 @@ void RaceActionManager::sendInfoToServer()
     if (network->isConnected())
     {
         QGeoCoordinate currentCoordinate = uiInterface->getGPSInfo().coordinate();
-        QJsonObject gpsMessage;
-        gpsMessage.insert("latitude", QJsonValue(currentCoordinate.latitude()));
-        gpsMessage.insert("longitude", QJsonValue(currentCoordinate.longitude()));
+
         // I'm guessing we don't actually need to know altitude
         //gpsMessage.insert("altitude", QJsonValue(currentCoordinate.altitude()));
 
         QJsonObject mainMessage;
-        mainMessage.insert("carName", uiInterface->getCarName());
-        mainMessage.insert("currentLap", uiInterface->getCurrentLapNumber());
-        mainMessage.insert("time", totalRaceTime.elapsed());
-        mainMessage.insert("lastLapTime", uiInterface->getLastLapTime());
-        mainMessage.insert("groundSpeed", uiInterface->getGroundSpeed());
-        mainMessage.insert("windSpeed", uiInterface->getWindSpeed());
-        mainMessage.insert("averageSpeed", uiInterface->getAverageSpeed());
-        mainMessage.insert("coordinate", gpsMessage);
-
+        mainMessage.insert("AndroidId", "placeholder");
+        mainMessage.insert("BatteryVoltage", 1.0);
+        mainMessage.insert("carId", uiInterface->getCarName());
+        mainMessage.insert("GroundSpeed", uiInterface->getGroundSpeed());
+        mainMessage.insert("Id", 1);
+        mainMessage.insert("IntakeTemperature", 30);
+        mainMessage.insert("LKillSwitch", "placeholder");
+        mainMessage.insert("Latitude", QJsonValue(currentCoordinate.latitude()));
+        mainMessage.insert("LogTime", uiInterface->getTotalTime());
+        mainMessage.insert("Longitude", QJsonValue(currentCoordinate.longitude()));
+        mainMessage.insert("MKillSwitch", "placeholder");
+        mainMessage.insert("RKillSwitch", "placeholder");
+        mainMessage.insert("SecondaryBatteryVoltage", );
+        mainMessage.insert("WheelRpm", 30);
+        mainMessage.insert("WindSpeed", uiInterface->getWindSpeed());
         network->sendJSON(mainMessage);
     }
 }
