@@ -41,6 +41,9 @@ CircularGaugeStyle {
     property real wholeAngle : endAngle - startAngle
     property string label: ""
     property bool tickmarkLabelVisible: true
+    property bool centerLabelVisible: true
+
+    property bool vertHalf: false
 
     function toPixels(percentage) {
         return percentage * outerRadius;
@@ -114,6 +117,7 @@ CircularGaugeStyle {
         Text
         {
             id: speedText
+            visible: centerLabelVisible
             font.pixelSize: toPixels(0.3)
             text: kphInt
             color: "white"
@@ -126,10 +130,34 @@ CircularGaugeStyle {
         }
         Text
         {
+            visible: centerLabelVisible
             text: label
             color: "white"
             font.pixelSize: toPixels(0.10)
             anchors.top: speedText.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Text
+        {
+            visible: !centerLabelVisible && vertHalf
+            text: label
+            color: "white"
+            font.pixelSize: toPixels(0.14)
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.left
+            anchors.horizontalCenterOffset: toPixels(.72)
+        }
+
+        Text
+        {
+            visible: !centerLabelVisible && !vertHalf
+            text: label
+            color: "white"
+            font.pixelSize: toPixels(0.14)
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: speedText.bottom
+            anchors.topMargin: -50
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }

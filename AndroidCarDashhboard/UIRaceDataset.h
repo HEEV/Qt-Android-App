@@ -28,6 +28,8 @@ class UIRaceDataset : public QObject
 public:
     explicit UIRaceDataset(QObject *parent = 0);
 
+    void setBatteryState(int voltage);
+
     QString getCarName();
     void setCarName(QString name);
 
@@ -75,6 +77,13 @@ public:
     void setWindSpeed(qreal speed);
     qreal getWindSpeed();
 
+    enum BatteryStates {
+        critical,
+        urgent,
+        caution,
+        good
+    };
+
 private:
     // Used by DataProcessor to choose whether to use Urbie's wheel circumference or
     // Sting's wheel circumference when calculating ground speed.
@@ -97,6 +106,8 @@ private:
     bool isFinalLap;
     qreal windSpeed;
     static const int FINAL_LAP_NUMBER;
+    BatteryStates batteryState;
+
 
 signals:
     void carNameNotify();

@@ -16,6 +16,24 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     lastLapTime = "00:00";
     currentLapNumber = 1;
     isFinalLap = false;
+    batteryState = BatteryStates.good;
+}
+
+void UIRaceDataset::setBatteryState(int voltage) {
+    int critical = 10;
+    int urgent = 20;
+    int caution = 30;
+    int good = 40;
+
+    if (voltage < critical) {
+        batteryState = BatteryStates.critical;
+    } else if (voltage < urgent) {
+        batteryState = BatteryStates.urgent;
+    } else if (voltage < caution) {
+        batteryState = BatteryStates.caution;
+    } else {
+        batteryState = BatteryStates.good;
+    }
 }
 
 QString UIRaceDataset::getCarName()

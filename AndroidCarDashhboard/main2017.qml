@@ -134,6 +134,12 @@ Window {
             anchors.right: speedometerPositioner.right
         }
 
+        Rectangle {
+            id:iconPositioner
+            color: "black"
+            x: 500/applicationWindow.scale
+            y: 750/applicationWindow.scale
+        }
 
         Image {
             id: windometerBackground
@@ -163,7 +169,24 @@ Window {
             anchors.verticalCenter: speedometerPositioner.verticalCenter
         }
 
+        Image {
+            id: batteryImage
+            source: "BatteryGood.png"
+            height: parent.height * .07
+            fillMode: Image.PreserveAspectFit
+            anchors.horizontalCenter: iconPositioner.horizontalCenter
+            anchors.verticalCenter: iconPositioner.verticalCenter
+        }
 
+        Image {
+            id: engineImage
+            source: "EngineBad.png"
+            height: parent.height * .07
+            fillMode: Image.PreserveAspectFit
+            anchors.horizontalCenter: iconPositioner.horizontalCenter
+            anchors.top: batteryImage.bottom
+            anchors.topMargin: 25
+        }
 
 
         CircularGauge {
@@ -191,6 +214,8 @@ Window {
 
             style: NewDashboardGaugeStyle
             {
+                centerLabelVisible: false
+                vertHalf: true
                 startingAngle: 180
                 endingAngle: 360
                 stepSize: 150
@@ -240,6 +265,7 @@ Window {
 
             style: NewDashboardGaugeStyle
             {
+                centerLabelVisible: false
                 startingAngle: 270
                 endingAngle: 90
                 reverseArc: true
@@ -310,5 +336,8 @@ Window {
                 }
             }
         }
+
+
+
     }
 }

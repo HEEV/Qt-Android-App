@@ -13,5 +13,10 @@
         <file>RPMometer.png</file>
         <file>Speedometer.png</file>
         <file>Windometer.png</file>
+        <file>BatteryCaution.png</file>
+        <file>BatteryCritical.png</file>
+        <file>BatteryGood.png</file>
+        <file>BatteryUrgent.png</file>
+        <file>EngineBad.png</file>
     </qresource>
 </RCC>
