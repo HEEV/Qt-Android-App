@@ -12,13 +12,16 @@ import QtQuick.Controls.Styles 1.4
 */
 
 Window {
+    property real scale: 2
+
     id: applicationWindow
     visible: true
     //visibility: "FullScreen"
-    maximumWidth: 1920/2
-    maximumHeight: 1200/2
-    minimumWidth: 1920/2
-    minimumHeight: 1200/2
+
+    maximumWidth: 1920/scale
+    maximumHeight: 1200/scale
+    minimumWidth: 1920/scale
+    minimumHeight: 1200/scale
 
     title: qsTr("AndroidCANDashboard")
 
@@ -119,33 +122,26 @@ Window {
         Rectangle {
             id:speedometerPositioner
             color: "black"
-            x: 903.2/2
-            y: 411.8/2
+            x: 903.2/applicationWindow.scale
+            y: 411.8/applicationWindow.scale
         }
 
         Rectangle {
             id:rpmPositioner
             color: "black"
-            width: parent.width * .40
+            width: (speedometerBackground.width / 2) - 2
             height: parent.height
-            anchors.right: parent.right
+            anchors.right: speedometerPositioner.right
         }
 
-        Rectangle {
-            id:windometerPositioner
-            color: "black"
-            width: parent.width * .40
-            height: parent.height
-            anchors.right: parent.right
-        }
 
         Image {
             id: windometerBackground
             source: "Windometer.png"
             height: parent.height * 0.52
             fillMode: Image.PreserveAspectFit
+            anchors.horizontalCenter: speedometerPositioner.horizontalCenter
             anchors.verticalCenter: speedometerBackground.bottom
-            anchors.horizontalCenter: speedometerBackground.horizontalCenter
         }
 
         Image {
@@ -153,9 +149,8 @@ Window {
             source: "RPMometer.png"
             height: parent.height * 0.52
             fillMode: Image.PreserveAspectFit
-
             anchors.top:  speedometerBackground.top
-            anchors.horizontalCenter: speedometerBackground.left
+            anchors.horizontalCenter: rpmPositioner.left
         }
 
         Image {
@@ -164,8 +159,11 @@ Window {
             height: parent.height * 0.6
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: speedometerPositioner.horizontalCenter
+            anchors.horizontalCenterOffset: -1
             anchors.verticalCenter: speedometerPositioner.verticalCenter
         }
+
+
 
 
         CircularGauge {
