@@ -4,6 +4,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
+import QtLocation 5.6
+import QtPositioning 5.6
 
 /*
   The main application window.
@@ -12,7 +14,7 @@ import QtQuick.Controls.Styles 1.4
 */
 
 Window {
-    property real scale: 2
+    property real scale: 1
 
     id: applicationWindow
     visible: true
@@ -117,8 +119,6 @@ Window {
         width: parent.width
         height: parent.height
 
-
-
         Rectangle {
             id:speedometerPositioner
             color: "black"
@@ -171,7 +171,7 @@ Window {
 
         Image {
             id: batteryImage
-            source: "BatteryGood.png"
+            source: UIRaceDataset.batteryState
             height: parent.height * .07
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: iconPositioner.horizontalCenter
@@ -337,7 +337,30 @@ Window {
             }
         }
 
+        Rectangle {
+            id: mapRectangle
+            height: parent.height
+            width: parent.width - speedometer.width - rpmometer.width -batteryImage.width
+            anchors.right: parent.right
 
+            Plugin {
+                id: mapPlugin
+                name: "osm" // "mapboxgl", "esri", ...
+                // specify plugin parameters if necessary
+                PluginParameter {
+                     name: "osm.mapping.host"
+                     value: "http://163.11.136.233"
+                  }
+            }
 
+            Map {
+                anchors.fill: parent
+                bearing: -45
+                plugin: mapPlugin
+                center: QtPositioning.coordinate(38.161724, -122.456705) // Sonoma
+                zoomLevel: 16.5
+                gesture.enabled: false
+            }
+        }
     }
 }

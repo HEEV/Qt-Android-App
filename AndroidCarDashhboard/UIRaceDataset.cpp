@@ -2,6 +2,11 @@
 
 const int UIRaceDataset::FINAL_LAP_NUMBER = 10;
 
+QString BatteryStates::CRITICAL = "BatteryCritical.png";
+QString BatteryStates::URGENT   = "BatteryUrgent.png";
+QString BatteryStates::CAUTION  = "BatteryCaution.png";
+QString BatteryStates::GOOD     = "BatteryGood.png";
+
 UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
 {
     //Set defaults.
@@ -15,24 +20,27 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     currentLapTime = "00:00";
     lastLapTime = "00:00";
     currentLapNumber = 1;
+    batteryState = BatteryStates::GOOD;
     isFinalLap = false;
-    batteryState = BatteryStates.good;
 }
 
 void UIRaceDataset::setBatteryState(int voltage) {
     int critical = 10;
     int urgent = 20;
     int caution = 30;
-    int good = 40;
 
     if (voltage < critical) {
-        batteryState = BatteryStates.critical;
+        batteryState = BatteryStates::CRITICAL;
+        batteryStateNotify();
     } else if (voltage < urgent) {
-        batteryState = BatteryStates.urgent;
+        batteryState = BatteryStates::URGENT;
+        batteryStateNotify();
     } else if (voltage < caution) {
-        batteryState = BatteryStates.caution;
+        batteryState = BatteryStates::CAUTION;
+        batteryStateNotify();
     } else {
-        batteryState = BatteryStates.good;
+        batteryState = BatteryStates::GOOD;
+        batteryStateNotify();
     }
 }
 
@@ -198,4 +206,14 @@ void UIRaceDataset::setWindSpeed(qreal speed)
 qreal UIRaceDataset::getWindSpeed()
 {
     return windSpeed;
+}
+
+QString UIRaceDataset::getBatteryState()
+{
+    return batteryState;
+}
+
+void UIRaceDataset::setBatteryState(QString status)
+{
+    batteryState = status;
 }
