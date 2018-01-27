@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef Q_OS_ANDROID
+#ifndef Q_OS_WINDOWS
 /*Linux includes*/
 #include <sys/ioctl.h>
 #include <net/if.h>

@@ -3,9 +3,10 @@
 std::map<std::string ,std::function<void(can_frame)>> CANSocket::callbacks;
 std::vector<struct canThread*> CANSocket::activeThreads;
 
+
 int CANSocket::Init(std::string connectionName)
 {
-    #ifdef Q_OS_ANDROID
+#ifndef Q_OS_WINDOWS
     //Now we should set up the socket connection.
     struct ifreq ifr;
     struct sockaddr_can addr;
@@ -18,7 +19,7 @@ int CANSocket::Init(std::string connectionName)
     
     //Select the type of CAN port we want to use. Basic non-extended is fine.
     addr.can_family = AF_CAN;
-    strcpy(ifr.ifr_name, busName.c_str());
+    strcpy(ifr.ifr_name, connectionName.c_str());
 
     //check if the socket is valid.
     if(ioctl(socketHandle, SIOCGIFINDEX, &ifr) < 0)
@@ -38,7 +39,7 @@ int CANSocket::Init(std::string connectionName)
     //If we made it here the socket is set up and ready to go.
     //Now we should create the new thread to use.
     canThread *newThreadEntry = new canThread;
-    newThreadEntr->stop = false;
+    newThreadEntry->stop = false;
     newThreadEntry->socketHandle = socketHandle;
     newThreadEntry->socketOpen = true;
     newThreadEntry->busName = connectionName;
@@ -47,15 +48,14 @@ int CANSocket::Init(std::string connectionName)
     newThreadEntry->actualThread = tempThreadPointer;
 	
     return activeThreads.size() - 1;
-	#endif
-	
-	
+
+#endif
     return -1;
 }
 
 void CANSocket::Run(int index)
 {
-    #ifdef Q_OS_ANDROID
+#ifndef Q_OS_WINDOWS
     //Allocate some space for received frames and the map iterator.
     can_frame receivedFrame;
     std::map<std::string, std::function<void(can_frame)>>::iterator it;
@@ -71,9 +71,9 @@ void CANSocket::Run(int index)
             }
         }
         //If we are not currently receiving a frame we should sleep for a half a second.
-        std::this_thread::sleep_for(0.1);
+        std::this_thread::yeald();
     }
-	#endif
+#endif
 }
 
 void CANSocket::Stop(int threadNumber)
@@ -96,7 +96,7 @@ bool CANSocket::isOpen(int threadNumber)
 
 bool CANSocket::sendFrame(can_frame frame, int threadNumber)
 {
-    #ifdef Q_OS_ANDROID
+#ifndef Q_OS_WINDOWS
     if(isOpen(threadNumber))
     {
         int retval;
@@ -110,6 +110,6 @@ bool CANSocket::sendFrame(can_frame frame, int threadNumber)
             return true;
         }
     }
-    #endif
+#endif
     return false;
 }

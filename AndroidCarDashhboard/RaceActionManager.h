@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QTimer>
 #include <QTime>
-#include <sys/
 
 #ifdef Q_OS_ANDROID
     #include <sys/system_properties.h>

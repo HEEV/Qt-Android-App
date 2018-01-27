@@ -219,7 +219,7 @@ void RaceActionManager::sendInfoToServer()
         mainMessage.insert("Longitude", QJsonValue(currentCoordinate.longitude()));
         mainMessage.insert("MKillSwitch", "placeholder");
         mainMessage.insert("RKillSwitch", "placeholder");
-        mainMessage.insert("SecondaryBatteryVoltage", );
+        mainMessage.insert("SecondaryBatteryVoltage", "placeholder");
         mainMessage.insert("WheelRpm", 30);
         mainMessage.insert("WindSpeed", uiInterface->getWindSpeed());
         network->sendJSON(mainMessage);
