@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtLocation 5.6
 import QtPositioning 5.6
+import QtQuick.Particles 2.0
 
 /*
   The main application window.
@@ -141,6 +142,14 @@ Window {
             y: 750/applicationWindow.scale
         }
 
+        Button {
+            id: menuBtn
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.margins: 50
+            text: "MENU"
+        }
+
         Image {
             id: windometerBackground
             source: "Windometer.png"
@@ -148,6 +157,14 @@ Window {
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: speedometerPositioner.horizontalCenter
             anchors.verticalCenter: speedometerBackground.bottom
+        }
+
+        StatusIndicator
+        {
+            id: windometerCenter
+            color: "#5e5e5e"
+            anchors.verticalCenter: windometerBackground.verticalCenter
+            anchors.horizontalCenter: windometerBackground.horizontalCenter
         }
 
         Image {
@@ -159,6 +176,14 @@ Window {
             anchors.horizontalCenter: rpmPositioner.left
         }
 
+        StatusIndicator
+        {
+            id: rpmometerCenter
+            color: "#5e5e5e"
+            anchors.verticalCenter: rpmometerBackground.verticalCenter
+            anchors.horizontalCenter: rpmometerBackground.horizontalCenter
+        }
+
         Image {
             id: speedometerBackground
             source: "Speedometer.png"
@@ -167,6 +192,14 @@ Window {
             anchors.horizontalCenter: speedometerPositioner.horizontalCenter
             anchors.horizontalCenterOffset: -1
             anchors.verticalCenter: speedometerPositioner.verticalCenter
+        }
+
+        StatusIndicator
+        {
+            id: speedometerCenter
+            color: "#5e5e5e"
+            anchors.verticalCenter: speedometerBackground.verticalCenter
+            anchors.horizontalCenter: speedometerBackground.horizontalCenter
         }
 
         Image {
@@ -190,6 +223,8 @@ Window {
 
 
         CircularGauge {
+            visible: false
+
             id: rpmometer
             parent: rpmometerBackground
             width: rpmometerBackground.width * 0.9
@@ -241,6 +276,8 @@ Window {
         }
 
         CircularGauge {
+            visible: false
+
             id: windometer
             parent: windometerBackground
             width: windometerBackground.width * 0.9
@@ -292,6 +329,8 @@ Window {
         }
 
         CircularGauge {
+            visible: false
+
             id: speedometer
             parent: speedometerBackground
             width: speedometerBackground.width * 0.9
@@ -336,6 +375,208 @@ Window {
                 }
             }
         }
+
+
+        // menu elements
+
+        Rectangle {
+            id:statusLights
+
+            height: rpmometer.height / 2 - 100
+            anchors.right: rpmometerBackground.horizontalCenter
+            anchors.verticalCenter: rpmometerBackground.verticalCenter
+            anchors.rightMargin: 200
+
+            Rectangle {
+                id: canStatus
+
+                StatusIndicator
+                {
+                    id: canIndicator
+                    color: "#5e5e5e"
+                    active: UIRaceDataset.canStatus
+
+                }
+
+                Text {
+                    text: "CAN"
+                    font.bold: true
+                    font.pointSize: 20
+                    anchors.left: canIndicator.right
+                    anchors.verticalCenter: canIndicator.verticalCenter
+                    anchors.leftMargin: 10
+                    color: "#FFFFFF"
+                }
+            }
+
+            Rectangle {
+                id: networkStatus
+                anchors.top: canStatus.bottom
+                anchors.topMargin: 75
+
+                StatusIndicator
+                {
+                    id: networkIndicator
+                    color: "#5e5e5e"
+                    active: UIRaceDataset.networkStatus
+
+                }
+
+                Text {
+                    text: "Network"
+                    font.bold: true
+                    font.pointSize: 20
+                    anchors.left: networkIndicator.right
+                    anchors.verticalCenter: networkIndicator.verticalCenter
+                    anchors.leftMargin: 10
+                    color: "#FFFFFF"
+                }
+            }
+
+            Rectangle {
+                id: efiStatus
+                anchors.top: networkStatus.bottom
+                anchors.topMargin: 75
+
+                StatusIndicator
+                {
+                    id: efiIndicator
+                    color: "#5e5e5e"
+                    active: UIRaceDataset.networkStatus
+
+                }
+
+                Text {
+                    text: "EFI"
+                    font.bold: true
+                    font.pointSize: 20
+                    color: "#FFFFFF"
+                    anchors.left: efiIndicator.right
+                    anchors.verticalCenter: efiIndicator.verticalCenter
+                    anchors.leftMargin: 10
+
+                }
+            }
+        }
+
+
+
+        Rectangle {
+            id:checkBoxOptions
+
+            height: gpsModeOption.height + unitsCheckBox.height
+            anchors.right: speedometerBackground.horizontalCenter
+            anchors.bottom: speedometerBackground.verticalCenter
+            anchors.rightMargin: 200
+
+            Rectangle {
+                id: gpsModeOption
+                height: gpsModeCheckBox.height
+
+                CheckBox {
+                    id: gpsModeCheckBox
+                    style: CheckBoxStyle {
+                        indicator: Rectangle {
+                                        implicitWidth: 35
+                                        implicitHeight: 35
+                                        radius: 3
+                                        border.width: 3
+                                        Rectangle {
+                                            visible: control.checked
+                                            color: "#00ff54"
+                                            border.color: "#000000"
+                                            border.width: 1
+                                            radius: 1
+                                            anchors.margins: 2
+                                            anchors.fill: parent
+
+                                            Image {
+                                                source: "check.png"
+                                                fillMode: Image.PreserveAspectFit
+                                                height: parent.height
+                                                width: parent.width
+                                            }
+                                        }
+                                }
+                    }
+
+                }
+
+                Text {
+                    text: "Use GPS for Speed"
+                    font.bold: true
+                    font.pointSize: 20
+                    color: "#FFFFFF"
+                    anchors.left: gpsModeCheckBox.right
+                    anchors.verticalCenter: gpsModeCheckBox.verticalCenter
+                    anchors.leftMargin: 10
+
+                }
+            }
+
+
+            Rectangle {
+                id: unitsOption
+
+                anchors.top: gpsModeOption.bottom
+                anchors.topMargin: 25
+
+                CheckBox {
+                    id: unitsCheckBox
+                    style: CheckBoxStyle {
+                        indicator: Rectangle {
+                                        implicitWidth: 35
+                                        implicitHeight: 35
+                                        radius: 3
+                                        border.width: 3
+                                        Rectangle {
+                                            visible: control.checked
+                                            color: "#00ff54"
+                                            border.color: "#000000"
+                                            border.width: 1
+                                            radius: 1
+                                            anchors.margins: 2
+                                            anchors.fill: parent
+
+                                            Image {
+                                                source: "check.png"
+                                                fillMode: Image.PreserveAspectFit
+                                                height: parent.height
+                                                width: parent.width
+                                            }
+                                        }
+                                }
+                    }
+
+                }
+
+                Text {
+                    text: "Kilometer per Hour"
+                    font.bold: true
+                    font.pointSize: 20
+                    color: "#FFFFFF"
+                    anchors.left: unitsCheckBox.right
+                    anchors.verticalCenter: unitsCheckBox.verticalCenter
+                    anchors.leftMargin: 10
+
+                }
+            }
+        }
+
+        Button {
+            id:startRaceBtn
+            text: "Start"
+            anchors.horizontalCenter: speedometerBackground.horizontalCenter
+            y: 150
+
+            style: ButtonStyle {
+                background: EllipseShape {
+
+                       }
+            }
+        }
+
+        //end menu
 
         Rectangle {
             id: mapRectangle
