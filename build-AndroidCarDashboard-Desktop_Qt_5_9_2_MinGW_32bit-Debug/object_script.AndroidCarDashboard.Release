@@ -8,6 +8,7 @@ INPUT(
 ./release\RaceActionManager.o
 ./release\GPSPositioningService.o
 ./release\NetworkInterface.o
+./release\BatteryStates.o
 ./release\ViewManagement.o
 ./release\qrc_qml.o
 ./release\moc_ViewManagement.o

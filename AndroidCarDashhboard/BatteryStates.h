@@ -1,3 +1,4 @@
+#include <QString>
 #ifndef BATTERYSTATES_H
 #define BATTERYSTATES_H
 
@@ -7,6 +8,8 @@ class BatteryStates {
         static QString URGENT;
         static QString CAUTION;
         static QString GOOD;
+
+        BatteryStates();
 };
 
 #endif // BATTERYSTATES_H

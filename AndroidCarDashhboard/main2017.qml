@@ -589,8 +589,8 @@ Window {
                 name: "osm" // "mapboxgl", "esri", ...
                 // specify plugin parameters if necessary
                 PluginParameter {
-                     name: "osm.mapping.host"
-                     value: "http://163.11.136.233"
+                     name: "osm.mapping.offline.directory"
+                     value: ":/offiline_tiles/"
                   }
             }
 

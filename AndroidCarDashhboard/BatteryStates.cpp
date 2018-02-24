@@ -1,6 +1,6 @@
 #include "BatteryStates.h"
 
-static BatteryStates::BatteryStates()
+BatteryStates::BatteryStates()
 {
     static QString CRITICAL = "BatteryCritical.png";
     static QString URGENT = "BatteryUrgent.png";
