@@ -11,6 +11,7 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QStringList>
+#include <cmath>
 #include <functional>
 #include "DataProcessor.h"
 #include "canBus.h"

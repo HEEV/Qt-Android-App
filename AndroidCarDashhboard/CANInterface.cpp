@@ -93,22 +93,26 @@ bool CANInterface::writeCANFrame(int ID, QByteArray payload)
 void CANInterface::simulateInputFrames()
 {
     QVectorIterator<simuData> simIter(simulationDataVector);
-    /*while(i.hasNext())
+    while(simIter.hasNext())
     {
         simuData currentData = simIter.next();
-        QCanBusFrame simulatedFrame;
-        simulatedFrame.setFrameId(currentData.canID);
+        can_frame simulatedFrame;
+        simulatedFrame.can_id = currentData.canID;
 
         //Now we should simulate the byte data based on simulation type
-        if(currentData.wForm == "sin")
-        {
-
+        if(currentData.wForm == "sin") {
+            double d = sin(QDateTime::currentSecsSinceEpoch() % currentData.max);
+            simulatedFrame.data[0] = (int) d;
+            dataProcessor->routeCANFrame(simulatedFrame);
         }
         else if(currentData.wForm == "random")
         {
-            qrand()
+            qsrand(QDateTime::currentMSecsSinceEpoch());
+            double d = qrand() % 11;
+            simulatedFrame.data[0] = (int) d;
+            dataProcessor->routeCANFrame(simulatedFrame);
         }
-    }*/
+    }
 }
 
 void CANInterface::readFrame(can_frame frame)
