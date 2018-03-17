@@ -22,12 +22,33 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     currentLapNumber = 1;
     batteryState = BatteryStates::GOOD;
     isFinalLap = false;
+    tempSliderVisible = 0;
 }
 
-void UIRaceDataset::setBatteryState(int voltage) {
-    int critical = 10;
-    int urgent = 20;
-    int caution = 30;
+void UIRaceDataset::setTemperatureState(double temperature) {
+    double critical = 30;
+    double urgent = 20;
+    double caution = 10;
+
+    if (temperature < caution) {
+        tempSliderVisible = 0;
+        temperatureStateNotify();
+    } else if (temperature < urgent) {
+        tempSliderVisible = 1;
+        temperatureStateNotify();
+    } else if (temperature < critical) {
+        tempSliderVisible = 2;
+        temperatureStateNotify();
+    } else {
+        tempSliderVisible = 3;
+        temperatureStateNotify();
+    }
+}
+
+void UIRaceDataset::setBatteryState(double voltage) {
+    double critical = 10;
+    double urgent = 20;
+    double caution = 30;
 
     if (voltage < critical) {
         batteryState = BatteryStates::CRITICAL;
@@ -211,6 +232,11 @@ qreal UIRaceDataset::getWindSpeed()
 QString UIRaceDataset::getBatteryState()
 {
     return batteryState;
+}
+
+int UIRaceDataset::getTemperatureState()
+{
+    return tempSliderVisible;
 }
 
 void UIRaceDataset::setBatteryState(QString status)

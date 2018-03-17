@@ -26,11 +26,10 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(bool isFinalLap READ getIsFinalLap NOTIFY isFinalLapNotify)
     Q_PROPERTY(qreal windSpeed READ getWindSpeed WRITE setWindSpeed NOTIFY windSpeedNotify)
     Q_PROPERTY(QString batteryState READ getBatteryState WRITE setBatteryState NOTIFY batteryStateNotify)
+    Q_PROPERTY(int tempSliderVisible READ getTemperatureState WRITE setTemperatureState NOTIFY temperatureStateNotify)
 
 public:
     explicit UIRaceDataset(QObject *parent = 0);
-
-    void setBatteryState(int voltage);
 
     QString getCarName();
     void setCarName(QString name);
@@ -82,7 +81,12 @@ public:
     void batteryStateNotify(BatteryStates state);
 
     QString getBatteryState();
+    void setBatteryState(double voltage);
     void setBatteryState(QString status);
+
+    void setTemperatureState(double status);
+    int getTemperatureState();
+
 
 
 private:
@@ -108,6 +112,7 @@ private:
     qreal windSpeed;
     static const int FINAL_LAP_NUMBER;
     QString batteryState;
+    int tempSliderVisible;
 
 
 signals:
@@ -128,6 +133,7 @@ signals:
     void isFinalLapNotify();
     void windSpeedNotify();
     void batteryStateNotify();
+    void temperatureStateNotify();
 public slots:
 };
 

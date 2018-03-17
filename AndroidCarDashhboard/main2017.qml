@@ -114,11 +114,158 @@ Window {
         }
     }
 
+
+
     Rectangle {
         id: mainRectangle
         color: "black"
         width: parent.width
         height: parent.height
+
+        Rectangle {
+            id: tempometer
+            color: "#5d5d5d"
+            width: applicationWindow.width * 0.02
+            height: applicationWindow.height * 0.6
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+
+            Rectangle {
+                id: tempometerGood
+                color: "#00ff54"
+                width: parent.width
+                height: parent.height * 0.25
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+            }
+
+            Rectangle {
+                id: tempometerCaution
+                gradient: Gradient {
+                        GradientStop { position: 1.0; color: "#00ff54" }
+                        GradientStop { position: 0.7; color: "#ffe800" }
+                    }
+                width: parent.width
+                height: parent.height * 0.25
+                anchors.left: parent.left
+                anchors.bottom: tempometerGood.top
+            }
+
+            Rectangle {
+                id: tempometerUrgent
+                gradient: Gradient {
+                        GradientStop { position: 1.0; color: "#ffe800" }
+                        GradientStop { position: 0.7; color: "#ff8000" }
+                    }
+                width: parent.width
+                height: parent.height * 0.25
+                anchors.left: parent.left
+                anchors.bottom: tempometerCaution.top
+            }
+
+            Rectangle {
+                id: tempometerCritical
+                gradient: Gradient {
+                        GradientStop { position: 1.0; color: "#ff8000" }
+                        GradientStop { position: 0.7; color: "#ff1900" }
+                    }
+                width: parent.width
+                height: parent.height * 0.25
+                anchors.left: parent.left
+                anchors.bottom: tempometerUrgent.top
+            }
+
+
+            Rectangle {
+                id: tempometerGoodSlider
+                color: "#00000000"
+                border.color: "black"
+                border.width: 5
+                width: parent.width
+                height: parent.height * 0.05
+                visible: UIRaceDataset.tempSliderVisible === 0
+                anchors.left: parent.left
+                anchors.verticalCenter: tempometerGood.verticalCenter
+
+                Rectangle {
+                    id: tempometerGoodSliderPointer
+                    color: parent.border.color
+                    width: parent.height * 0.32
+                    height: parent.height * 0.32
+                    anchors.right: parent.right
+                    rotation: 45
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+            Rectangle {
+                id: tempometerCautionSlider
+                color: "#00000000"
+                border.color: "black"
+                border.width: 5
+                width: parent.width
+                height: parent.height * 0.05
+                visible: UIRaceDataset.tempSliderVisible === 1
+                anchors.left: parent.left
+                anchors.verticalCenter: tempometerCaution.verticalCenter
+
+                Rectangle {
+                    id: tempometerCautionSliderPointer
+                    color: parent.border.color
+                    width: parent.height * 0.32
+                    height: parent.height * 0.32
+                    anchors.right: parent.right
+                    rotation: 45
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+            Rectangle {
+                id: tempometerUrgentSlider
+                color: "#00000000"
+                border.color: "black"
+                border.width: 5
+                width: parent.width
+                height: parent.height * 0.05
+                visible: UIRaceDataset.tempSliderVisible === 2
+                anchors.left: parent.left
+                anchors.verticalCenter: tempometerUrgent.verticalCenter
+
+                Rectangle {
+                    id: tempometerUrgentSliderPointer
+                    color: parent.border.color
+                    width: parent.height * 0.32
+                    height: parent.height * 0.32
+                    anchors.right: parent.right
+                    rotation: 45
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+            Rectangle {
+                id: tempometerCriticalSlider
+                color: "#00000000"
+                border.color: "black"
+                border.width: 5
+                width: parent.width
+                height: parent.height * 0.05
+                visible: UIRaceDataset.tempSliderVisible === 3
+                anchors.left: parent.left
+                anchors.verticalCenter: tempometerCritical.verticalCenter
+
+                Rectangle {
+                    id: tempometerriticalSliderPointer
+                    color: parent.border.color
+                    width: parent.height * 0.32
+                    height: parent.height * 0.32
+                    anchors.right: parent.right
+                    rotation: 45
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+
+        }
 
         Rectangle {
             id:speedometerPositioner
