@@ -818,12 +818,37 @@ Window {
                 bearing: -45
                 plugin: mapPlugin
                 center: QtPositioning.coordinate(38.161724, -122.456705) // Sonoma
-                zoomLevel: 16.5 / scale
+                zoomLevel: 16.5
                 gesture.enabled: false
 
+                Rectangle{
+                    id:spot
+                    height: 50
+                    width: 50
+                    color: "red"
+                }
+
+                MapQuickItem {
+                    id: marker
+                    anchorPoint.x: parent.width/4
+                    anchorPoint.y: parent.height
+
+                    sourceItem: Image {
+                        id: image
+                        source: "check.png"
+                    }
+                }
+
                 PositionSource {
+                    id: src
+                    nmeaSource: "race.nmea"
                     active: true
-                   // nmeaSource: "output.nmea"
+
+                    onPositionChanged: {
+                        var coord = src.position.coordinate;
+                        spot.x = coord.lattitude
+                        spot.y = coord.longitude
+                    }
                 }
             }
         }

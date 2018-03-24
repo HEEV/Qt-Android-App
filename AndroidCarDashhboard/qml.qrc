@@ -538,5 +538,6 @@
         <file>UIRaceDataset.cpp</file>
         <file>UIRaceDataset.h</file>
         <file>sting.png</file>
+        <file>race.nmea</file>
     </qresource>
 </RCC>
