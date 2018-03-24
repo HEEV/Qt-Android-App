@@ -23,6 +23,7 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     batteryState = BatteryStates::GOOD;
     isFinalLap = false;
     tempSliderVisible = 0;
+    showMenu = true;
 }
 
 void UIRaceDataset::setTemperatureState(double temperature) {
@@ -243,3 +244,23 @@ void UIRaceDataset::setBatteryState(QString status)
 {
     batteryState = status;
 }
+
+void UIRaceDataset::setMenuState(bool status)
+{
+    showMenu = status;
+    menuStateNotify();
+}
+
+bool UIRaceDataset::getMenuState()
+{
+    return showMenu;
+}
+
+void UIRaceDataset::setMenuVisible() {
+    setMenuState(true);
+}
+
+void UIRaceDataset::setMenuHidden() {
+    setMenuState(false);
+}
+

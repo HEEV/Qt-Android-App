@@ -537,5 +537,6 @@
         <file>RaceActionManager.h</file>
         <file>UIRaceDataset.cpp</file>
         <file>UIRaceDataset.h</file>
+        <file>sting.png</file>
     </qresource>
 </RCC>

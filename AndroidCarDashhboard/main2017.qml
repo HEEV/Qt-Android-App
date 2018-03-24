@@ -293,8 +293,37 @@ Window {
             id: menuBtn
             anchors.bottom: parent.bottom
             anchors.left: parent.left
-            anchors.margins: 50
-            text: "MENU"
+            anchors.margins: 10
+            width: 50
+            height: 25
+
+            visible: !UIRaceDataset.showMenu
+
+            onClicked: {
+                UIRaceDataset.setMenuVisible()
+            }
+
+
+            style: ButtonStyle {
+                background: Rectangle {
+                    width: 500
+                    height: 500
+                    border.color: "#5e5e5e"
+                    color: "#5e5e5e"
+                    radius: 5000
+
+
+                    Text {
+                        text: "Menu"
+                        font.bold: false
+                        font.pointSize: 9
+                        color: "white"
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                    }
+                }
+            }
         }
 
         Image {
@@ -310,6 +339,7 @@ Window {
         {
             id: windometerCenter
             color: "#5e5e5e"
+            visible: !UIRaceDataset.showMenu
             anchors.verticalCenter: windometerBackground.verticalCenter
             anchors.horizontalCenter: windometerBackground.horizontalCenter
         }
@@ -327,6 +357,7 @@ Window {
         {
             id: rpmometerCenter
             color: "#5e5e5e"
+            visible: !UIRaceDataset.showMenu
             anchors.verticalCenter: rpmometerBackground.verticalCenter
             anchors.horizontalCenter: rpmometerBackground.horizontalCenter
         }
@@ -345,6 +376,7 @@ Window {
         {
             id: speedometerCenter
             color: "#5e5e5e"
+            visible: !UIRaceDataset.showMenu
             anchors.verticalCenter: speedometerBackground.verticalCenter
             anchors.horizontalCenter: speedometerBackground.horizontalCenter
         }
@@ -370,14 +402,14 @@ Window {
 
 
         CircularGauge {
-            visible: false
-
             id: rpmometer
             parent: rpmometerBackground
             width: rpmometerBackground.width * 0.9
             height: rpmometerBackground.height * 0.9
             anchors.verticalCenter: rpmometerBackground.verticalCenter;
             anchors.horizontalCenter: rpmometerBackground.horizontalCenter;
+
+            visible: !UIRaceDataset.showMenu
 
             anchors.bottomMargin: 5
             anchors.leftMargin: 1
@@ -396,7 +428,7 @@ Window {
 
             style: NewDashboardGaugeStyle
             {
-                centerLabelVisible: false
+                centerLabelVisible: true
                 vertHalf: true
                 startingAngle: 180
                 endingAngle: 360
@@ -423,14 +455,14 @@ Window {
         }
 
         CircularGauge {
-            visible: false
-
             id: windometer
             parent: windometerBackground
             width: windometerBackground.width * 0.9
             height: windometerBackground.height * 0.9
             anchors.verticalCenter: windometerBackground.verticalCenter;
             anchors.horizontalCenter: windometerBackground.horizontalCenter;
+
+            visible: !UIRaceDataset.showMenu
 
             anchors.bottomMargin: 5
             anchors.leftMargin: 1
@@ -449,7 +481,7 @@ Window {
 
             style: NewDashboardGaugeStyle
             {
-                centerLabelVisible: false
+                centerLabelVisible: true
                 startingAngle: 270
                 endingAngle: 90
                 reverseArc: true
@@ -476,14 +508,14 @@ Window {
         }
 
         CircularGauge {
-            visible: false
-
             id: speedometer
             parent: speedometerBackground
             width: speedometerBackground.width * 0.9
             height: speedometerBackground.height * 0.9
             anchors.verticalCenter: speedometerBackground.verticalCenter;
             anchors.horizontalCenter: speedometerBackground.horizontalCenter;
+
+            visible: !UIRaceDataset.showMenu
 
             anchors.bottomMargin: 5
             anchors.leftMargin: 1
@@ -528,6 +560,8 @@ Window {
 
         Rectangle {
             id:statusLights
+
+            visible: UIRaceDataset.showMenu
 
             height: rpmometer.height / 2 - 100
             anchors.right: rpmometerBackground.horizontalCenter
@@ -610,6 +644,8 @@ Window {
 
         Rectangle {
             id:checkBoxOptions
+
+            visible: UIRaceDataset.showMenu
 
             height: gpsModeOption.height + unitsCheckBox.height
             anchors.right: speedometerBackground.horizontalCenter
@@ -712,15 +748,51 @@ Window {
 
         Button {
             id:startRaceBtn
-            text: "Start"
             anchors.horizontalCenter: speedometerBackground.horizontalCenter
             y: 150
+            width: 100
+            height: 50
+
+            visible: UIRaceDataset.showMenu
+
+            onClicked: {
+                UIRaceDataset.setMenuHidden()
+            }
+
 
             style: ButtonStyle {
-                background: EllipseShape {
+                background: Rectangle {
+                    width: 500
+                    height: 500
+                    border.color: "black"
+                    color: "black"
+                    radius: 5000
 
-                       }
+
+                    Text {
+                        text: "Start"
+                        font.bold: false
+                        font.pointSize: 20
+                        color: "#FFFFFF"
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                    }
+                }
             }
+        }
+
+        Image {
+            id: carSelectImage
+            source: "sting.png"
+            parent: windometerBackground
+            height: parent.height * 0.4
+
+            visible: UIRaceDataset.showMenu
+
+            fillMode: Image.PreserveAspectFit
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.verticalCenter
         }
 
         //end menu
@@ -746,8 +818,13 @@ Window {
                 bearing: -45
                 plugin: mapPlugin
                 center: QtPositioning.coordinate(38.161724, -122.456705) // Sonoma
-                zoomLevel: 16.5
+                zoomLevel: 16.5 / scale
                 gesture.enabled: false
+
+                PositionSource {
+                    active: true
+                   // nmeaSource: "output.nmea"
+                }
             }
         }
     }

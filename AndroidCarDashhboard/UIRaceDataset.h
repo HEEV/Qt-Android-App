@@ -27,6 +27,7 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(qreal windSpeed READ getWindSpeed WRITE setWindSpeed NOTIFY windSpeedNotify)
     Q_PROPERTY(QString batteryState READ getBatteryState WRITE setBatteryState NOTIFY batteryStateNotify)
     Q_PROPERTY(int tempSliderVisible READ getTemperatureState WRITE setTemperatureState NOTIFY temperatureStateNotify)
+    Q_PROPERTY(int showMenu READ getMenuState WRITE setMenuState NOTIFY menuStateNotify)
 
 public:
     explicit UIRaceDataset(QObject *parent = 0);
@@ -87,6 +88,12 @@ public:
     void setTemperatureState(double status);
     int getTemperatureState();
 
+    void setMenuState(bool status);
+    bool getMenuState();
+
+    Q_INVOKABLE void setMenuVisible();
+    Q_INVOKABLE void setMenuHidden();
+
 
 
 private:
@@ -113,6 +120,7 @@ private:
     static const int FINAL_LAP_NUMBER;
     QString batteryState;
     int tempSliderVisible;
+    bool showMenu;
 
 
 signals:
@@ -134,6 +142,7 @@ signals:
     void windSpeedNotify();
     void batteryStateNotify();
     void temperatureStateNotify();
+    void menuStateNotify();
 public slots:
 };
 
