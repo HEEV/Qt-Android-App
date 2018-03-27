@@ -15,6 +15,9 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     uiInterface->setCanStatus(canConnected);
     uiInterface->canStatusNotify();
 
+    QByteArray testArray = QByteArrayLiteral("\x12\x32");
+    canInterface->writeCANFrame(12, testArray);
+
     gpsService = gps;
     connect(gps, SIGNAL(lapIncremented()), this, SLOT(incrementCurrentLap()));
 
@@ -40,14 +43,6 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
 
 bool RaceActionManager::initConnections()
 {
-    //Canbus setup
-//    if (!canConnected)
-//    {
-//        canConnected = canInterface->startListening();
-//    }
-//    uiInterface->setCanStatus(canConnected);
-//    uiInterface->canStatusNotify();
-
     //GPS setup
     gpsService->startTracking();
 

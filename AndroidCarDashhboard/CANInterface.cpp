@@ -56,7 +56,13 @@ bool CANInterface::startListening()
     }
     else
     {
+#ifdef Q_OS_ANDROID
         slcandSuccess = activateSlcand();
+#elif defined(Q_OS_LINUX)
+        slcandSuccess = true;
+#else
+        slcandSuccess = false;
+#endif
         if (slcandSuccess) {
             canBus.StartupModule();
             slcandActive = true;

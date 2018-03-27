@@ -6,7 +6,7 @@ int CANSocket::socketHandle = -1;
 
 int CANSocket::Init(std::string connectionName)
 {
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_LINUX)
     //Now we should set up the socket connection.
     ifreq ifr;
     sockaddr_can addr;
@@ -55,7 +55,7 @@ int CANSocket::Init(std::string connectionName)
 
 void CANSocket::Run(int threadNumber)
 {
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_LINUX)
     //Allocate some space for received frames and the map iterator.
     can_frame receivedFrame;
     std::map<std::string, std::function<void(can_frame)>>::iterator it;
@@ -96,7 +96,7 @@ bool CANSocket::isOpen(int threadNumber)
 
 bool CANSocket::sendFrame(can_frame frame, int threadNumber)
 {
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_LINUX)
     if(isOpen(threadNumber))
     {
         int retval;

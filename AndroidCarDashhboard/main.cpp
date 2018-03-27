@@ -1,4 +1,5 @@
 //QT includes.
+#include <QtGlobal>
 #include <QGuiApplication>
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras/QtAndroidExtras>
@@ -21,7 +22,11 @@
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
+#if defined(Q_OS_LINUX) || defined(Q_OS_ANDROID)
+static const bool simulateInput = false;
+#else
 static const bool simulateInput = true;
+#endif
 
 
 #ifdef Q_OS_ANDROID
