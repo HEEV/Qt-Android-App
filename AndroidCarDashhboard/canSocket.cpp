@@ -2,14 +2,14 @@
 
 std::map<std::string ,std::function<void(can_frame)>> CANSocket::callbacks;
 std::vector<struct canThread*> CANSocket::activeThreads;
-
+int CANSocket::socketHandle = -1;
 
 int CANSocket::Init(std::string connectionName)
 {
 #ifdef Q_OS_ANDROID
     //Now we should set up the socket connection.
-    struct ifreq ifr;
-    struct sockaddr_can addr;
+    ifreq ifr;
+    sockaddr_can addr;
 
     socketHandle = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if(socketHandle < 0)
@@ -53,7 +53,7 @@ int CANSocket::Init(std::string connectionName)
     return -1;
 }
 
-void CANSocket::Run(int index)
+void CANSocket::Run(int threadNumber)
 {
 #ifdef Q_OS_ANDROID
     //Allocate some space for received frames and the map iterator.
@@ -71,7 +71,7 @@ void CANSocket::Run(int index)
             }
         }
         //If we are not currently receiving a frame we should sleep for a half a second.
-        std::this_thread::yeald();
+        std::this_thread::yield();
     }
 #endif
 }
@@ -100,7 +100,7 @@ bool CANSocket::sendFrame(can_frame frame, int threadNumber)
     if(isOpen(threadNumber))
     {
         int retval;
-        retval = write(activeThreads.at(threadNumber)->socketHandle, frame, sizeof(struct can_frame));
+        retval = write(activeThreads.at(threadNumber)->socketHandle, &frame, sizeof(struct can_frame));
         if (retval != sizeof(struct can_frame))
         {
             return false;

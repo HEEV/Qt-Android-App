@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QNetworkInterface>
 #include "Logger.h"
 
 //Again circular dependancies.
@@ -29,6 +30,9 @@ public:
     bool isConnected();
 
     bool sendJSON(QJsonObject json);
+
+    QString macAddress;
+
 
 private:
     QTcpSocket *sock;

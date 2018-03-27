@@ -8,6 +8,7 @@
 #include "canSocket.h"
 #include "Logger.h"
 
+
 class DataProcessor
 {
 public:

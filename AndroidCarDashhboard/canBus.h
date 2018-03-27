@@ -18,6 +18,9 @@
 #include <thread>
 #include <map>
 
+/*QT Includes*/
+#include <QtGlobal>
+
 /*Local includes*/
 #include "canSocket.h"
 
@@ -26,13 +29,15 @@ class CanBusModule
 public:
     virtual void StartupModule();
     virtual void ShutdownModule();
-
-	static bool registerCallback(std::string name, std::function<void(can_frame)> callback);
-
-	//CAN bus interface.
-	bool isOpen();
-	bool sendFrame(int id, int data[], int size);
+#ifdef Q_OS_ANDROID
+    static bool registerCallback(std::string name, std::function<void(can_frame)> callback);
+#endif
+    //CAN bus interface.
+    bool isOpen();
+    bool sendFrame(int id, int data[], int size);
+#ifdef Q_OS_ANDROID
     bool sendFrame(can_frame frame);
+#endif
     bool sendErrorFrame(int id, int data[], int size);
 
 private:

@@ -89,6 +89,7 @@ bool RaceActionManager::startRace()
     //Set up pulses to check on things.
     indicatorUpdaterTimer->start(updateIndicatorPeriod);
     raceTimer->start(timerPeriod);
+    logger->println((string)"Starting timer\n");
     sendToServerTimer->start(sendToServerTimerPeriod);
     averageSpeedTimer->start(callAveragingFunctionPeriod);
 
@@ -199,17 +200,20 @@ bool RaceActionManager::stopRace()
  */
 void RaceActionManager::sendInfoToServer()
 {
+    logger->println((string)"Trying to send data\n");
     if (network->isConnected())
     {
+        logger->println((string)"Network is connected\n");
         QGeoCoordinate currentCoordinate = uiInterface->getGPSInfo().coordinate();
 
         // I'm guessing we don't actually need to know altitude
         //gpsMessage.insert("altitude", QJsonValue(currentCoordinate.altitude()));
 
         QJsonObject mainMessage;
-        mainMessage.insert("AndroidId", "placeholder");
+        mainMessage.insert("MessageType", "Log");
+        mainMessage.insert("AndroidId", network->macAddress);
         mainMessage.insert("BatteryVoltage", 1.0);
-        mainMessage.insert("carId", uiInterface->getCarName());
+        mainMessage.insert("CarId", uiInterface->getCarName());
         mainMessage.insert("GroundSpeed", uiInterface->getGroundSpeed());
         mainMessage.insert("Id", 1);
         mainMessage.insert("IntakeTemperature", 30);
@@ -222,6 +226,8 @@ void RaceActionManager::sendInfoToServer()
         mainMessage.insert("SecondaryBatteryVoltage", "placeholder");
         mainMessage.insert("WheelRpm", 30);
         mainMessage.insert("WindSpeed", uiInterface->getWindSpeed());
+        mainMessage.insert("SystemCurrent", 1.02f);
+        mainMessage.insert("CoolantTemperature", 42.42f);
         network->sendJSON(mainMessage);
     }
 }

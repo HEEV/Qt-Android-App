@@ -1,7 +1,6 @@
 #include "NetworkInterface.h"
 
-const QString NetworkInterface::host = "jacob.cedarville.edu";
-
+const QString NetworkInterface::host = "jacob.cedarville.edu"; 
 //This port is a placeholder please talk to a team leader about what it should actually be.
 const int NetworkInterface::port = 64738;
 const int NetworkInterface::reconnectAttemptInterval = 2000;
@@ -10,6 +9,18 @@ const string NetworkInterface::logPrefix = "NETWORK_INTERFACE: ";
 
 NetworkInterface::NetworkInterface(Logger *log)
 {
+    //Get MAC address for ID.
+    QNetworkInterface networkInterface;
+    QList<QNetworkInterface> list1=QNetworkInterface::allInterfaces();
+    foreach(networkInterface, list1)
+    {
+        if(networkInterface.flags().testFlag(QNetworkInterface::IsUp)&& !networkInterface.flags().testFlag(QNetworkInterface::IsLoopBack))
+        {
+            macAddress = networkInterface.hardwareAddress();
+            log->println(macAddress + "\n");
+        }
+    }
+
     reconnectInProgress = false;
     raceManager = nullptr;
     this->log = log;
@@ -60,6 +71,7 @@ bool NetworkInterface::sendJSON(QJsonObject json)
 {
     QJsonDocument jDoc = QJsonDocument(json);
     int written = sock->write(jDoc.toJson());
+    log->println((string)"Sending Data\n");
     if(written > 0)
     {
         return true;
