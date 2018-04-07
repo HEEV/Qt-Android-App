@@ -93,7 +93,7 @@ bool CANInterface::writeCANFrame(int ID, QByteArray payload)
         d[i] = payload[i];
     }
 
-    canBus.sendFrame(ID, d,payload.size());
+    return canBus.sendFrame(ID, d,payload.size());
 }
 
 void CANInterface::simulateInputFrames()

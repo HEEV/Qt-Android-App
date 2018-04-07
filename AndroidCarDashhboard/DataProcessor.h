@@ -23,7 +23,7 @@ public:
     void updateAverageSpeed();
     void updateAirSpeed(QByteArray data);
     void updateEFIPressure(QByteArray data);
-    void updateMegasquirt(QByteArray data);
+    void updateMegasquirt(int id, can_frame frame);
     void updateCurrent(QByteArray data);
     void updateVoltage(QByteArray data);
 
@@ -36,7 +36,7 @@ private:
     static const int TACHOMETER_TIME_LAST_PULSE_ID; // Used for ground speed
     static const int PITOT_ID; // Used for air speed
     static const int EFI_PRESSURE_ID; // Used for fuel injection info
-    static const int MEGASQUIRT_ID; // Used for engine temperature and other info
+    static const int MEGASQUIRT_BASE_ID; // Used for engine temperature and other info
     static const int CURRENT_ID;
     static const int VOLTAGE_ID;
 
