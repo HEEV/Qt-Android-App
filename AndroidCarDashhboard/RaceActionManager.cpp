@@ -41,6 +41,12 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     connect(averageSpeedTimer, SIGNAL(timeout()), this, SLOT(doSpeedAveraging()));
 }
 
+void RaceActionManager::setRunNum(int num)
+{
+    logger->println("Got Num: " + QString::number(num));
+    runNum = num;
+}
+
 bool RaceActionManager::initConnections()
 {
     //GPS setup
@@ -102,6 +108,12 @@ bool RaceActionManager::startRace()
     dataProcessor->initiateAverageSpeed();
 
     logger->println((logPrefix + "Race started.").toStdString());
+
+    //Get the run number from the server
+    QJsonObject startMessage;
+    startMessage.insert("MessageType", "GetNextRunNumber");
+    startMessage.insert("AndroidId", network->macAddress); //"d8:50:e6:8f:92:67");//
+    network->sendJSON(startMessage);
 
     return true;
 }
@@ -204,21 +216,23 @@ void RaceActionManager::sendInfoToServer()
         // I'm guessing we don't actually need to know altitude
         //gpsMessage.insert("altitude", QJsonValue(currentCoordinate.altitude()));
 
+        QDateTime currentTime = QDateTime::currentDateTime();
         QJsonObject mainMessage;
+        QString dateStr = currentTime.toString(Qt::ISODateWithMs);
+        dateStr = dateStr.replace("T", " ");
+        mainMessage.insert("AndroidId", network->macAddress); //"d8:50:e6:8f:92:67");//
         mainMessage.insert("MessageType", "Log");
-        mainMessage.insert("AndroidId", network->macAddress);
+        mainMessage.insert("RunNumber", runNum);
         mainMessage.insert("BatteryVoltage", 1.0);
-        mainMessage.insert("CarId", uiInterface->getCarName());
         mainMessage.insert("GroundSpeed", uiInterface->getGroundSpeed());
-        mainMessage.insert("Id", 1);
         mainMessage.insert("IntakeTemperature", 30);
-        mainMessage.insert("LKillSwitch", "placeholder");
+        mainMessage.insert("LKillSwitch", 0);
         mainMessage.insert("Latitude", QJsonValue(currentCoordinate.latitude()));
-        mainMessage.insert("LogTime", uiInterface->getTotalTime());
+        mainMessage.insert("LogTime", dateStr);
         mainMessage.insert("Longitude", QJsonValue(currentCoordinate.longitude()));
-        mainMessage.insert("MKillSwitch", "placeholder");
-        mainMessage.insert("RKillSwitch", "placeholder");
-        mainMessage.insert("SecondaryBatteryVoltage", "placeholder");
+        mainMessage.insert("MKillSwitch", 0);
+        mainMessage.insert("RKillSwitch", 0);
+        mainMessage.insert("SecondaryBatteryVoltage", 0.0);
         mainMessage.insert("WheelRpm", 30);
         mainMessage.insert("WindSpeed", uiInterface->getWindSpeed());
         mainMessage.insert("SystemCurrent", 1.02f);

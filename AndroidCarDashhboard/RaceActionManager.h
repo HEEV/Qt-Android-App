@@ -37,6 +37,8 @@ public:
     Q_INVOKABLE bool startRace();
     Q_INVOKABLE bool stopRace();
 
+    void setRunNum(int num);
+
 private slots:
     void updateCurrentTime();
     void sendInfoToServer();
@@ -71,6 +73,7 @@ private:
     QTime totalRaceTime;
     QTime currentLapTime;
 
+    int runNum;
     char model_string[20];
 
 };
