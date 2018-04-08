@@ -24,6 +24,11 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(QGeoPositionInfo gpsInfo READ getGPSInfo WRITE setGPSInfo NOTIFY gpsInfoNotify)
     Q_PROPERTY(bool isFinalLap READ getIsFinalLap NOTIFY isFinalLapNotify)
     Q_PROPERTY(qreal windSpeed READ getWindSpeed WRITE setWindSpeed NOTIFY windSpeedNotify)
+    Q_PROPERTY(qreal engineRPM READ getEngineRPM WRITE setEngineRPM NOTIFY engineRPMNotify)
+    Q_PROPERTY(qreal coolantTemp READ getCoolantTemp WRITE setCoolantTemp NOTIFY coolantTempNotify)
+    Q_PROPERTY(qreal throttlePos READ getThrottlePos WRITE setThrottlePos NOTIFY throttlePosNotify)
+    Q_PROPERTY(qreal manifoldAirTemp READ getManifoldAirTemp WRITE setManifoldAirTemp NOTIFY manifoldAirTempNotify)
+    Q_PROPERTY(qreal batteryVoltage READ getBatteryVoltage WRITE setBatteryVoltage NOTIFY batteryVoltageNotify)
 
 public:
     explicit UIRaceDataset(QObject *parent = 0);
@@ -67,6 +72,21 @@ public:
     void setRaceStatus(bool status);
     bool getRaceStatus();
 
+    void setEngineRPM(qreal engineRPM);
+    qreal getEngineRPM();
+
+    void setCoolantTemp(qreal CoolantTemp);
+    qreal getCoolantTemp();
+
+    void setThrottlePos(qreal ThrottlePos);
+    qreal getThrottlePos();
+
+    void setManifoldAirTemp(qreal ManifoldAirTemp);
+    qreal getManifoldAirTemp();
+
+    void setBatteryVoltage(qreal BatteryVoltage);
+    qreal getBatteryVoltage();
+
     void setGPSInfo(QGeoPositionInfo info);
     QGeoPositionInfo getGPSInfo();
 
@@ -96,6 +116,11 @@ private:
     QGeoPositionInfo gpsInfo;
     bool isFinalLap;
     qreal windSpeed;
+    qreal engineRPM;
+    qreal coolantTemp;
+    qreal throttlePos;
+    qreal manifoldAirTemp;
+    qreal batteryVoltage;
     static const int FINAL_LAP_NUMBER;
 
 signals:
@@ -115,6 +140,12 @@ signals:
     void gpsInfoNotify();
     void isFinalLapNotify();
     void windSpeedNotify();
+    void engineRPMNotify();
+    void coolantTempNotify();
+    void throttlePosNotify();
+    void manifoldAirTempNotify();
+    void batteryVoltageNotify();
+
 public slots:
 };
 

@@ -223,9 +223,9 @@ void RaceActionManager::sendInfoToServer()
         mainMessage.insert("AndroidId", network->macAddress); //"d8:50:e6:8f:92:67");//
         mainMessage.insert("MessageType", "Log");
         mainMessage.insert("RunNumber", runNum);
-        mainMessage.insert("BatteryVoltage", 1.0);
+        mainMessage.insert("BatteryVoltage", uiInterface->getBatteryVoltage());
         mainMessage.insert("GroundSpeed", uiInterface->getGroundSpeed());
-        mainMessage.insert("IntakeTemperature", 30);
+        mainMessage.insert("IntakeTemperature", uiInterface->getManifoldAirTemp());
         mainMessage.insert("LKillSwitch", 0);
         mainMessage.insert("Latitude", QJsonValue(currentCoordinate.latitude()));
         mainMessage.insert("LogTime", dateStr);
@@ -233,7 +233,7 @@ void RaceActionManager::sendInfoToServer()
         mainMessage.insert("MKillSwitch", 0);
         mainMessage.insert("RKillSwitch", 0);
         mainMessage.insert("SecondaryBatteryVoltage", 0.0);
-        mainMessage.insert("WheelRpm", 30);
+        mainMessage.insert("WheelRpm", uiInterface->getEngineRPM());
         mainMessage.insert("WindSpeed", uiInterface->getWindSpeed());
         mainMessage.insert("SystemCurrent", 1.02f);
         mainMessage.insert("CoolantTemperature", 42.42f);

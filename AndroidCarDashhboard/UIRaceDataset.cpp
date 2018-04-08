@@ -181,3 +181,48 @@ qreal UIRaceDataset::getWindSpeed()
 {
     return windSpeed;
 }
+
+void UIRaceDataset::setEngineRPM(qreal engineRPM)
+{
+    this->engineRPM = engineRPM;
+}
+qreal UIRaceDataset::getEngineRPM()
+{
+    return engineRPM;
+}
+
+void UIRaceDataset::setCoolantTemp(qreal CoolantTemp)
+{
+    this->coolantTemp = CoolantTemp;
+}
+qreal UIRaceDataset::getCoolantTemp()
+{
+    return coolantTemp;
+}
+
+void UIRaceDataset::setThrottlePos(qreal ThrottlePos)
+{
+    this->throttlePos = ThrottlePos;
+}
+qreal UIRaceDataset::getThrottlePos()
+{
+    return throttlePos;
+}
+
+void UIRaceDataset::setManifoldAirTemp(qreal ManifoldAirTemp)
+{
+    this->manifoldAirTemp = ManifoldAirTemp;
+}
+qreal UIRaceDataset::getManifoldAirTemp()
+{
+    return manifoldAirTemp;
+}
+
+void UIRaceDataset::setBatteryVoltage(qreal BatteryVoltage)
+{
+    this->batteryVoltage = BatteryVoltage;
+}
+qreal UIRaceDataset::getBatteryVoltage()
+{
+    return batteryVoltage;
+}

@@ -28,7 +28,7 @@ DataProcessor::DataProcessor(UIRaceDataset *uiRaceDataset, QString carName, Logg
     // Calculate the velocity multiplier for ground speed
     if((carName != "Urbie") & (carName != "Sting"))
     {
-        carName = "Urbie";
+        carName = "Sting";
     }
     setWheelCircumference(carName);
 }
@@ -49,7 +49,11 @@ void DataProcessor::routeCANFrame(can_frame frame)
 {
     int id = frame.can_id;
     QByteArray data = (char *) frame.data;
-    logger->println("Got Frame ID: " + QString::number(id).toStdString());
+    while(data.length() != frame.can_dlc)
+    {
+        data.append('\0');
+    }
+    //logger->println("Got Frame ID: " + QString::number(id).toStdString());
 
     // For efficienty, these cases should be ordered with the most
     // frequent ids at the top.
@@ -128,7 +132,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
         //logger->println("Speed: " + QString::number(milesPerHour).toStdString());
 
         }
-
+    //logger->println("Current speed: " + QString::number(milesPerHour) + "\n");
     raceDataset->setGroundSpeed(milesPerHour);
     raceDataset->groundSpeedNotify();
 }
@@ -225,9 +229,10 @@ void DataProcessor::updateMegasquirt(int id, can_frame frame)
     if(id == DataProcessor::MEGASQUIRT_BASE_ID)
     {
         //QByteArray temp = data.mid(2,2);
-        bool tmp;
         int engineRPM = (int)frame.data[2] << 8;
         engineRPM |= (int)frame.data[3];
+        raceDataset->setEngineRPM(engineRPM);
+        raceDataset->engineRPMNotify();
         loggerStr = "EngineRPM: ";
         loggerStr += QString::number(engineRPM);
         loggerStr += " RPM\n";
@@ -235,6 +240,8 @@ void DataProcessor::updateMegasquirt(int id, can_frame frame)
         int coolantTemp = frame.data[4] << 8;
         coolantTemp |= frame.data[5];
         float fCoolantTemp = (float)coolantTemp / 10.0f;
+        raceDataset->setCoolantTemp(fCoolantTemp);
+        raceDataset->coolantTempNotify();
         loggerStr += "CoolantTemp: ";
         loggerStr += QString::number(fCoolantTemp);
         loggerStr += " C\n";
@@ -242,6 +249,8 @@ void DataProcessor::updateMegasquirt(int id, can_frame frame)
         int throttlePos = frame.data[6] << 8;
         throttlePos |= frame.data[7];
         float fThrottlePos = (float)throttlePos / 10.0f;
+        raceDataset->setThrottlePos(fThrottlePos);
+        raceDataset->throttlePosNotify();
         loggerStr += "ThrottlePos: ";
         loggerStr += QString::number(fThrottlePos);
         loggerStr += "\n";
@@ -251,6 +260,8 @@ void DataProcessor::updateMegasquirt(int id, can_frame frame)
         int manifoldAirTemperature = frame.data[4] << 8;
         manifoldAirTemperature |= frame.data[5];
         float fManifoldAirTemperature = (float)manifoldAirTemperature / 10.0f;
+        raceDataset->setManifoldAirTemp(fManifoldAirTemperature);
+        raceDataset->manifoldAirTempNotify();
         loggerStr += "ManifoldAirTemp: ";
         loggerStr += QString::number(fManifoldAirTemperature);
         loggerStr += " C\n";
@@ -260,6 +271,8 @@ void DataProcessor::updateMegasquirt(int id, can_frame frame)
         int batteryVoltage = frame.data[0] << 8;
         batteryVoltage |= frame.data[1];
         float fBatteryVoltage = (float)batteryVoltage / 10.0f;
+        raceDataset->setBatteryVoltage(fBatteryVoltage);
+        raceDataset->batteryVoltageNotify();
         loggerStr += "BatteryVoltage: ";
         loggerStr += QString::number(fBatteryVoltage);
         loggerStr += "\n";
