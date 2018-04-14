@@ -814,6 +814,7 @@ Window {
             }
 
             Map {
+                id: map
                 anchors.fill: parent
                 bearing: -45
                 plugin: mapPlugin
@@ -821,11 +822,13 @@ Window {
                 zoomLevel: 16.5
                 gesture.enabled: false
 
-                Rectangle{
-                    id:spot
+                Image {
+                    id: spot
+                    source: "mapMarker.png"
                     height: 50
-                    width: 50
-                    color: "red"
+                    fillMode: Image.PreserveAspectFit
+                    x: map.horizontalCenter
+                    y: map.verticalCenter
                 }
 
                 MapQuickItem {
@@ -846,8 +849,8 @@ Window {
 
                     onPositionChanged: {
                         var coord = src.position.coordinate;
-                        spot.x = coord.lattitude
-                        spot.y = coord.longitude
+                        spot.x = map.fromCoordinate(coord, true).x - 23
+                        spot.y = map.fromCoordinate(coord, true).y - 47
                     }
                 }
             }

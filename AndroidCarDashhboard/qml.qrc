@@ -515,7 +515,8 @@
         <file>offiline_tiles/osm_100-l-1-16-10480-25248.png</file>
         <file>offiline_tiles/osm_100-l-1-16-10480-25249.png</file>
         <file>offiline_tiles/osm_100-l-1-16-10480-25250.png</file>
-		<file>sting.png</file>
+        <file>sting.png</file>
         <file>race.nmea</file>
+        <file>mapMarker.png</file>
     </qresource>
 </RCC>
