@@ -26,6 +26,7 @@ Logger::~Logger()
 {
     logStream->flush();
     logStream->device()->close();
+    delete logStream;
     delete logFile;
 }
 

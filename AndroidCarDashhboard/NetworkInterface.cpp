@@ -136,4 +136,6 @@ void NetworkInterface::attemptToReconnect()
 NetworkInterface::~NetworkInterface()
 {
     raceManager = nullptr;
+    delete sock;
+    delete inStream;
 }

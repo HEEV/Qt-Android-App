@@ -46,10 +46,11 @@ void DataProcessor::setWheelCircumference(QString carName)
     }
 }
 
-void DataProcessor::routeCANFrame(QCanBusFrame frame)
+void DataProcessor::routeCANFrame(can_frame frame)
 {
-    int id = frame.frameId();
-    QByteArray data = frame.payload();
+    int id = frame.can_id;
+    QByteArray data = (char *) frame.data;
+    logger->println("Got Frame ID: " + QString::number(id).toStdString());
     //qDebug() << "Frame ID: " << QString::number(id) << "\n";
 
     // For efficienty, these cases should be ordered with the most

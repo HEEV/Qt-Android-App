@@ -518,5 +518,6 @@
         <file>sting.png</file>
         <file>race.nmea</file>
         <file>mapMarker.png</file>
+        <file>simulationData.csv</file>
     </qresource>
 </RCC>

@@ -21,8 +21,11 @@
 static const QString LOG_FILE_BASE_NAME = QString("SupermileageLogs/SMDashboardLog");
 static const QString LOG_FILE_EXTENSION = QString(".txt");
 
+static const bool simulateInput = false;
+
 
 #ifdef Q_OS_ANDROID
+//Foward declare any function that will apear after the main function.
 void performJNIOperations();
 #endif
 
@@ -33,7 +36,7 @@ int main(int argc, char *argv[])
     QQmlEngine engine;
 
 #ifdef Q_OS_ANDROID
-    //Get the screen to stay on hopefuly
+    //Get the screen to stay on as long as the app has focus.
     performJNIOperations();
 #endif
 
@@ -53,7 +56,7 @@ int main(int argc, char *argv[])
     DataProcessor *dataProcessor = new DataProcessor(raceDataset, "Sting" /*Default to String*/, logger);
 
     //Make a instance of CANInterface.
-    CANInterface *interface = new CANInterface(dataProcessor);
+    CANInterface *interface = new CANInterface(dataProcessor, simulateInput);
 
     //Make a GPS Service
     GPSPositioningService *gps = new GPSPositioningService(logger, raceDataset);
@@ -76,11 +79,18 @@ int main(int argc, char *argv[])
     //Run the app here. Main will "halt" here until the app is killed.
     const int returnval = app.exec();
 
-    //Kill the GPS usage.
+    //Stop the GPS usage so the system does not believe that a process is using it any more. Saves battery long term.
     gps->stopTracking();
 
-    //Us being lazy and not cleaning up our pointers.
-    //TODO: handle memory falts.
+    //Clean up the pointers so we don't force the OS to deal with the memory falts.
+    //Delete in the reverse order in which modules are created.
+    delete manager;
+    delete net;
+    delete gps;
+    delete interface;
+    delete dataProcessor;
+    delete logger;
+
 
     return returnval;
 }

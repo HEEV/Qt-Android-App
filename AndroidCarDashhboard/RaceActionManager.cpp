@@ -157,7 +157,6 @@ void RaceActionManager::updateIndicatorLights()
 bool RaceActionManager::stopRace()
 {
     // Need to re-evaluate this entire function once startRace() and initConnections() have been figured out
-
     if(raceStarted)
     {
         //Stop the update timer.
