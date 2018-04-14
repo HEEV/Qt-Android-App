@@ -2,6 +2,11 @@
 
 const int UIRaceDataset::FINAL_LAP_NUMBER = 10;
 
+QString BatteryStates::CRITICAL = "BatteryCritical.png";
+QString BatteryStates::URGENT   = "BatteryUrgent.png";
+QString BatteryStates::CAUTION  = "BatteryCaution.png";
+QString BatteryStates::GOOD     = "BatteryGood.png";
+
 UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
 {
     //Set defaults.
@@ -15,7 +20,50 @@ UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
     currentLapTime = "00:00";
     lastLapTime = "00:00";
     currentLapNumber = 1;
+    batteryState = BatteryStates::GOOD;
     isFinalLap = false;
+    tempSliderVisible = 0;
+    showMenu = true;
+}
+
+void UIRaceDataset::setTemperatureState(double temperature) {
+    double critical = 30;
+    double urgent = 20;
+    double caution = 10;
+
+    if (temperature < caution) {
+        tempSliderVisible = 0;
+        temperatureStateNotify();
+    } else if (temperature < urgent) {
+        tempSliderVisible = 1;
+        temperatureStateNotify();
+    } else if (temperature < critical) {
+        tempSliderVisible = 2;
+        temperatureStateNotify();
+    } else {
+        tempSliderVisible = 3;
+        temperatureStateNotify();
+    }
+}
+
+void UIRaceDataset::setBatteryState(double voltage) {
+    double critical = 10;
+    double urgent = 20;
+    double caution = 30;
+
+    if (voltage < critical) {
+        batteryState = BatteryStates::CRITICAL;
+        batteryStateNotify();
+    } else if (voltage < urgent) {
+        batteryState = BatteryStates::URGENT;
+        batteryStateNotify();
+    } else if (voltage < caution) {
+        batteryState = BatteryStates::CAUTION;
+        batteryStateNotify();
+    } else {
+        batteryState = BatteryStates::GOOD;
+        batteryStateNotify();
+    }
 }
 
 QString UIRaceDataset::getCarName()
@@ -181,3 +229,38 @@ qreal UIRaceDataset::getWindSpeed()
 {
     return windSpeed;
 }
+
+QString UIRaceDataset::getBatteryState()
+{
+    return batteryState;
+}
+
+int UIRaceDataset::getTemperatureState()
+{
+    return tempSliderVisible;
+}
+
+void UIRaceDataset::setBatteryState(QString status)
+{
+    batteryState = status;
+}
+
+void UIRaceDataset::setMenuState(bool status)
+{
+    showMenu = status;
+    menuStateNotify();
+}
+
+bool UIRaceDataset::getMenuState()
+{
+    return showMenu;
+}
+
+void UIRaceDataset::setMenuVisible() {
+    setMenuState(true);
+}
+
+void UIRaceDataset::setMenuHidden() {
+    setMenuState(false);
+}
+
