@@ -515,29 +515,7 @@
         <file>offiline_tiles/osm_100-l-1-16-10480-25248.png</file>
         <file>offiline_tiles/osm_100-l-1-16-10480-25249.png</file>
         <file>offiline_tiles/osm_100-l-1-16-10480-25250.png</file>
-        <file>QMLLib/ViewManagement.cpp</file>
-        <file>QMLLib/ViewManagement.h</file>
-        <file>batterystates.cpp</file>
-        <file>BatteryStates.h</file>
-        <file>CANInterface.cpp</file>
-        <file>CANInterface.h</file>
-        <file>CanNodeParser.cpp</file>
-        <file>CanNodeParser.h</file>
-        <file>Car.h</file>
-        <file>DataProcessor.cpp</file>
-        <file>DataProcessor.h</file>
-        <file>GPSPositioningService.cpp</file>
-        <file>GPSPositioningService.h</file>
-        <file>Logger.cpp</file>
-        <file>Logger.h</file>
-        <file>main.cpp</file>
-        <file>NetworkInterface.cpp</file>
-        <file>NetworkInterface.h</file>
-        <file>RaceActionManager.cpp</file>
-        <file>RaceActionManager.h</file>
-        <file>UIRaceDataset.cpp</file>
-        <file>UIRaceDataset.h</file>
-        <file>sting.png</file>
+		<file>sting.png</file>
         <file>race.nmea</file>
     </qresource>
 </RCC>
