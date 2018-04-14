@@ -19,17 +19,17 @@ public:
 
     //begin static functions
     /// \brief Get a signed 8-bit integer from a CanMessage.
-    static int getData(const QByteArray msg,   int8_t& data);
+    static int getData_int8(const QByteArray msg,   int8_t& data);
     /// \brief Get an unsigned 8-bit integer from a CanMessage.
-    static int getData(const QByteArray msg,  uint8_t& data);
+    static int getData_uint8(const QByteArray msg,  uint8_t& data);
     /// \brief Get a signed 16-bit integer from a CanMessage.
-    static int getData(const QByteArray msg,  int16_t& data);
+    static int getData_int16(const QByteArray msg,  int16_t& data);
     /// \brief Get an unsigned 16-bit integer from a CanMessage.
-    static int getData(const QByteArray msg, uint16_t& data);
+    static int getData_uint16(const QByteArray msg, uint16_t& data);
     /// \brief Get a signed 32-bit integer from a CanMessage.
-    static int getData(const QByteArray msg,  int32_t& data);
+    static int getData_int32(const QByteArray msg,  int32_t& data);
     /// \brief Get an unsigned 32-bit integer from a CanMessage.
-    static int getData(const QByteArray msg, uint32_t& data);
+    static int getData_uint32(const QByteArray msg, uint32_t& data);
     /**
      * \brief Stuffs any data type into an int.
      * This is a hacky convinence function that ignores typchecking. Most of the
