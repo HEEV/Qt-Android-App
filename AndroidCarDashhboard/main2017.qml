@@ -19,7 +19,7 @@ Window {
 
     id: applicationWindow
     visible: true
-    //visibility: "FullScreen"
+    visibility: "FullScreen"
 
     maximumWidth: 1920/scale
     maximumHeight: 1200/scale
