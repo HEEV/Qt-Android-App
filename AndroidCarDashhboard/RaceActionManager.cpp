@@ -67,23 +67,10 @@ bool RaceActionManager::startRace()
 {
     initConnections();
 
-    //TODO: set approprate car here
+    //Set the car that has been selected from the UI.
     dataProcessor->setWheelCircumference(uiInterface->getCarName());
 
-    // Should this be put into a slot that occurs when network is connected?
-    /*
-    QJsonObject startUp;
-    startUp.insert("SharedKey", "k5t452dewa432");
-    startUp.insert("CarType", "Sting");
-    startUp.insert("LapNum", "1");
-
-
-    if(networkConnected)
-    {
-        network->sendJASON(startUp);
-    }
-    */
-
+    //We are starting on lap 1 of course.
     uiInterface->setCurrentLapNumber(1);
     uiInterface->setLastLapTime("00:00");
 
@@ -173,11 +160,6 @@ bool RaceActionManager::stopRace()
         indicatorUpdaterTimer->stop();
         averageSpeedTimer->stop();
 
-//        if (canConnected)
-//        {
-//            canInterface->stopListening();
-//            canConnected = false;
-//        }
 
         //Stop GPS updates.
         gpsService->stopTracking();
@@ -230,6 +212,7 @@ void RaceActionManager::sendInfoToServer()
         mainMessage.insert("Latitude", QJsonValue(currentCoordinate.latitude()));
         mainMessage.insert("LogTime", dateStr);
         mainMessage.insert("Longitude", QJsonValue(currentCoordinate.longitude()));
+        mainMessage.insert("LapNumber", uiInterface->getCurrentLapNumber());
         mainMessage.insert("MKillSwitch", 0);
         mainMessage.insert("RKillSwitch", 0);
         mainMessage.insert("SecondaryBatteryVoltage", 0.0);
