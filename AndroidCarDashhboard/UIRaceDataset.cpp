@@ -10,7 +10,7 @@ QString BatteryStates::GOOD     = "BatteryGood.png";
 UIRaceDataset::UIRaceDataset(QObject *parent) : QObject(parent)
 {
     //Set defaults.
-    carName = "Urbie";
+    carName = "Sting";
     projectedProgress = 0;
     groundSpeed = 0;
     averageSpeed = "0.0";
