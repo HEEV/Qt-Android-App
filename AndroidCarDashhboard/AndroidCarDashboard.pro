@@ -19,6 +19,7 @@ SOURCES += main.cpp \
     RaceActionManager.cpp \
     GPSPositioningService.cpp \
     NetworkInterface.cpp \
+    BatteryStates.cpp \
     canBus.cpp \
     canSocket.cpp
 
@@ -43,9 +44,9 @@ HEADERS += \
     RaceActionManager.h \
     GPSPositioningService.h \
     NetworkInterface.h \
-    canBus.h \
-    canSocket.h
+    BatteryStates.h \
 
 DISTFILES += \
     QMLLib/View.pri \
+    Windometer.png \
     simulationData.csv

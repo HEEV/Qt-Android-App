@@ -15,7 +15,6 @@ Logger::Logger(QString logFileName, QObject *parent)
 #ifndef Q_OS_WIN
     assert(logFileOpened);
 #endif
-
 }
 
 Logger::Logger(string logFileName, QObject *parent) : QObject(parent)

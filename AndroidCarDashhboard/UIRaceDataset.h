@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGeoPositionInfo>
 #include <Car.h>
+#include <BatteryStates.h>
 
 class UIRaceDataset : public QObject
 {
@@ -29,6 +30,9 @@ class UIRaceDataset : public QObject
     Q_PROPERTY(qreal throttlePos READ getThrottlePos WRITE setThrottlePos NOTIFY throttlePosNotify)
     Q_PROPERTY(qreal manifoldAirTemp READ getManifoldAirTemp WRITE setManifoldAirTemp NOTIFY manifoldAirTempNotify)
     Q_PROPERTY(qreal batteryVoltage READ getBatteryVoltage WRITE setBatteryVoltage NOTIFY batteryVoltageNotify)
+    Q_PROPERTY(QString batteryState READ getBatteryState WRITE setBatteryState NOTIFY batteryStateNotify)
+    Q_PROPERTY(int tempSliderVisible READ getTemperatureState WRITE setTemperatureState NOTIFY temperatureStateNotify)
+    Q_PROPERTY(int showMenu READ getMenuState WRITE setMenuState NOTIFY menuStateNotify)
 
 public:
     explicit UIRaceDataset(QObject *parent = 0);
@@ -95,6 +99,23 @@ public:
     void setWindSpeed(qreal speed);
     qreal getWindSpeed();
 
+    void batteryStateNotify(BatteryStates state);
+
+    QString getBatteryState();
+    void setBatteryState(double voltage);
+    void setBatteryState(QString status);
+
+    void setTemperatureState(double status);
+    int getTemperatureState();
+
+    void setMenuState(bool status);
+    bool getMenuState();
+
+    Q_INVOKABLE void setMenuVisible();
+    Q_INVOKABLE void setMenuHidden();
+
+
+
 private:
     // Used by DataProcessor to choose whether to use Urbie's wheel circumference or
     // Sting's wheel circumference when calculating ground speed.
@@ -122,20 +143,24 @@ private:
     qreal manifoldAirTemp;
     qreal batteryVoltage;
     static const int FINAL_LAP_NUMBER;
+    QString batteryState;
+    int tempSliderVisible;
+    bool showMenu;
+
 
 signals:
+    void canStatusNotify();
     void carNameNotify();
+    void currentLapTimeNotify();
+    void currentLapNumberNotify();
     void projectedProgressNotify();
     void useGPSSpeedNotify();
     void groundSpeedNotify();
     void averageSpeedNotify();
     void speedSensorStatusNotify();
-    void canStatusNotify();
     void networkStatusNotify();
     void totalTimeNotify();
-    void currentLapTimeNotify();
-    void lastLapTimeNotify();
-    void currentLapNumberNotify();
+    void lastLapTimeNotify();    
     void raceStatusNotify();
     void gpsInfoNotify();
     void isFinalLapNotify();
@@ -145,7 +170,9 @@ signals:
     void throttlePosNotify();
     void manifoldAirTempNotify();
     void batteryVoltageNotify();
-
+    void batteryStateNotify();
+    void temperatureStateNotify();
+    void menuStateNotify();
 public slots:
 };
 

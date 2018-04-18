@@ -1,5 +1,7 @@
 #include "DataProcessor.h"
 #include <climits>
+#include <time.h>
+#include <cmath>
 
 
 // This signal gives the number of wheel rotations since
@@ -101,7 +103,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 
      // Grab the time interval from data byte 1.
     uint32_t intervalOfLastRevolution = NO_NEW_DATA;
-    CanNodeParser::getData(data, intervalOfLastRevolution);
+    CanNodeParser::getData_uint32(data, intervalOfLastRevolution);
 
     // If we got a max_int (meaning CAN board did not receive a pulse since last message)
     if (intervalOfLastRevolution == NO_NEW_DATA)
@@ -111,7 +113,7 @@ void DataProcessor::updateGroundSpeed(QByteArray data)
 
         if (timeSinceLastUpdate > WHEEL_TIMEOUT_LENGTH)
         {
-            // Set the ground speed as if it the car has stopped.
+            // Set the ground speed as if the car has stopped.
             milesPerHour = 0.0;
         }
 //        else
@@ -192,7 +194,7 @@ void DataProcessor::updateAirSpeed(QByteArray data)
 
 	//convert the CAN data into a voltage (in mili-volts)
     uint16_t voltage;
-    CanNodeParser::getData(data, voltage);
+    CanNodeParser::getData_uint16(data, voltage);
 
 	//voltage -> pressure;
 	double pressure;

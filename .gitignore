@@ -34,3 +34,9 @@ build*/
 #QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+build-AndroidCarDashboard-Desktop_Qt_5_9_1_MSVC2013_64bit-Debug/debug/AndroidCarDashboard.exe
+build-AndroidCarDashboard-Desktop_Qt_5_9_1_MSVC2013_64bit-Debug/debug/AndroidCarDashboard.ilk
+build-AndroidCarDashboard-Desktop_Qt_5_9_1_MSVC2013_64bit-Debug/debug/AndroidCarDashboard.pdb
+build-AndroidCarDashboard-Desktop_Qt_5_9_1_MSVC2013_64bit-Debug/debug/androidcardashboard.vc.pdb
+build-AndroidCarDashboard-Desktop_Qt_5_9_1_MSVC2013_64bit-Debug/debug/qrc_qml.obj
+*.exe
