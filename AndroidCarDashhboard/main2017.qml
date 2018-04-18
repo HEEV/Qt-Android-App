@@ -419,12 +419,10 @@ Window {
             maximumValue: 750
             minimumValue: 0
 
-            value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+            //Div by 10 is hack please fix TODO:
+            value: UIRaceDataset.engineRPM/10
 
-            property real values: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
-
-//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
-//                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
+            property real values: UIRaceDataset.engineRPM/10
 
             style: NewDashboardGaugeStyle
             {
@@ -438,7 +436,7 @@ Window {
                 lowValues: 150
                 highValues: 600
                 label: "rpm"
-                values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
+                values: UIRaceDataset.engineRPM/10
             }
 
             //Every time the number changes this is the animation to play in response.
@@ -472,12 +470,9 @@ Window {
             maximumValue: 35
             minimumValue: -35
 
-            value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+            value: UIRaceDataset.windSpeed
 
-            property real values: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
-
-//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
-//                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
+            property real values: UIRaceDataset.windSpeed
 
             style: NewDashboardGaugeStyle
             {
@@ -491,7 +486,7 @@ Window {
                 lowValues: -15
                 highValues: 15
                 label: "mph"
-                values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
+                values: UIRaceDataset.windSpeed
             }
 
             //Every time the number changes this is the animation to play in response.
@@ -525,12 +520,9 @@ Window {
             maximumValue: 40
             minimumValue: 0
 
-            value: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
+            value: UIRaceDataset.groundSpeed
 
-            property real values: UIRaceDataset.groundSpeed //| (parent.randVal * (maximumValue - minimumValue) + minimumValue)
-
-//                Behavior on needleAngleRad {SpringAnimation {spring: 1.2; damping: 0.3;}}
-//                onNeedleAngleRadChanged: speedometerValueGradient.requestPaint();
+            property real values: UIRaceDataset.groundSpeed
 
             style: NewDashboardGaugeStyle
             {
@@ -539,7 +531,7 @@ Window {
                 lowValues: 10
                 highValues: 30
                 label: "mph"
-                values: UIRaceDataset.groundSpeed //| (parent.randVal * (maxValue - minValue) + minValue)
+                values: UIRaceDataset.groundSpeed
             }
 
             //Every time the number changes this is the animation to play in response.
@@ -757,6 +749,7 @@ Window {
 
             onClicked: {
                 UIRaceDataset.setMenuHidden()
+                RaceActionManager.startRace();
             }
 
 
@@ -818,7 +811,7 @@ Window {
                 anchors.fill: parent
                 bearing: -45
                 plugin: mapPlugin
-                center: QtPositioning.coordinate(38.161724, -122.456705) // Sonoma
+                center: QtPositioning.coordinate(38.161724, -122.456705) // Sonoma Raceway in California
                 zoomLevel: 16.5
                 gesture.enabled: false
 
@@ -844,7 +837,7 @@ Window {
 
                 PositionSource {
                     id: src
-                    nmeaSource: "race.nmea"
+                    nmeaSource: "race.nmea" //Currently we are not getting data from the gps.
                     active: true
 
                     onPositionChanged: {
