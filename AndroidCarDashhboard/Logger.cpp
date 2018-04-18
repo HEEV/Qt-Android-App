@@ -53,7 +53,7 @@ void Logger::println(string message)
 
 void Logger::println(QString message)
 {
-    log.append(message);
+    /*log.append(message);
 
     if (logStream->device()->isOpen())
     {
@@ -68,7 +68,7 @@ void Logger::println(QString message)
 #endif
     }
 
-    logNotify();
+    logNotify();*/
 }
 
 QString Logger::getLog()

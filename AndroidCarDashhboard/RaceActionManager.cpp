@@ -15,6 +15,9 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     uiInterface->setCanStatus(canConnected);
     uiInterface->canStatusNotify();
 
+    QByteArray testArray = QByteArrayLiteral("\x12\x32");
+    canInterface->writeCANFrame(12, testArray);
+
     gpsService = gps;
     connect(gps, SIGNAL(lapIncremented()), this, SLOT(incrementCurrentLap()));
 
@@ -38,16 +41,14 @@ RaceActionManager::RaceActionManager(CANInterface *can, DataProcessor *data, Log
     connect(averageSpeedTimer, SIGNAL(timeout()), this, SLOT(doSpeedAveraging()));
 }
 
+void RaceActionManager::setRunNum(int num)
+{
+    logger->println("Got Num: " + QString::number(num));
+    runNum = num;
+}
+
 bool RaceActionManager::initConnections()
 {
-    //Canbus setup
-//    if (!canConnected)
-//    {
-//        canConnected = canInterface->startListening();
-//    }
-//    uiInterface->setCanStatus(canConnected);
-//    uiInterface->canStatusNotify();
-
     //GPS setup
     gpsService->startTracking();
 
@@ -89,6 +90,7 @@ bool RaceActionManager::startRace()
     //Set up pulses to check on things.
     indicatorUpdaterTimer->start(updateIndicatorPeriod);
     raceTimer->start(timerPeriod);
+    logger->println((string)"Starting timer\n");
     sendToServerTimer->start(sendToServerTimerPeriod);
     averageSpeedTimer->start(callAveragingFunctionPeriod);
 
@@ -106,6 +108,12 @@ bool RaceActionManager::startRace()
     dataProcessor->initiateAverageSpeed();
 
     logger->println((logPrefix + "Race started.").toStdString());
+
+    //Get the run number from the server
+    QJsonObject startMessage;
+    startMessage.insert("MessageType", "GetNextRunNumber");
+    startMessage.insert("AndroidId", network->macAddress); //"d8:50:e6:8f:92:67");//
+    network->sendJSON(startMessage);
 
     return true;
 }
@@ -199,25 +207,36 @@ bool RaceActionManager::stopRace()
  */
 void RaceActionManager::sendInfoToServer()
 {
+    logger->println((string)"Trying to send data\n");
     if (network->isConnected())
     {
+        logger->println((string)"Network is connected\n");
         QGeoCoordinate currentCoordinate = uiInterface->getGPSInfo().coordinate();
-        QJsonObject gpsMessage;
-        gpsMessage.insert("latitude", QJsonValue(currentCoordinate.latitude()));
-        gpsMessage.insert("longitude", QJsonValue(currentCoordinate.longitude()));
+
         // I'm guessing we don't actually need to know altitude
         //gpsMessage.insert("altitude", QJsonValue(currentCoordinate.altitude()));
 
+        QDateTime currentTime = QDateTime::currentDateTime();
         QJsonObject mainMessage;
-        mainMessage.insert("carName", uiInterface->getCarName());
-        mainMessage.insert("currentLap", uiInterface->getCurrentLapNumber());
-        mainMessage.insert("time", totalRaceTime.elapsed());
-        mainMessage.insert("lastLapTime", uiInterface->getLastLapTime());
-        mainMessage.insert("groundSpeed", uiInterface->getGroundSpeed());
-        mainMessage.insert("windSpeed", uiInterface->getWindSpeed());
-        mainMessage.insert("averageSpeed", uiInterface->getAverageSpeed());
-        mainMessage.insert("coordinate", gpsMessage);
-
+        QString dateStr = currentTime.toString(Qt::ISODateWithMs);
+        dateStr = dateStr.replace("T", " ");
+        mainMessage.insert("AndroidId", network->macAddress); //"d8:50:e6:8f:92:67");//
+        mainMessage.insert("MessageType", "Log");
+        mainMessage.insert("RunNumber", runNum);
+        mainMessage.insert("BatteryVoltage", uiInterface->getBatteryVoltage());
+        mainMessage.insert("GroundSpeed", uiInterface->getGroundSpeed());
+        mainMessage.insert("IntakeTemperature", uiInterface->getManifoldAirTemp());
+        mainMessage.insert("LKillSwitch", 0);
+        mainMessage.insert("Latitude", QJsonValue(currentCoordinate.latitude()));
+        mainMessage.insert("LogTime", dateStr);
+        mainMessage.insert("Longitude", QJsonValue(currentCoordinate.longitude()));
+        mainMessage.insert("MKillSwitch", 0);
+        mainMessage.insert("RKillSwitch", 0);
+        mainMessage.insert("SecondaryBatteryVoltage", 0.0);
+        mainMessage.insert("WheelRpm", uiInterface->getEngineRPM());
+        mainMessage.insert("WindSpeed", uiInterface->getWindSpeed());
+        mainMessage.insert("SystemCurrent", 1.02f);
+        mainMessage.insert("CoolantTemperature", 42.42f);
         network->sendJSON(mainMessage);
     }
 }

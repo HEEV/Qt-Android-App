@@ -67,9 +67,14 @@ int CanNodeParser::getData_uint16(const QByteArray msg, uint16_t& data)
 int CanNodeParser::getData_int32(const QByteArray msg, int32_t& data)
 {
     //check configuration byte
-    if((msg[0] >> 5) != CAN_INT32 ||   //not right type
+    /*if((msg[0] >> 5) != CAN_INT32 ||   //not right type
        (msg[0] & 0x1F) != CAN_DATA ){ //not data
 
+        return INVALID_TYPE;
+    }*/
+
+    if(msg.length() != 5)
+    {
         return INVALID_TYPE;
     }
 
@@ -84,12 +89,15 @@ int CanNodeParser::getData_int32(const QByteArray msg, int32_t& data)
 int CanNodeParser::getData_uint32(const QByteArray msg, uint32_t& data)
 {
     //check configuration byte
-    if((msg[0] >> 5) != CAN_UINT32 ||   //not right type
+    /*if((msg[0] >> 5) != CAN_UINT32 ||   //not right type
        (msg[0] & 0x1F) != CAN_DATA ){ //not data
 
         return INVALID_TYPE;
+    }*/
+    if(msg.length() != 5)
+    {
+        return INVALID_TYPE;
     }
-
     data  = (uint32_t)   (msg[1] & 0xFF);
     data |= (uint32_t) ( (msg[2] << 8) & 0xFF00);
     data |= (uint32_t) ( (msg[3] <<16) & 0xFF0000);

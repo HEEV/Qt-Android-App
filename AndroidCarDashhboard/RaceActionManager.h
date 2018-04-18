@@ -5,6 +5,10 @@
 #include <QTimer>
 #include <QTime>
 
+#ifdef Q_OS_ANDROID
+    #include <sys/system_properties.h>
+#endif
+
 //Removes annoying circular dependancy issue.
 class RaceActionManager;
 
@@ -32,6 +36,8 @@ public:
     //Q_INVOKABLE is a giant "Peach" macro that allows QML "UI" to call the functions.
     Q_INVOKABLE bool startRace();
     Q_INVOKABLE bool stopRace();
+
+    void setRunNum(int num);
 
 private slots:
     void updateCurrentTime();
@@ -66,6 +72,9 @@ private:
     QTimer *averageSpeedTimer;
     QTime totalRaceTime;
     QTime currentLapTime;
+
+    int runNum;
+    char model_string[20];
 
 };
 

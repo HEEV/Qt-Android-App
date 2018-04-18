@@ -1,7 +1,6 @@
 #include "NetworkInterface.h"
 
-const QString NetworkInterface::host = "jacob.cedarville.edu";
-
+const QString NetworkInterface::host = "jacob.cedarville.edu"; 
 //This port is a placeholder please talk to a team leader about what it should actually be.
 const int NetworkInterface::port = 64738;
 const int NetworkInterface::reconnectAttemptInterval = 2000;
@@ -10,6 +9,16 @@ const string NetworkInterface::logPrefix = "NETWORK_INTERFACE: ";
 
 NetworkInterface::NetworkInterface(Logger *log)
 {
+    //Get MAC address for ID.
+    for(auto interface: QNetworkInterface::allInterfaces())
+    {
+        if(interface.name() == QLatin1String("wlan0"))
+        {
+            macAddress = interface.hardwareAddress();
+            log->println( + " MAC address: " + macAddress.toStdString() + "\n");
+        }
+    }
+
     reconnectInProgress = false;
     raceManager = nullptr;
     this->log = log;
@@ -52,14 +61,21 @@ void NetworkInterface::disconnect()
     shouldTryToReconnect = false;
     if(isConnected())
     {
+        sock->write("quit\n");
         sock->disconnectFromHost();
     }
 }
 
 bool NetworkInterface::sendJSON(QJsonObject json)
 {
-    QJsonDocument jDoc = QJsonDocument(json);
-    int written = sock->write(jDoc.toJson());
+    QJsonDocument doc(json);
+    QString strJson = doc.toJson();
+    strJson = strJson.remove(QRegExp("[\\n\\t\\r]"));
+    //int length = strJson.length();
+    QString packet = strJson + "\n";
+
+    int written = sock->write(packet.toLocal8Bit());
+    log->println(packet);
     if(written > 0)
     {
         return true;
@@ -72,12 +88,21 @@ bool NetworkInterface::sendJSON(QJsonObject json)
  */
 void NetworkInterface::handleReceiveData()
 {
-    // For now, simply log the incoming data.
-    while (sock->canReadLine())
-    {
-        QString data = inStream->readLine();
-        log->println(logPrefix + data.toStdString());
-    }
+        log->println((QString)"Recieved Packet\n");
+        QByteArray data;
+        data = sock->readAll();
+        /*while(sock->canReadLine())
+        {
+            data += sock->readLine();
+        }*/
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+        QJsonObject jsonObj = jsonDoc.object();
+        log->println("Got: " + data + "\n");
+        if(jsonObj.contains("NextRunNum"))
+        {
+            raceManager->setRunNum(jsonObj.value("NextRunNum").toInt());
+        }
 }
 
 /**

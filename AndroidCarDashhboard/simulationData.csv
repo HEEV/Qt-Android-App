@@ -1,4 +1,4 @@
 Pitot tube , 950 , 0 , 10, sin
 Tacometer , 1150 , 0 , 11, sin
 Tacometer last pulse , 1154 , 0 , 12, sin
-current , 1000, 0, 13, sin
+current , 3, 0, 13, sin
