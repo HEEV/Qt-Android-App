@@ -49,13 +49,19 @@ void DataProcessor::setWheelCircumference(QString carName)
 
 void DataProcessor::routeCANFrame(can_frame frame)
 {
+    //If we get a CAN frame we should say that CAN is working.
+    if(raceDataset->getCanStatus() == false)
+    {
+        raceDataset->setCanStatus(true);
+        raceDataset->canStatusNotify();
+    }
+
     int id = frame.can_id;
     QByteArray data = (char *) frame.data;
     while(data.length() != frame.can_dlc)
     {
         data.append('\0');
     }
-    //logger->println("Got Frame ID: " + QString::number(id).toStdString());
 
     // For efficienty, these cases should be ordered with the most
     // frequent ids at the top.
