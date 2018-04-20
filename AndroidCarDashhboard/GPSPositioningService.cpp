@@ -51,11 +51,11 @@ void GPSPositioningService::stopTracking()
 
 void GPSPositioningService::positionUpdated(const QGeoPositionInfo &info)
 {
-    //QGeoCoordinate coord = info.coordinate();
-    //QString coords = QString::number(coord.latitude());
-    //coords += " : " + QString::number(coord.longitude());
-    //coords += " : " + QString::number(coord.altitude());
-    //logger->println((logTag + coords).toStdString());
+    QGeoCoordinate coord = info.coordinate();
+    QString coords = QString::number(coord.latitude());
+    coords += " : " + QString::number(coord.longitude());
+    coords += " : " + QString::number(coord.altitude());
+    qDebug() << coords;
 
     //This if is for setting the start location once we have the required accuracy on the GPS data.
     if (!lapStartLocationHasBeenSet && info.attribute(QGeoPositionInfo::HorizontalAccuracy) < 6.7)

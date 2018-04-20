@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QGeoCoordinate>
+#include <QDebug>
 #include <QGeoPositionInfoSource>
 
 #include "Logger.h"
