@@ -45,6 +45,8 @@ HEADERS += \
     GPSPositioningService.h \
     NetworkInterface.h \
     BatteryStates.h \
+    canSocket.h \
+    canBus.h
 
 DISTFILES += \
     QMLLib/View.pri \

@@ -29,15 +29,12 @@ class CanBusModule
 public:
     virtual void StartupModule();
     virtual void ShutdownModule();
-#if defined(Q_OS_ANDROID) || defined(Q_OS_LINUX)
     static bool registerCallback(std::string name, std::function<void(can_frame)> callback);
-#endif
+
     //CAN bus interface.
     bool isOpen();
     bool sendFrame(int id, int data[], int size);
-#if defined(Q_OS_ANDROID) || defined(Q_OS_LINUX)
     bool sendFrame(can_frame frame);
-#endif
     bool sendErrorFrame(int id, int data[], int size);
 
 private:

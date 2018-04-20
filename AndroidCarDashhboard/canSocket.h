@@ -23,7 +23,17 @@
 #include <fcntl.h>
 #endif
 
-
+#ifdef Q_OS_WIN
+struct can_frame
+{
+    uint32_t can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
+    uint8_t    can_dlc; /* frame payload length in byte (0 .. CAN_MAX_DLEN) */
+    uint8_t    __pad;   /* padding */
+    uint8_t    __res0;  /* reserved / padding */
+    uint8_t    __res1;  /* reserved / padding */
+    uint8_t    data[8];
+};
+#endif
 
 
 struct canThread
@@ -43,12 +53,12 @@ class CANSocket
         static void Stop(int threadNumber);
 
         static bool isOpen(int threadNumber);
-#if defined(Q_OS_ANDROID) || defined(Q_OS_LINUX)
+
         static bool sendFrame(can_frame frame, int threadNumber);
 
         static std::map<std::string, std::function<void(can_frame)>> callbacks;
         static std::vector<struct canThread*> activeThreads;
-#endif
+
     protected:
 
     private:

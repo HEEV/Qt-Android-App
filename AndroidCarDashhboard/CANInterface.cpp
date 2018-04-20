@@ -34,8 +34,9 @@ CANInterface::CANInterface(DataProcessor *dataProcessor, bool simulateInput)
         simulationTimer = new QTimer();
         connect(simulationTimer, SIGNAL(timeout()), this, SLOT(simulateInputFrames()));
     }
-
+#ifdef Q_OS_ANDROID
     canBus.registerCallback("GetFrame", std::bind(&CANInterface::readFrame, this, std::placeholders::_1));
+#endif
 }
 
 CANInterface::~CANInterface()
